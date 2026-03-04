@@ -1,0 +1,88 @@
+export const translations = {
+  mn: {
+    nav: {
+      home: 'Нүүр',
+      program: 'Хөтөлбөр',
+      courses: 'Сургалтууд',
+      teachers: 'Багш нар',
+      articles: 'Нийтлэл',
+      about: 'Бидний тухай',
+      login: 'Нэвтрэх',
+    },
+    hero: {
+      premium: 'Дээд зэрэглэлийн туршлага',
+      identity: 'Te³ Ижилсэл',
+      copyright: '© 2026 Нарийн нямбай урлав',
+      replay: 'Дахин үзэх',
+    },
+    stats: {
+      title: 'Тоо худал хэлдэггүй',
+      experience: 'Жилийн туршлага',
+      programs: 'Төрлийн хөтөлбөр',
+      graduations: 'Төгсөлт',
+      students: 'Чадваржсан сурагчид',
+    },
+    testimonials: {
+      title: 'Бидний тухай',
+      subtitle: 'Сэтгэгдлүүд',
+      desc: 'Эцэг эхчүүд болон сурагчдын санал',
+    },
+    success: {
+      title: 'Хүүхдүүдийн',
+      subtitle: 'амжилт',
+      desc: 'Манай сурагчдын бахархалт амжилтууд болон технологийн ертөнцөд хийсэн анхны алхмууд',
+      more: 'Дэлгэрэнгүй',
+    },
+    footer: {
+      desc: 'Бид ирээдүйн технологийн мэргэжилтнүүдийг бэлтгэж, хүүхэд бүрийн бүтээлч сэтгэлгээг хөгжүүлэх зорилготой.',
+      courses: 'Сургалтууд',
+      contact: 'Холбоо барих',
+      copyright: '© 2026 Crafted with Precision. All Rights Reserved.',
+      privacy: 'Нууцлалын бодлого',
+      terms: 'Үйлчилгээний нөхцөл',
+    },
+  },
+  en: {
+    nav: {
+      home: 'Home',
+      program: 'Program',
+      courses: 'Courses',
+      teachers: 'Teachers',
+      articles: 'Articles',
+      about: 'About Us',
+      login: 'Login',
+    },
+    hero: {
+      premium: 'Premium Experience',
+      identity: 'Te³ Identity',
+      copyright: '© 2026 Crafted with Precision',
+      replay: 'Replay Experience',
+    },
+    stats: {
+      title: 'Numbers Don\'t Lie',
+      experience: 'Years of Experience',
+      programs: 'Types of Programs',
+      graduations: 'Graduations',
+      students: 'Skilled Students',
+    },
+    testimonials: {
+      title: 'What People Say',
+      subtitle: 'Testimonials',
+      desc: 'Feedback from parents and students',
+    },
+    success: {
+      title: 'Student',
+      subtitle: 'Success',
+      desc: 'Proud achievements of our students and their first steps in the tech world',
+      more: 'Learn More',
+    },
+    footer: {
+      desc: 'We prepare future tech professionals and aim to develop every child\'s creative thinking.',
+      courses: 'Courses',
+      contact: 'Contact Us',
+      copyright: '© 2026 Crafted with Precision. All Rights Reserved.',
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Service',
+    },
+  },
+};
