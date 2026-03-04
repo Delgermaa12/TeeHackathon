@@ -3,7 +3,6 @@ import { motion, AnimatePresence, useScroll, useTransform, animate } from 'motio
 import { Trophy, Zap, Star, Award, Cpu, Palette, ExternalLink, Quote, Phone, Mail, Clock, MapPin } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
-import { PATHS } from '../constants';
 
 // --- Sub-components for Hero ---
 const COLORS = {
