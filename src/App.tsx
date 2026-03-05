@@ -11,7 +11,6 @@ export default function App() {
     <main className="min-h-screen bg-[#050505] text-white selection:bg-[#D4AF37] selection:text-black relative">
       {/* Ambient Decorations (Goose & Teee) */}
       <AmbientDecorations />
-
       <Header />
 
       {/* Hero Section */}
