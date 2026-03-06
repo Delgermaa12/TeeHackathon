@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppProvider, useAppContext } from './context/AppContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import Staff from './pages/Staff';
+import StaffDetail from './pages/StaffDetail';
 import { AmbientDecorations } from './components/AmbientDecorations';
 import './index.css';
+
 
 function AppContent() {
   const { theme } = useAppContext();
@@ -24,7 +28,11 @@ function AppContent() {
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#060810]' : 'bg-white'} text-[var(--text-primary)] transition-colors duration-500`}>
       <AmbientDecorations />
       <Header />
-      <HomePage />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/staff" element={<Staff />} />
+        <Route path="/staff/:id" element={<StaffDetail />} />
+      </Routes>
       <Footer />
     </div>
   );
@@ -33,7 +41,9 @@ function AppContent() {
 function App() {
   return (
     <AppProvider>
-      <AppContent />
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </AppProvider>
   );
 }

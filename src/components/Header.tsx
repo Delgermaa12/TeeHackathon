@@ -50,7 +50,7 @@ const Header = () => {
     { key: 'home', label: t.home, href: '#home' },
     { key: 'program', label: t.program, href: '#program' },
     { key: 'courses', label: t.courses, href: '#courses' },
-    { key: 'teachers', label: t.teachers, href: '#teachers' },
+    { key: 'teachers', label: t.teachers, href: '/staff' },
     { key: 'articles', label: t.articles, href: '#articles' },
     { 
       key: 'about', 
