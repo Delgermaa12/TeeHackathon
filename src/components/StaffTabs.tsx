@@ -21,8 +21,13 @@ const StaffTabs: React.FC<StaffTabsProps> = ({ activeTab, onChange }) => {
 
   const passiveClass =
     theme === "dark"
-      ? "bg-white/5 text-white/60 border-white/10 hover:bg-white/10 hover:text-white"
-      : "bg-[#e8edf5] text-black/60 border-[#d4dbe6] hover:bg-[#dde4ee] hover:text-black";
+      ? "bg-white/10 text-white/60 border-white/10 hover:text-white"
+      : "bg-white/5 text-black/60 border-[#d4dbe6] hover:text-black";
+
+  const innerMaskClass =
+    theme === "dark"
+      ? "bg-[#050505]"
+      : "bg-[rgba(255,255,255,0.92)]";
 
   return (
     <div className="flex flex-wrap justify-center gap-3">
@@ -33,13 +38,28 @@ const StaffTabs: React.FC<StaffTabsProps> = ({ activeTab, onChange }) => {
           <button
             key={tab.key}
             onClick={() => onChange(tab.key)}
-            className={`px-5 py-2.5 rounded-full text-sm font-bold tracking-wide border transition-all duration-300 ${
+            className={`group relative overflow-hidden px-5 py-2.5 rounded-full text-sm font-bold tracking-wide border transition-all duration-300 ${
               isActive
-                ? "bg-[#D4AF37] text-black border-[#D4AF37] shadow-lg"
+                ? "bg-[var(--brand-accent)] text-black border-[var(--brand-accent)] shadow-lg"
                 : passiveClass
             }`}
           >
-            {tab.label}
+            {!isActive && (
+              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300">
+                <div className="absolute -inset-[1px] rounded-full bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+                <div
+                  className={`absolute inset-[2px] rounded-full ${innerMaskClass}`}
+                />
+              </div>
+            )}
+
+            <span
+              className={`relative z-10 transition ${
+                isActive ? "text-black" : ""
+              }`}
+            >
+              {tab.label}
+            </span>
           </button>
         );
       })}

@@ -14,6 +14,14 @@ import { staffData } from "../data/StaffData";
 import { translations } from "../translations";
 import { useAppContext } from "../context/AppContext";
 
+const skillColors = [
+  "border-blue-500/30 bg-gradient-to-r from-blue-500/20 to-transparent",
+  "border-purple-500/30 bg-gradient-to-r from-purple-500/20 to-transparent",
+  "border-red-500/30 bg-gradient-to-r from-red-500/20 to-transparent",
+  "border-yellow-500/30 bg-gradient-to-r from-yellow-500/20 to-transparent",
+  "border-green-500/30 bg-gradient-to-r from-green-500/20 to-transparent",
+  "border-orange-500/30 bg-gradient-to-r from-orange-500/20 to-transparent",
+];
 const StaffDetail: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -25,7 +33,6 @@ const StaffDetail: React.FC = () => {
   const textMain = theme === "dark" ? "text-white" : "text-black";
   const textSoft = theme === "dark" ? "text-white/70" : "text-black/70";
   const textMuted = theme === "dark" ? "text-white/45" : "text-black/45";
-  const textFaint = theme === "dark" ? "text-white/35" : "text-black/35";
   const cardBg =
     theme === "dark"
       ? "bg-white/[0.03] border-white/10"
@@ -36,8 +43,9 @@ const StaffDetail: React.FC = () => {
       : "bg-black/[0.03] border-black/10";
   const softBg =
     theme === "dark"
-      ? "bg-white/5 hover:bg-white/10 border-white/10"
+      ? "bg-white/5 hover:bg-[#050505] border-white/10"
       : "bg-black/5 hover:bg-black/10 border-black/10";
+  const innerMaskClass = theme === "dark" ? "bg-[#050505]" : "bg-white/10";
 
   if (!person) {
     return (
@@ -45,10 +53,22 @@ const StaffDetail: React.FC = () => {
         <div className="max-w-5xl mx-auto">
           <button
             onClick={() => navigate("/staff")}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border transition ${softBg} ${textSoft}`}
+            className={`group relative mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 overflow-hidden ${softBg} ${textSoft}`}
           >
-            <ArrowLeft size={16} />
-            {t.back}
+            <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300">
+              <div className="absolute -inset-[1px] rounded-full bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+              <div
+                className={`absolute inset-[2px] rounded-full ${innerMaskClass}`}
+              />
+            </div>
+
+            <span className="relative z-10 inline-flex items-center gap-2 group-hover:text-[#eab308] transition">
+              <ArrowLeft
+                size={16}
+                className="transition-transform duration-300 group-hover:-translate-x-1"
+              />
+              {t.back}
+            </span>
           </button>
 
           <div className={`mt-10 rounded-3xl border p-8 text-center ${cardBg}`}>
@@ -67,10 +87,22 @@ const StaffDetail: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <button
           onClick={() => navigate("/staff")}
-          className={`mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border transition ${softBg} ${textSoft}`}
+          className={`group relative mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 overflow-hidden ${softBg} ${textSoft}`}
         >
-          <ArrowLeft size={16} />
-          {t.back}
+          <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300">
+            <div className="absolute -inset-[1px] rounded-full bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+            <div
+              className={`absolute inset-[2px] rounded-full ${innerMaskClass}`}
+            />
+          </div>
+
+          <span className="relative z-10 inline-flex items-center gap-2 group-hover:text-[#eab308] transition">
+            <ArrowLeft
+              size={16}
+              className="transition-transform duration-300 group-hover:-translate-x-1"
+            />
+            {t.back}
+          </span>
         </button>
 
         <div className="grid lg:grid-cols-[340px_1fr] gap-8">
@@ -80,9 +112,12 @@ const StaffDetail: React.FC = () => {
             <div
               className={`relative group rounded-3xl border p-5 overflow-hidden ${cardBg}`}
             >
-              <div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500">
-                <div className="absolute inset-0 rounded-3xl border border-[#D4AF37]/50" />
-                <div className="absolute -inset-[1px] rounded-3xl bg-[conic-gradient(from_0deg,transparent,rgba(212,175,55,0.9),transparent)] opacity-30" />
+              {/* Rotating multi-color border */}
+              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-1000 transition duration-300">
+                <div className="absolute -inset-[1px] rounded-3xl bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+                <div
+                  className={`absolute inset-[2px] rounded-3xl ${innerMaskClass}`}
+                />
               </div>
 
               <div
@@ -90,7 +125,7 @@ const StaffDetail: React.FC = () => {
               >
                 <img
                   src={person.image}
-                  alt={person.name}
+                  alt={person.name[language]}
                   className="w-full h-[360px] object-cover transition duration-500 group-hover:scale-105"
                 />
               </div>
@@ -102,10 +137,19 @@ const StaffDetail: React.FC = () => {
                 href={person.github || "#"}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition text-sm ${softBg} ${textSoft} hover:text-[#D4AF37]`}
+                className={`group relative overflow-hidden inline-flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-300 text-sm ${softBg} ${textSoft} hover:text-[#D4AF37]`}
               >
-                <Github size={16} />
-                {t.github}
+                <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300">
+                  <div className="absolute -inset-[1px] rounded-xl bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+                  <div
+                    className={`absolute inset-[2px] rounded-xl ${innerMaskClass}`}
+                  />
+                </div>
+
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  <Github size={16} />
+                  {t.github}
+                </span>
               </a>
             </div>
 
@@ -113,14 +157,17 @@ const StaffDetail: React.FC = () => {
             <div
               className={`relative group rounded-3xl border p-5 overflow-hidden ${cardBg}`}
             >
-              <div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500">
-                <div className="absolute inset-0 rounded-3xl border border-[#D4AF37]/50" />
-                <div className="absolute -inset-[1px] rounded-3xl bg-[conic-gradient(from_0deg,transparent,rgba(212,175,55,0.9),transparent)] opacity-30" />
+              {/* Rotating multi-color border */}
+              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-1000 transition duration-300">
+                <div className="absolute -inset-[1px] rounded-3xl bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+                <div
+                  className={`absolute inset-[2px] rounded-3xl ${innerMaskClass}`}
+                />
               </div>
 
               <div className="relative">
                 <div className="flex items-center gap-3 mb-4">
-                  <BookOpen size={18} className="text-[#D4AF37]" />
+                  <BookOpen size={18} className="text-[#eab308]" />
                   <h3 className={`${textMain} text-xl font-bold`}>
                     {t.certificate}
                   </h3>
@@ -129,12 +176,12 @@ const StaffDetail: React.FC = () => {
                 <div className="grid gap-4">
                   {person.courses.map((course) => (
                     <div
-                      key={course.title}
+                      key={course.title[language]}
                       className={`group/item border rounded-xl overflow-hidden transition ${softBg}`}
                     >
                       <img
                         src={course.image}
-                        alt={course.title}
+                        alt={course.title[language]}
                         className="w-full h-full object-cover transition duration-500 group-hover/item:scale-105"
                       />
                     </div>
@@ -148,53 +195,52 @@ const StaffDetail: React.FC = () => {
           <div
             className={`relative group rounded-3xl border p-6 md:p-8 overflow-hidden ${cardBg}`}
           >
-            <div className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition duration-500">
-              <div className="absolute inset-0 rounded-3xl border border-[#D4AF37]/50" />
-              <div className="absolute -inset-[1px] rounded-3xl bg-[conic-gradient(from_0deg,transparent,rgba(212,175,55,0.8),transparent)] opacity-30" />
+            {/* Rotating multi-color border */}
+            <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-1000 transition duration-300">
+              <div className="absolute -inset-[1px] rounded-3xl bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+              <div
+                className={`absolute inset-[2px] rounded-3xl ${innerMaskClass}`}
+              />
             </div>
 
             <div className="relative">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
                 <h1 className={`text-3xl md:text-4xl font-black ${textMain}`}>
-                  {person.name}
+                  {person.name[language]}
                 </h1>
-                <p className="text-[#D4AF37] text-sm font-semibold">
-                  {person.role}
+                <p className="text-[#eab308] text-sm font-semibold">
+                  {person.role[language]}
                 </p>
               </div>
 
               {/* description */}
-              <div className={`rounded-2xl border p-5 mb-8 transition hover:-translate-y-0.5 ${innerBg}`}>
-                <p
-                  className={`text-xs uppercase tracking-[0.25em] mb-3 ${textFaint}`}
-                >
-                  {t.description}
-                </p>
+              <div
+                className={`rounded-2xl border p-5 mb-8 transition hover:-translate-y-0.5 ${innerBg}`}
+              >
                 <p className={`${textSoft} italic leading-8`}>
-                  “{person.philosophy}”
+                  “{person.philosophy[language]}”
                 </p>
               </div>
 
               {/* skills */}
               <div className="mb-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <Brain size={18} className="text-[#D4AF37]" />
+                  <Brain size={18} className="text-[#eab308]" />
                   <h3 className={`${textMain} text-xl font-bold`}>
                     {t.skills}
                   </h3>
                 </div>
 
                 <div className="flex flex-wrap gap-3">
-                  {person.skills.map((skill) => (
+                  {person.skills.map((skill, i) => (
                     <span
-                      key={skill}
-                      className={`px-4 py-2 rounded-xl border text-sm transition ${
-                        theme === "dark"
-                          ? "border-white/10 bg-white/5 text-white/75 hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
-                          : "border-black/10 bg-black/5 text-black/75 hover:border-[#D4AF37]/50 hover:text-[#B88900]"
-                      }`}
+                      key={skill[language]}
+                      className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all duration-300
+      ${skillColors[i % skillColors.length]}
+      ${textSoft}
+      hover:scale-105`}
                     >
-                      {skill}
+                      {skill[language]}
                     </span>
                   ))}
                 </div>
@@ -206,13 +252,13 @@ const StaffDetail: React.FC = () => {
                   className={`rounded-2xl border p-4 transition hover:-translate-y-0.5 ${innerBg}`}
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <Briefcase size={18} className="text-[#D4AF37]" />
+                    <Briefcase size={18} className="text-[#eab308]" />
                     <span className={`text-sm ${textSoft}`}>
                       {t.experience}
                     </span>
                   </div>
                   <p className={`${textMain} font-medium`}>
-                    {person.experience}
+                    {person.experience[language]}
                   </p>
                 </div>
 
@@ -220,21 +266,23 @@ const StaffDetail: React.FC = () => {
                   className={`rounded-2xl border p-4 transition hover:-translate-y-0.5 ${innerBg}`}
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <GraduationCap size={18} className="text-[#D4AF37]" />
+                    <GraduationCap size={18} className="text-[#eab308]" />
                     <span className={`text-sm ${textSoft}`}>{t.education}</span>
                   </div>
                   <p className={`${textMain} font-medium`}>
-                    {person.education}
+                    {person.education[language]}
                   </p>
                 </div>
               </div>
 
               {/* articles */}
               <div
-                className={`border-t pt-8 ${theme === "dark" ? "border-white/10" : "border-black/10"}`}
+                className={`border-t pt-8 ${
+                  theme === "dark" ? "border-white/10" : "border-black/10"
+                }`}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <FileText size={18} className="text-[#D4AF37]" />
+                  <FileText size={18} className="text-[#eab308]" />
                   <h3 className={`${textMain} text-xl font-bold`}>
                     {t.articles}
                   </h3>
@@ -243,30 +291,41 @@ const StaffDetail: React.FC = () => {
                 <div className="space-y-4">
                   {person.articles.map((article) => (
                     <a
-                      key={article.title}
+                      key={article.title[language]}
                       href={article.url || "#"}
                       target="_blank"
                       rel="noreferrer"
-                      className={`group/article flex items-center justify-between gap-4 rounded-2xl border p-4 transition ${innerBg} ${
+                      className={`group/article relative overflow-hidden flex items-center justify-between gap-4 rounded-2xl border p-4 transition ${
+                        innerBg
+                      } ${
                         theme === "dark"
-                          ? "hover:bg-white/[0.05] hover:border-[#D4AF37]/40"
-                          : "hover:bg-black/[0.05] hover:border-[#D4AF37]/40"
+                          ? "hover:border-[#eab308]/40"
+                          : "hover:border-[#eab308]/40"
                       }`}
                     >
-                      <div>
+                      {/* rotating border */}
+                      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/article:opacity-1000 transition duration-300">
+                        <div className="absolute -inset-[1px] rounded-2xl bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
+                        <div
+                          className={`absolute inset-[2px] rounded-2xl ${innerMaskClass}`}
+                        />
+                      </div>
+
+                      {/* content */}
+                      <div className="relative z-10">
                         <p
-                          className={`${textMain} font-semibold mb-1 group-hover/article:text-[#D4AF37] transition`}
+                          className={`${textMain} font-semibold mb-1 group-hover/article:text-[#eab308] transition`}
                         >
-                          {article.title}
+                          {article.title[language]}
                         </p>
                         <p className={`text-sm ${textMuted}`}>
-                          {article.category} • {article.readTime}
+                          {article.category[language]} • {article.readTime[language]}
                         </p>
                       </div>
 
                       <ExternalLink
                         size={18}
-                        className={`${textMuted} shrink-0 group-hover/article:text-[#D4AF37] transition`}
+                        className={`relative z-10 ${textMuted} shrink-0 group-hover/article:text-[#eab308] transition`}
                       />
                     </a>
                   ))}
