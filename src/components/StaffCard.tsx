@@ -23,7 +23,10 @@ const StaffCard: React.FC<StaffCardProps> = ({ person }) => {
       ? "overflow-hidden rounded-2xl mb-5 bg-white/5"
       : "overflow-hidden rounded-2xl mb-5 bg-black/5";
 
-  const innerMaskClass = theme === "dark" ? "bg-[#050505]" : "bg-white/10";
+   const innerMaskClass =
+    theme === "dark"
+      ? "bg-[#050505]"
+      : "bg-[rgba(255,255,255)]";
 
   return (
     <Link

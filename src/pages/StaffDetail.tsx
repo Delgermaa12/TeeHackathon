@@ -45,7 +45,10 @@ const StaffDetail: React.FC = () => {
     theme === "dark"
       ? "bg-white/5 hover:bg-[#050505] border-white/10"
       : "bg-black/5 hover:bg-black/10 border-black/10";
-  const innerMaskClass = theme === "dark" ? "bg-[#050505]" : "bg-white/10";
+   const innerMaskClass =
+    theme === "dark"
+      ? "bg-[#050505]"
+      : "bg-[rgba(255,255,255)]";
 
   if (!person) {
     return (

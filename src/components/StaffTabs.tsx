@@ -27,7 +27,7 @@ const StaffTabs: React.FC<StaffTabsProps> = ({ activeTab, onChange }) => {
   const innerMaskClass =
     theme === "dark"
       ? "bg-[#050505]"
-      : "bg-[rgba(255,255,255,0.92)]";
+      : "bg-[rgba(255,255,255)]";
 
   return (
     <div className="flex flex-wrap justify-center gap-3">
