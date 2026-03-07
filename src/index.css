@@ -42,6 +42,15 @@
   }
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 /* Markdown styles */
 .markdown-body {
   @apply text-sm leading-relaxed;
