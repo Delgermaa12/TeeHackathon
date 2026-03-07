@@ -3,12 +3,12 @@ import {
   Sun,
   Moon,
   Globe,
-  MapPin,
-  Phone,
   ChevronDown,
   LogIn,
   Menu,
   X,
+  BookOpen,
+  Users,
 } from 'lucide-react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
@@ -23,21 +23,21 @@ const Header: React.FC = () => {
   const { scrollY } = useScroll();
   const location = useLocation();
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileInfoOpen, setIsMobileInfoOpen] = useState(false);
+  const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
 
-  const dropdownItems = [
+  const aboutItems = [
     {
-      icon: <MapPin size={14} />,
-      label: language === 'mn' ? 'Байршил' : 'Location',
-      href: '#location',
+      icon: <BookOpen size={14} />,
+      label: language === 'mn' ? 'Танилцуулга' : 'Introduction',
+      to: '/about',
     },
     {
-      icon: <Phone size={14} />,
-      label: language === 'mn' ? 'Холбоо барих' : 'Contact',
-      href: '#contact',
+      icon: <Users size={14} />,
+      label: language === 'mn' ? 'Манай хамт олон' : 'Our Team',
+      to: '/staff',
     },
   ];
 
@@ -62,7 +62,7 @@ const Header: React.FC = () => {
   );
 
   const navClass = `text-[11px] uppercase tracking-widest font-bold ${
-    theme === 'dark' ? 'text-white/50' : 'text-black/50'
+    theme === 'dark' ? 'text-white/50' : 'text-black/70'
   } hover:text-brand-primary transition-all relative group`;
 
   const navUnderline = (
@@ -71,8 +71,10 @@ const Header: React.FC = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
-    setIsMobileInfoOpen(false);
+    setIsMobileAboutOpen(false);
   };
+
+  const aboutLabel = language === 'mn' ? 'Бидний тухай' : t.about;
 
   return (
     <>
@@ -108,10 +110,12 @@ const Header: React.FC = () => {
                   {t.home}
                   {navUnderline}
                 </a>
-                <a href="#program" className={navClass}>
+
+                <Link to="/programm" className={navClass}>
                   {t.program}
                   {navUnderline}
-                </a>
+                </Link>
+
                 <a href="#articles" className={navClass}>
                   {t.articles}
                   {navUnderline}
@@ -123,10 +127,12 @@ const Header: React.FC = () => {
                   {t.home}
                   {navUnderline}
                 </Link>
-                <Link to="/" className={navClass}>
+
+                <Link to="/programm" className={navClass}>
                   {t.program}
                   {navUnderline}
                 </Link>
+
                 <Link to="/" className={navClass}>
                   {t.articles}
                   {navUnderline}
@@ -134,45 +140,42 @@ const Header: React.FC = () => {
               </>
             )}
 
-            <Link to="/about" className={navClass}>
-              {t.about}
-              {navUnderline}
-            </Link>
-
             <div
               className="relative"
-              onMouseEnter={() => setIsDropdownOpen(true)}
-              onMouseLeave={() => setIsDropdownOpen(false)}
+              onMouseEnter={() => setIsAboutDropdownOpen(true)}
+              onMouseLeave={() => setIsAboutDropdownOpen(false)}
             >
               <button
                 type="button"
                 className={`flex items-center gap-1 text-[11px] uppercase tracking-widest font-bold ${
-                  theme === 'dark' ? 'text-white/50' : 'text-black/50'
+                  theme === 'dark' ? 'text-white/50' : 'text-black/70'
                 } hover:text-brand-primary transition-all`}
               >
-                {language === 'mn' ? 'Мэдээлэл' : 'Info'}
+                {aboutLabel}
                 <ChevronDown
                   size={12}
-                  className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                  className={`transition-transform duration-300 ${
+                    isAboutDropdownOpen ? 'rotate-180' : ''
+                  }`}
                 />
               </button>
 
               <AnimatePresence>
-                {isDropdownOpen && (
+                {isAboutDropdownOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
-                    className={`absolute top-full left-0 mt-2 w-52 py-2 rounded-2xl border ${
+                    className={`absolute top-full left-0 mt-2 w-56 py-2 rounded-2xl border ${
                       theme === 'dark'
                         ? 'bg-[#0A0D18]/95 border-white/10'
                         : 'bg-white/95 border-black/10'
                     } backdrop-blur-xl shadow-2xl z-50`}
                   >
-                    {dropdownItems.map((item, i) => (
-                      <a
+                    {aboutItems.map((item, i) => (
+                      <Link
                         key={i}
-                        href={location.pathname === '/' ? item.href : '/'}
+                        to={item.to}
                         className={`flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider ${
                           theme === 'dark'
                             ? 'text-white/70 hover:text-brand-primary hover:bg-white/5'
@@ -181,7 +184,7 @@ const Header: React.FC = () => {
                       >
                         {item.icon}
                         {item.label}
-                      </a>
+                      </Link>
                     ))}
                   </motion.div>
                 )}
@@ -196,7 +199,7 @@ const Header: React.FC = () => {
               className={`p-2 rounded-full ${
                 theme === 'dark'
                   ? 'hover:bg-white/5 text-white/50'
-                  : 'hover:bg-black/5 text-black/50'
+                  : 'hover:bg-black/5 text-black/60'
               } transition-colors flex items-center gap-1`}
             >
               <Globe size={16} />
@@ -211,7 +214,7 @@ const Header: React.FC = () => {
               className={`p-2 rounded-full ${
                 theme === 'dark'
                   ? 'hover:bg-white/5 text-white/50'
-                  : 'hover:bg-black/5 text-black/50'
+                  : 'hover:bg-black/5 text-black/60'
               } transition-colors`}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
@@ -229,7 +232,7 @@ const Header: React.FC = () => {
               } hover:bg-brand-primary hover:text-white rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
             >
               <LogIn size={14} />
-              <span>{language === 'mn' ? 'Бүртгүүлэх' : 'Register'}</span>
+              <span>{language === 'mn' ? 'БҮРТГҮҮЛЭХ' : 'Register'}</span>
             </motion.button>
 
             <button
@@ -272,8 +275,9 @@ const Header: React.FC = () => {
                     >
                       {t.home}
                     </a>
-                    <a
-                      href="#program"
+
+                    <Link
+                      to="/programm"
                       onClick={closeMobileMenu}
                       className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
                         theme === 'dark'
@@ -282,7 +286,8 @@ const Header: React.FC = () => {
                       }`}
                     >
                       {t.program}
-                    </a>
+                    </Link>
+
                     <a
                       href="#articles"
                       onClick={closeMobileMenu}
@@ -308,8 +313,9 @@ const Header: React.FC = () => {
                     >
                       {t.home}
                     </Link>
+
                     <Link
-                      to="/"
+                      to="/programm"
                       onClick={closeMobileMenu}
                       className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
                         theme === 'dark'
@@ -319,6 +325,7 @@ const Header: React.FC = () => {
                     >
                       {t.program}
                     </Link>
+
                     <Link
                       to="/"
                       onClick={closeMobileMenu}
@@ -333,46 +340,36 @@ const Header: React.FC = () => {
                   </>
                 )}
 
-                <Link
-                  to="/about"
-                  onClick={closeMobileMenu}
-                  className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
-                    theme === 'dark'
-                      ? 'text-white/70 hover:bg-white/5'
-                      : 'text-black/70 hover:bg-black/5'
-                  }`}
-                >
-                  {t.about}
-                </Link>
-
                 <button
                   type="button"
-                  onClick={() => setIsMobileInfoOpen(!isMobileInfoOpen)}
+                  onClick={() => setIsMobileAboutOpen(!isMobileAboutOpen)}
                   className={`w-full flex items-center justify-between px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
                     theme === 'dark'
                       ? 'text-white/70 hover:bg-white/5'
                       : 'text-black/70 hover:bg-black/5'
                   }`}
                 >
-                  <span>{language === 'mn' ? 'Мэдээлэл' : 'Info'}</span>
+                  <span>{aboutLabel}</span>
                   <ChevronDown
                     size={16}
-                    className={`transition-transform duration-300 ${isMobileInfoOpen ? 'rotate-180' : ''}`}
+                    className={`transition-transform duration-300 ${
+                      isMobileAboutOpen ? 'rotate-180' : ''
+                    }`}
                   />
                 </button>
 
                 <AnimatePresence>
-                  {isMobileInfoOpen && (
+                  {isMobileAboutOpen && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden ml-2 flex flex-col"
                     >
-                      {dropdownItems.map((item, i) => (
-                        <a
+                      {aboutItems.map((item, i) => (
+                        <Link
                           key={i}
-                          href={location.pathname === '/' ? item.href : '/'}
+                          to={item.to}
                           onClick={closeMobileMenu}
                           className={`flex items-center gap-3 px-3 py-3 rounded-xl text-[11px] font-bold uppercase tracking-wider ${
                             theme === 'dark'
@@ -382,7 +379,7 @@ const Header: React.FC = () => {
                         >
                           {item.icon}
                           {item.label}
-                        </a>
+                        </Link>
                       ))}
                     </motion.div>
                   )}
@@ -400,7 +397,7 @@ const Header: React.FC = () => {
                   } hover:bg-brand-primary hover:text-white rounded-full text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
                 >
                   <LogIn size={14} />
-                  <span>{language === 'mn' ? 'Бүртгүүлэх' : 'Register'}</span>
+                  <span>{language === 'mn' ? 'БҮРТГҮҮЛЭХ' : 'Register'}</span>
                 </motion.button>
               </div>
             </motion.div>

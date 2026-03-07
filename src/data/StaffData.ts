@@ -42,13 +42,14 @@ export const staffData: StaffMember[] = [
     name: { mn: "Б.Билгүүн", en: "B. Bilguun" },
     role: { mn: "Захирал", en: "Director" },
     type: "udirdlaga",
-    image: "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
+    image:
+      "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
     philosophy: {
       mn: "Хүүхэд бүр өөрийн онцлог, хурд, авьяастай. Боловсролын зорилго нь зөвхөн мэдлэг олгох биш, харин хүүхдийн өөртөө итгэх итгэл, бүтээлч сэтгэлгээ, багаар ажиллах чадварыг хөгжүүлэхэд оршино.",
       en: "Every child has unique strengths, pace, and talent. The goal of education is not only to provide knowledge, but also to develop confidence, creativity, and teamwork.",
     },
-    experience: { mn: "8 жил", en: "8 years" },
-    education: { mn: "Удирдлага", en: "Management" },
+    experience: { mn: "7 жил", en: "7 years" },
+    education: { mn: "Электроникийн инженер", en: "Electronic engineering" },
     github: "https://github.com/",
     skills: [
       { mn: "Манлайлал", en: "Leadership" },
@@ -78,18 +79,19 @@ export const staffData: StaffMember[] = [
       },
     ],
   },
-    {
+  {
     id: "2",
     name: { mn: "Б.Билгүүн", en: "B. Bilguun" },
     role: { mn: "Захирал", en: "Director" },
     type: "udirdlaga",
-    image: "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
+    image:
+      "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
     philosophy: {
       mn: "Хүүхэд бүр өөрийн онцлог, хурд, авьяастай. Боловсролын зорилго нь зөвхөн мэдлэг олгох биш, харин хүүхдийн өөртөө итгэх итгэл, бүтээлч сэтгэлгээ, багаар ажиллах чадварыг хөгжүүлэхэд оршино.",
       en: "Every child has unique strengths, pace, and talent. The goal of education is not only to provide knowledge, but also to develop confidence, creativity, and teamwork.",
     },
-    experience: { mn: "8 жил", en: "8 years" },
-    education: { mn: "Удирдлага", en: "Management" },
+    experience: { mn: "7 жил", en: "7 years" },
+    education: { mn: "Электроникийн инженер", en: "Electronic engineering" },
     github: "https://github.com/",
     skills: [
       { mn: "Манлайлал", en: "Leadership" },
@@ -119,18 +121,19 @@ export const staffData: StaffMember[] = [
       },
     ],
   },
-    {
+  {
     id: "3",
     name: { mn: "Б.Билгүүн", en: "B. Bilguun" },
     role: { mn: "Захирал", en: "Director" },
     type: "udirdlaga",
-    image: "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
+    image:
+      "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
     philosophy: {
       mn: "Хүүхэд бүр өөрийн онцлог, хурд, авьяастай. Боловсролын зорилго нь зөвхөн мэдлэг олгох биш, харин хүүхдийн өөртөө итгэх итгэл, бүтээлч сэтгэлгээ, багаар ажиллах чадварыг хөгжүүлэхэд оршино.",
       en: "Every child has unique strengths, pace, and talent. The goal of education is not only to provide knowledge, but also to develop confidence, creativity, and teamwork.",
     },
-    experience: { mn: "8 жил", en: "8 years" },
-    education: { mn: "Удирдлага", en: "Management" },
+    experience: { mn: "7 жил", en: "7 years" },
+    education: { mn: "Электроникийн инженер", en: "Electronic engineering" },
     github: "https://github.com/",
     skills: [
       { mn: "Манлайлал", en: "Leadership" },
@@ -160,18 +163,19 @@ export const staffData: StaffMember[] = [
       },
     ],
   },
-    {
+  {
     id: "4",
     name: { mn: "Б.Билгүүн", en: "B. Bilguun" },
     role: { mn: "Захирал", en: "Director" },
     type: "udirdlaga",
-    image: "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
+    image:
+      "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
     philosophy: {
       mn: "Хүүхэд бүр өөрийн онцлог, хурд, авьяастай. Боловсролын зорилго нь зөвхөн мэдлэг олгох биш, харин хүүхдийн өөртөө итгэх итгэл, бүтээлч сэтгэлгээ, багаар ажиллах чадварыг хөгжүүлэхэд оршино.",
       en: "Every child has unique strengths, pace, and talent. The goal of education is not only to provide knowledge, but also to develop confidence, creativity, and teamwork.",
     },
-    experience: { mn: "8 жил", en: "8 years" },
-    education: { mn: "Удирдлага", en: "Management" },
+    experience: { mn: "7 жил", en: "7 years" },
+    education: { mn: "Электроникийн инженер", en: "Electronic engineering" },
     github: "https://github.com/",
     skills: [
       { mn: "Манлайлал", en: "Leadership" },
@@ -238,7 +242,10 @@ export const staffData: StaffMember[] = [
         url: "#",
       },
       {
-        title: { mn: "Хүний эрх ба технологи", en: "Human Rights and Technology" },
+        title: {
+          mn: "Хүний эрх ба технологи",
+          en: "Human Rights and Technology",
+        },
         category: { mn: "Боловсрол", en: "Education" },
         readTime: { mn: "4 мин", en: "4 min" },
         url: "#",
@@ -282,14 +289,17 @@ export const staffData: StaffMember[] = [
         url: "#",
       },
       {
-        title: { mn: "Хүний эрх ба технологи", en: "Human Rights and Technology" },
+        title: {
+          mn: "Хүний эрх ба технологи",
+          en: "Human Rights and Technology",
+        },
         category: { mn: "Боловсрол", en: "Education" },
         readTime: { mn: "4 мин", en: "4 min" },
         url: "#",
       },
     ],
   },
-{
+  {
     id: "7",
     name: { mn: "Б.Солонгоо", en: "B. Solongoo" },
     role: { mn: "Багш", en: "Teacher" },
@@ -326,7 +336,10 @@ export const staffData: StaffMember[] = [
         url: "#",
       },
       {
-        title: { mn: "Хүний эрх ба технологи", en: "Human Rights and Technology" },
+        title: {
+          mn: "Хүний эрх ба технологи",
+          en: "Human Rights and Technology",
+        },
         category: { mn: "Боловсрол", en: "Education" },
         readTime: { mn: "4 мин", en: "4 min" },
         url: "#",
@@ -370,7 +383,10 @@ export const staffData: StaffMember[] = [
         url: "#",
       },
       {
-        title: { mn: "Хүний эрх ба технологи", en: "Human Rights and Technology" },
+        title: {
+          mn: "Хүний эрх ба технологи",
+          en: "Human Rights and Technology",
+        },
         category: { mn: "Боловсрол", en: "Education" },
         readTime: { mn: "4 мин", en: "4 min" },
         url: "#",

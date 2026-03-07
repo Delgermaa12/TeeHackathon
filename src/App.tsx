@@ -5,6 +5,9 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import About from "./pages/AboutUs";
+import Programm from "./pages/Program";
+import Staff from "./pages/Staff";
+import StaffDetail from "./pages/StaffDetail";
 
 export default function App() {
   return (
@@ -16,6 +19,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<About />} />
+            <Route path="/programm" element={<Programm />} />
+            <Route path="/staff" element={<Staff />} />
+            <Route path="/staff/:id" element={<StaffDetail />} />
           </Routes>
 
           <Footer />
