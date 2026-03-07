@@ -5,10 +5,11 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import ArticlesPage from "./pages/ArticlesPage";
 import ArticleDetail from "./pages/ArticleDetail";
+import AdminPage from "./pages/AdminPage";
 import { articles } from "./data/articles";
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'articles' | 'article-detail'>('home');
+  const [view, setView] = useState<'home' | 'articles' | 'article-detail' | 'admin'>('home');
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -17,7 +18,11 @@ export default function App() {
       if (hash === '#articles') {
         setView('articles');
         window.scrollTo(0, 0);
+      } else if (hash === '#admin') {
+        setView('admin');
+        window.scrollTo(0, 0);
       } else if (hash.startsWith('#article-')) {
+        // ... lines 21-27
         const id = hash.replace('#article-', '');
         setSelectedArticleId(id);
         setView('article-detail');
@@ -25,7 +30,7 @@ export default function App() {
         setView('home');
       }
     };
-
+    // ... lines 33-66
     window.addEventListener('hashchange', handleHashChange);
     handleHashChange(); // Initial check
 
@@ -49,7 +54,7 @@ export default function App() {
   return (
     <AppProvider>
       <div className="min-h-screen bg-brand-dark dark:bg-brand-dark light:bg-brand-light text-white dark:text-white light:text-black selection:bg-brand-secondary/30 selection:text-brand-secondary transition-colors duration-500">
-        <Header onArticlesClick={handleNavigateToArticles} onHomeClick={handleNavigateToHome} />
+        {view !== 'admin' && <Header onArticlesClick={handleNavigateToArticles} onHomeClick={handleNavigateToHome} />}
 
         {view === 'home' && (
           <HomePage />
@@ -66,7 +71,11 @@ export default function App() {
           />
         )}
 
-        <Footer />
+        {view === 'admin' && (
+          <AdminPage onBack={handleNavigateToHome} />
+        )}
+
+        {view !== 'admin' && <Footer />}
       </div>
     </AppProvider>
   );

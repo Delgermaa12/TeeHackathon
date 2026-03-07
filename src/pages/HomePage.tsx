@@ -6,6 +6,7 @@ import { translations } from '../translations';
 import { PATHS } from '../constants';
 import Galaxy from '../components/Galaxy';
 import CardSwap, { Card } from '../components/CardSwap';
+import { teachers, programs } from '../lib/data';
 
 // --- Sub-components for Hero ---
 const COLORS = {
@@ -396,12 +397,10 @@ const SuccessStoriesSection = () => {
 
 const ClassesSection = () => {
   const { theme, language } = useAppContext();
-  const classes = [
-    { grade: language === 'mn' ? '3-Р АНГИ' : '3RD GRADE', teacher: language === 'mn' ? 'Ш.Бонор' : 'Sh.Bonor' },
-    { grade: language === 'mn' ? '5-Р АНГИ' : '5TH GRADE', teacher: language === 'mn' ? 'М.Зоригт' : 'M.Zorigt' },
-    { grade: language === 'mn' ? '7-Р АНГИ' : '7TH GRADE', teacher: language === 'mn' ? 'Ж.Солонго' : 'J.Solongo' },
-    { grade: language === 'mn' ? '9-Р АНГИ' : '9TH GRADE', teacher: language === 'mn' ? 'У.Санж-Очир' : 'U.Sanj-Ochir' },
-  ];
+  const classes = programs.map(p => ({
+    grade: language === 'mn' ? p.grade : p.level,
+    teacher: teachers.find(t => t.id === p.teacherId)?.name || ''
+  }));
 
   return (
     <section className="py-24 relative overflow-hidden">

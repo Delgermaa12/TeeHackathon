@@ -124,6 +124,9 @@ const Footer = () => {
           <div className="flex gap-8">
             <a href="#" className={`${theme === 'dark' ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'} text-[10px] uppercase tracking-widest font-bold transition-colors`}>{t.privacy}</a>
             <a href="#" className={`${theme === 'dark' ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'} text-[10px] uppercase tracking-widest font-bold transition-colors`}>{t.terms}</a>
+            <a href="#admin" className={`${theme === 'dark' ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'} text-[10px] uppercase tracking-widest font-bold transition-colors flex items-center gap-1`}>
+              <span className="opacity-50">⚙️</span> {t.admin}
+            </a>
           </div>
         </div>
       </div>

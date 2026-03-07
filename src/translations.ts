@@ -40,6 +40,7 @@ export const translations = {
       copyright: '© 2026 Crafted with Precision. All Rights Reserved.',
       privacy: 'Нууцлалын бодлого',
       terms: 'Үйлчилгээний нөхцөл',
+      admin: 'Админ нэвтрэх',
     },
   },
   en: {
@@ -83,6 +84,7 @@ export const translations = {
       copyright: '© 2026 Crafted with Precision. All Rights Reserved.',
       privacy: 'Privacy Policy',
       terms: 'Terms of Service',
+      admin: 'Admin Login',
     },
   },
 };
