@@ -452,7 +452,6 @@ const StatsSection = () => {
         </div>
       </div>
     </section>
-    
   );
 };
 

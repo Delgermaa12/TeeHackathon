@@ -65,12 +65,6 @@ const Header: React.FC = () => {
     theme === 'dark' ? 'text-white/50' : 'text-black/70'
   } hover:text-brand-primary transition-all relative group`;
 
-  const mobileNavClass = `px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
-    theme === 'dark'
-      ? 'text-white/70 hover:bg-white/5'
-      : 'text-black/70 hover:bg-black/5'
-  }`;
-
   const navUnderline = (
     <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-brand-primary transition-all duration-300 group-hover:w-full" />
   );
@@ -110,20 +104,41 @@ const Header: React.FC = () => {
           </Link>
 
           <nav className="hidden lg:flex items-center gap-7">
-            <Link to="/" className={navClass}>
-              {t.home}
-              {navUnderline}
-            </Link>
+            {location.pathname === '/' ? (
+              <>
+                <a href="#home" className={navClass}>
+                  {t.home}
+                  {navUnderline}
+                </a>
 
-            <Link to="/programm" className={navClass}>
-              {t.program}
-              {navUnderline}
-            </Link>
+                <Link to="/programm" className={navClass}>
+                  {t.program}
+                  {navUnderline}
+                </Link>
 
-            <Link to="/articles" className={navClass}>
-              {t.articles}
-              {navUnderline}
-            </Link>
+                <Link to="/articles" className={navClass}>
+                  {t.articles}
+                  {navUnderline}
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/" className={navClass}>
+                  {t.home}
+                  {navUnderline}
+                </Link>
+
+                <Link to="/programm" className={navClass}>
+                  {t.program}
+                  {navUnderline}
+                </Link>
+
+                <Link to="/" className={navClass}>
+                  {t.articles}
+                  {navUnderline}
+                </Link>
+              </>
+            )}
 
             <div
               className="relative"
@@ -247,29 +262,83 @@ const Header: React.FC = () => {
               } backdrop-blur-xl`}
             >
               <div className="px-4 py-4 flex flex-col gap-1">
-                <Link
-                  to="/"
-                  onClick={closeMobileMenu}
-                  className={mobileNavClass}
-                >
-                  {t.home}
-                </Link>
+                {location.pathname === '/' ? (
+                  <>
+                    <a
+                      href="#home"
+                      onClick={closeMobileMenu}
+                      className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
+                        theme === 'dark'
+                          ? 'text-white/70 hover:bg-white/5'
+                          : 'text-black/70 hover:bg-black/5'
+                      }`}
+                    >
+                      {t.home}
+                    </a>
 
-                <Link
-                  to="/programm"
-                  onClick={closeMobileMenu}
-                  className={mobileNavClass}
-                >
-                  {t.program}
-                </Link>
+                    <Link
+                      to="/programm"
+                      onClick={closeMobileMenu}
+                      className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
+                        theme === 'dark'
+                          ? 'text-white/70 hover:bg-white/5'
+                          : 'text-black/70 hover:bg-black/5'
+                      }`}
+                    >
+                      {t.program}
+                    </Link>
 
-                <Link
-                  to="/articles"
-                  onClick={closeMobileMenu}
-                  className={mobileNavClass}
-                >
-                  {t.articles}
-                </Link>
+                    <a
+                      href="#articles"
+                      onClick={closeMobileMenu}
+                      className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
+                        theme === 'dark'
+                          ? 'text-white/70 hover:bg-white/5'
+                          : 'text-black/70 hover:bg-black/5'
+                      }`}
+                    >
+                      {t.articles}
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/"
+                      onClick={closeMobileMenu}
+                      className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
+                        theme === 'dark'
+                          ? 'text-white/70 hover:bg-white/5'
+                          : 'text-black/70 hover:bg-black/5'
+                      }`}
+                    >
+                      {t.home}
+                    </Link>
+
+                    <Link
+                      to="/programm"
+                      onClick={closeMobileMenu}
+                      className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
+                        theme === 'dark'
+                          ? 'text-white/70 hover:bg-white/5'
+                          : 'text-black/70 hover:bg-black/5'
+                      }`}
+                    >
+                      {t.program}
+                    </Link>
+
+                    <Link
+                      to="/"
+                      onClick={closeMobileMenu}
+                      className={`px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
+                        theme === 'dark'
+                          ? 'text-white/70 hover:bg-white/5'
+                          : 'text-black/70 hover:bg-black/5'
+                      }`}
+                    >
+                      {t.articles}
+                    </Link>
+                  </>
+                )}
 
                 <button
                   type="button"

@@ -35,7 +35,7 @@ const AboutUs = () => {
   const rotatingLayer = () =>
     "pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500";
   const rotatingBorder =
-    "absolute -inset-[1px] bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]";
+    "absolute -inset-[1px] bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#4285F4,#DB4437)] opacity-25 animate-[spin_6s_linear_infinite]";
   const arcBorder = dark
     ? "border-t-white/10 border-r-white/10 border-b-white/10"
     : "border-t-[#cfd7e3] border-r-[#cfd7e3] border-b-[#cfd7e3]";
@@ -187,7 +187,7 @@ const timeline = [
   return (
     <div id="about-us" className={`${bg} min-h-screen`}>
       {/* Vision + Purpose + semicircle values */}
-      <section className={`py-36 ${bg}`}>
+      <section className={`py-24 ${bg}`}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-[1fr_1.1fr] gap-10 items-center">
           <motion.div
             variants={fadeUp}

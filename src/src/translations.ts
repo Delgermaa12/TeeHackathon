@@ -40,7 +40,6 @@ export const translations = {
       copyright: '© 2026 Crafted with Precision. All Rights Reserved.',
       privacy: 'Нууцлалын бодлого',
       terms: 'Үйлчилгээний нөхцөл',
-      admin: 'Админ',
     },
     staff: {
       back: "Буцах",
@@ -102,7 +101,6 @@ export const translations = {
       copyright: '© 2026 Crafted with Precision. All Rights Reserved.',
       privacy: 'Privacy Policy',
       terms: 'Terms of Service',
-      admin: 'Admin',
     },
     staff: {
       back: "Back",
