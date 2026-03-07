@@ -6,6 +6,8 @@ import { translations } from '../translations';
 import { PATHS } from '../constants';
 import Galaxy from '../components/Galaxy';
 import CardSwap, { Card } from '../components/CardSwap';
+import StudentProjectSection from '../components/Game';
+import { Masonry } from '../components/Masonry';
 
 // --- Sub-components for Hero ---
 const COLORS = {
@@ -14,8 +16,8 @@ const COLORS = {
   RED: "#DB4437",
   BLUE: "#4285F4",
   GREEN: "#0F9D58",
-  BG: "#050505",
-  PENCIL: "#A0A0A0",
+  BG: "#101010",
+  PENCIL: "#fcfcfd",
 };
 
 const TransitionScratches = ({ seed, color = COLORS.PENCIL }: { seed: number; color?: string; key?: string | number }) => {
@@ -63,7 +65,7 @@ const TransitionScratches = ({ seed, color = COLORS.PENCIL }: { seed: number; co
   }, [seed]);
 
   return (
-    <motion.div className="absolute inset-0 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: [0, 0.9, 0] }} transition={{ duration: 0.9, ease: "easeInOut" }} style={{ mixBlendMode: "screen" }}>
+    <motion.div className="absolute inset-0 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: [0, 0, 0] }} transition={{ duration: 0.9, ease: "easeInOut" }} style={{ mixBlendMode: "screen" }}>
       <svg viewBox="0 0 240 240" className="w-full h-full">
         <g filter="url(#glow)" opacity="0.9">
           {lines.map((ln) => (
@@ -457,35 +459,82 @@ const StatsSection = () => {
 };
 
 const SuccessStoriesSection = () => {
+  const galleryItems = [
+  {
+    id: '1',
+    img: '/students/student1.jpg',
+    url: '#',
+    height: 400,
+  },
+  {
+    id: '2',
+    img: '/students/student2.jpg',
+    url: '#',
+    height: 300,
+  },
+  {
+    id: '3',
+    img: '/students/student3.jpg',
+    url: '#',
+    height: 500,
+  },
+  {
+    id: '4',
+    img: '/students/student4.jpg',
+    url: '#',
+    height: 350,
+  },
+  {
+    id: '5',
+    img: '/students/student5.jpg',
+    url: '#',
+    height: 420,
+  },
+  {
+    id: '6',
+    img: '/students/student6.jpg',
+    url: '#',
+    height: 380,
+  },
+];
   const { theme, language } = useAppContext();
-  const t = translations[language].success;
-  const stories = [
-    { icon: <Trophy className="text-brand-accent" />, name: 'Г. Бат-Эрдэнэ', grade: language === 'mn' ? '8-р анги' : '8th Grade', achievement: language === 'mn' ? 'Python тэмцээнд алтан медаль' : 'Gold medal in Python competition', color: 'from-brand-secondary/20 to-transparent', borderColor: 'border-brand-secondary/50' },
-    { icon: <Zap className="text-brand-accent" />, name: 'Э. Сарнай', grade: language === 'mn' ? '6-р анги' : '6th Grade', achievement: language === 'mn' ? 'Arduino робот бүтээх уралдаанд шилдэг төсөл' : 'Best project in Arduino robot building competition', color: 'from-purple-500/20 to-transparent', borderColor: 'border-purple-500/50' },
-    { icon: <Star className="text-brand-accent" />, name: 'М. Ганзориг', grade: language === 'mn' ? '4-р анги' : '4th Grade', achievement: language === 'mn' ? 'Scratch анимэйшн уралдаанд тусгай шагнал' : 'Special award in Scratch animation competition', color: 'from-red-500/20 to-transparent', borderColor: 'border-red-500/50' },
-    { icon: <Award className="text-brand-accent" />, name: 'А. Тэмүүжин', grade: language === 'mn' ? '7-р анги' : '7th Grade', achievement: language === 'mn' ? 'Scratch тоглоом хөгжүүлэлтийн тэмцээнд 1-р байр' : '1st place in Scratch game development competition', color: 'from-brand-accent/20 to-transparent', borderColor: 'border-brand-accent/50' },
-    { icon: <Cpu className="text-brand-accent" />, name: 'Б. Номин-Эрдэнэ', grade: language === 'mn' ? '9-р анги' : '9th Grade', achievement: language === 'mn' ? 'Олон улсын роботикийн олимпиадад оролцсон' : 'Participated in International Robotics Olympiad', color: 'from-blue-500/20 to-transparent', borderColor: 'border-blue-500/50' },
-    { icon: <Palette className="text-brand-accent" />, name: 'Д. Ариунзаяа', grade: language === 'mn' ? '5-р анги' : '5th Grade', achievement: language === 'mn' ? 'Хамгийн бүтээлч програмчлалын төсөл шагнал' : 'Most creative programming project award', color: 'from-brand-primary/20 to-transparent', borderColor: 'border-brand-primary/50' },
-  ];
+
   return (
     <section className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col items-center text-center mb-24 space-y-6">
-          <motion.div initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="px-4 py-1.5 rounded-full border border-brand-secondary/30 bg-brand-secondary/5 text-brand-secondary text-[10px] uppercase tracking-[0.3em] font-bold">Hall of Fame</motion.div>
-          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary">{t.title}</span></motion.h2>
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className={`${theme === 'dark' ? 'text-white/30' : 'text-black/30'} text-xs uppercase tracking-[0.4em] font-bold max-w-lg leading-loose`}>{t.desc}</motion.p>
+
+        <div className="flex flex-col items-center text-center mb-16 space-y-4">
+          <h2
+            className={`text-4xl md:text-6xl font-black tracking-tight ${
+              theme === 'dark' ? 'text-white' : 'text-black'
+            }`}
+          >
+            Hall of Fame
+          </h2>
+
+          <p
+            className={`text-sm ${
+              theme === 'dark' ? 'text-white/40' : 'text-black/40'
+            }`}
+          >
+            {language === 'mn'
+              ? 'Манай сурагчдын бүтээлүүд'
+              : 'Our Students Works'}
+          </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {stories.map((story, index) => (
-            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} whileHover={{ y: -15 }} className={`group relative ${theme === 'dark' ? 'bg-white/[0.02] hover:bg-white/[0.05] border-white/5' : 'bg-black/[0.02] hover:bg-black/[0.05] border-black/5'} border rounded-[2rem] p-10 flex flex-col items-center text-center space-y-6 transition-all duration-500 overflow-hidden`}>
-              <div className={`absolute -bottom-20 -right-20 w-40 h-40 bg-gradient-to-br ${story.color} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-              <div className="relative"><div className={`${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} w-20 h-20 rounded-3xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>{story.icon}</div><motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 3, repeat: Infinity }} className="absolute -inset-4 bg-yellow-500/10 blur-xl rounded-full" /></div>
-              <div className="space-y-2 relative z-10"><h4 className={`font-black text-xl ${theme === 'dark' ? 'text-white' : 'text-black'} group-hover:text-brand-accent transition-colors`}>{story.name}</h4><div className="flex items-center justify-center gap-2"><span className={`w-8 h-px ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'}`} /><p className="text-blue-500 text-[10px] font-black uppercase tracking-[0.3em]">{story.grade}</p><span className={`w-8 h-px ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'}`} /></div></div>
-              <p className={`${theme === 'dark' ? 'text-white/40' : 'text-black/40'} text-sm leading-relaxed font-medium relative z-10`}>{story.achievement}</p>
-              <motion.div whileHover={{ scale: 1.1 }} className="pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 relative z-10"><button className={`flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold ${theme === 'dark' ? 'text-white/60 hover:text-white' : 'text-black/60 hover:text-black'} transition-colors`}>{t.more} <ExternalLink size={12} /></button></motion.div>
-            </motion.div>
-          ))}
-        </div>
+
+        <Masonry
+        items={galleryItems}
+        ease="power3.out"
+  duration={0.6}
+  stagger={0.05}
+  animateFrom="bottom"
+  scaleOnHover
+  hoverScale={0.95}
+  blurToFocus
+  colorShiftOnHover={false}
+/>
+
       </div>
     </section>
   );
@@ -647,6 +696,7 @@ const HomePage = () => {
         <HeroSection scrollY={scrollY} />
         <StatsSection />
         <ClassesSection />
+        <StudentProjectSection />
         <TestimonialsSection />
         <SuccessStoriesSection />
       </div>

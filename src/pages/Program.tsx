@@ -7,7 +7,7 @@ import { translations } from "../translations";
 
 type StaffTab = "all" | "udirdlaga" | "bagsh";
 
-const Staff: React.FC = () => {
+const Program: React.FC = () => {
   const [activeTab, setActiveTab] = useState<StaffTab>("all");
   const { language, theme } = useAppContext();
 
@@ -61,4 +61,4 @@ const Staff: React.FC = () => {
   );
 };
 
-export default Staff;
+export default Program;

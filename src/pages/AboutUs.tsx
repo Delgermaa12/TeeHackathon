@@ -7,7 +7,7 @@ import { translations } from "../translations";
 
 type StaffTab = "all" | "udirdlaga" | "bagsh";
 
-const Staff: React.FC = () => {
+const About: React.FC = () => {
   const [activeTab, setActiveTab] = useState<StaffTab>("all");
   const { language, theme } = useAppContext();
 
@@ -18,7 +18,8 @@ const Staff: React.FC = () => {
     return staffData.filter((item) => item.type === activeTab);
   }, [activeTab]);
 
-  // const textMain = theme === "dark" ? "text-white" : "text-black";
+  const textMain = theme === "dark" ? "text-white" : "text-black";
+
   const panelClass =
     theme === "dark"
       ? "bg-white/[0.03] border-white/10"
@@ -27,11 +28,11 @@ const Staff: React.FC = () => {
   return (
     <section className="min-h-screen pt-32 pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        {/* <div className="text-center mb-10">
+        <div className="text-center mb-10">
           <h1 className={`text-4xl md:text-5xl font-black mb-4 ${textMain}`}>
             {t.title}
           </h1>
-        </div> */}
+        </div>
 
         <div className="mb-12">
           <StaffTabs activeTab={activeTab} onChange={setActiveTab} />
@@ -61,4 +62,4 @@ const Staff: React.FC = () => {
   );
 };
 
-export default Staff;
+export default About;

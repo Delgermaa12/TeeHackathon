@@ -101,9 +101,9 @@ export const CinematicLogo = () => {
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setScene(2), 4000),  // Morph to Sketch
-      setTimeout(() => setScene(3), 8000),  // Color Fill
-      setTimeout(() => setScene(4), 12000), // Final Identity
+      setTimeout(() => setScene(2), 2200),  // Morph to Sketch
+      setTimeout(() => setScene(3), 5200),  // Color Fill
+      setTimeout(() => setScene(4), 8200), // Final Identity
     ];
     return () => timers.forEach(clearTimeout);
   }, []);

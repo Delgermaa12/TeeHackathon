@@ -5,22 +5,23 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Brand Colors */
   --color-brand-primary: #22c55e;
   --color-brand-secondary: #f97316;
   --color-brand-accent: #eab308;
-  --color-brand-dark: #050505;
-  --color-brand-light: #f5f5f5;
-  --color-brand-glass: rgba(255, 255, 255, 0.03);
-  --color-brand-glass-dark: rgba(0, 0, 0, 0.03);
+
+  --color-brand-dark: #101010;
+  --color-brand-light: #fcfcfd;
+
+  --color-brand-glass: rgba(255, 255, 255, 0.65);
+  --color-brand-glass-dark: rgba(16, 16, 16, 0.18);
 }
 
 :root {
   --brand-primary: #22c55e;
   --brand-secondary: #f97316;
   --brand-accent: #eab308;
-  --brand-dark: #050505;
-  --brand-light: #f5f5f5;
+  --brand-dark: #101010;
+  --brand-light: #fcfcfd;
 }
 
 @layer base {
