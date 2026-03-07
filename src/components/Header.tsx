@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LogIn, Sun, Moon, Globe, MapPin, Phone, ChevronDown, Menu, X } from 'lucide-react';
+import { LogIn, Sun, Moon, Globe, Users, Info, ChevronDown, Menu, X } from 'lucide-react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
@@ -47,19 +47,16 @@ const Header = () => {
   };
 
   const navItems = [
-    { key: 'home', label: t.home, href: '#home' },
-    { key: 'program', label: t.program, href: '#program' },
-    { key: 'courses', label: t.courses, href: '#courses' },
-    { key: 'teachers', label: t.teachers, href: '/staff' },
+    { key: 'home', label: t.home, href: '/' },
+    { key: 'program', label: t.program, href: '/program' },
     { key: 'articles', label: t.articles, href: '#articles' },
     { 
       key: 'about', 
       label: t.about, 
-      href: '#about',
       hasDropdown: true,
       dropdownItems: [
-        { icon: <MapPin size={14} />, label: language === 'mn' ? 'Хаяг байршил' : 'Location', href: '#location' },
-        { icon: <Phone size={14} />, label: language === 'mn' ? 'Холбоо барих' : 'Contact', href: '#contact' }
+        { icon: <Info size={14} />, label: language === 'mn' ? 'Танилцуулга' : 'Introduction', href: '/about' },
+        { icon: <Users size={14} />, label: language === 'mn' ? 'Манай хамт олон' : 'Our Team', href: '/staff' }
       ]
     },
   ];

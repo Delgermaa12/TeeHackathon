@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import type { StaffMember } from "../data/StaffData";
 import { useAppContext } from "../context/AppContext";
 
