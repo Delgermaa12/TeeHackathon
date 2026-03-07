@@ -21,8 +21,8 @@ const StaffTabs: React.FC<StaffTabsProps> = ({ activeTab, onChange }) => {
 
   const passiveClass =
     theme === "dark"
-      ? "bg-white/10 text-white/60 border-white/10 hover:text-white"
-      : "bg-white/5 text-black/60 border-[#d4dbe6] hover:text-black";
+      ? "border-white/10 bg-white/[0.03]"
+      : "border-black/10 bg-black/[0.03]";
 
   const innerMaskClass =
     theme === "dark"
