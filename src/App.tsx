@@ -11,6 +11,7 @@ import { articles } from "./data/articles";
 export default function App() {
   const [view, setView] = useState<'home' | 'articles' | 'article-detail' | 'admin'>('home');
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -61,13 +62,20 @@ export default function App() {
         )}
 
         {view === 'articles' && (
-          <ArticlesPage onArticleClick={handleArticleClick} />
+          <ArticlesPage
+            onArticleClick={handleArticleClick}
+            initialTag={selectedTag}
+            onTagChange={setSelectedTag}
+          />
         )}
 
         {view === 'article-detail' && selectedArticle && (
           <ArticleDetail
             article={selectedArticle}
-            onBack={handleNavigateToArticles}
+            onBack={(tag) => {
+              if (tag) setSelectedTag(tag);
+              handleNavigateToArticles();
+            }}
           />
         )}
 

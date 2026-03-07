@@ -7,15 +7,28 @@ import Galaxy from '../components/Galaxy';
 
 interface ArticlesPageProps {
     onArticleClick: (id: string) => void;
+    initialTag?: string | null;
+    onTagChange?: (tag: string | null) => void;
 }
 
-const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
+const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick, initialTag, onTagChange }) => {
     const { theme, language } = useAppContext();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const [selectedTag, setSelectedTag] = useState<string | null>(null);
+    const [selectedTag, setSelectedTag] = useState<string | null>(initialTag || null);
+
+    React.useEffect(() => {
+        if (initialTag !== undefined) {
+            setSelectedTag(initialTag);
+        }
+    }, [initialTag]);
+
+    const handleSetTag = (tag: string | null) => {
+        setSelectedTag(tag);
+        if (onTagChange) onTagChange(tag);
+    };
 
     const categories = useMemo(() => {
         const cats = new Set(articles.map(a => a.category[language]));
@@ -159,7 +172,7 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
                                     {language === 'mn' ? 'Шүүлтүүр:' : 'Filter:'}
                                 </span>
                                 <button
-                                    onClick={() => setSelectedTag(null)}
+                                    onClick={() => handleSetTag(null)}
                                     className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#eab308]/20 border border-[#eab308]/30 text-[#eab308] text-[10px] font-black uppercase tracking-widest hover:bg-[#eab308] hover:text-black transition-all"
                                 >
                                     #{selectedTag}
@@ -210,7 +223,7 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
                                                     key={tag}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        setSelectedTag(tag);
+                                                        handleSetTag(tag);
                                                     }}
                                                     className={`text-[8px] px-2 py-1 rounded-md bg-white/5 border border-white/5 hover:border-[#eab308]/40 transition-all font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-white/40 hover:text-[#eab308]' : 'text-black/40 hover:text-[#eab308]'}`}
                                                 >

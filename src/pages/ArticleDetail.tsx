@@ -7,7 +7,7 @@ import Galaxy from '../components/Galaxy';
 
 interface ArticleDetailProps {
     article: Article;
-    onBack: () => void;
+    onBack: (tag?: string) => void;
 }
 
 const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
