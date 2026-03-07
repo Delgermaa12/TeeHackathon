@@ -13,7 +13,12 @@ export const mockPrograms: Program[] = [
         featured: true,
         createdAt: '2026-01-15T08:00:00Z',
         updatedAt: '2026-02-20T10:30:00Z',
-        description: 'Хүүхэд залууст зориулсан програмчлалын үндсэн ойлголтуудыг олгох цогц хөтөлбөр.'
+        description: 'Хүүхэд залууст зориулсан програмчлалын үндсэн ойлголтуудыг олгох цогц хөтөлбөр.',
+        ageGroup: '8-12 нас',
+        curriculumSummary: 'Алгоритм, Scratch, Вэб хөгжүүлэлтийн суурь',
+        tools: 'Scratch, VS Code',
+        contactInfo: '88112233',
+        coverImage: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800'
     },
     {
         id: 'p2',
@@ -26,6 +31,11 @@ export const mockPrograms: Program[] = [
         status: 'active',
         createdAt: '2025-11-10T09:15:00Z',
         updatedAt: '2026-01-05T14:20:00Z',
+        ageGroup: '12-16 нас',
+        curriculumSummary: 'Arduino, Мэдрэгчүүд, Робот угсралт',
+        tools: 'Arduino Kit, Tinkercad',
+        contactInfo: '99001122',
+        coverImage: 'https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?auto=format&fit=crop&q=80&w=800'
     },
     {
         id: 'p3',
@@ -38,6 +48,11 @@ export const mockPrograms: Program[] = [
         status: 'draft',
         createdAt: '2026-03-01T11:00:00Z',
         updatedAt: '2026-03-05T16:45:00Z',
+        ageGroup: '10-18 нас',
+        curriculumSummary: 'Төсөлд суурилсан хакатон сургалт',
+        tools: 'Github, Replit',
+        contactInfo: '77665544',
+        coverImage: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800'
     }
 ];
 
@@ -50,8 +65,9 @@ export const mockTrainings: Training[] = [
         format: 'offline',
         startDate: '2026-04-01',
         endDate: '2026-06-25',
-        capacity: 20,
-        enrolledCount: 15,
+        price: 350000,
+        salesCount: 15,
+        type: 'paid',
         status: 'active',
         createdAt: '2026-02-15T10:00:00Z',
         updatedAt: '2026-03-02T09:30:00Z',
@@ -64,8 +80,9 @@ export const mockTrainings: Training[] = [
         format: 'online',
         startDate: '2026-03-15',
         endDate: '2026-05-15',
-        capacity: 50,
-        enrolledCount: 48,
+        price: 250000,
+        salesCount: 48,
+        type: 'paid',
         status: 'active',
         createdAt: '2026-01-20T14:00:00Z',
         updatedAt: '2026-03-01T11:15:00Z',
@@ -78,8 +95,9 @@ export const mockTrainings: Training[] = [
         format: 'hybrid',
         startDate: '2026-05-10',
         endDate: '2026-08-30',
-        capacity: 15,
-        enrolledCount: 5,
+        price: 0,
+        salesCount: 5,
+        type: 'free',
         status: 'pending',
         createdAt: '2026-03-05T08:30:00Z',
         updatedAt: '2026-03-06T15:20:00Z',

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { PageHeader } from '../../components/admin/PageHeader';
 import { FilterBar } from '../../components/admin/FilterBar';
+import { type ViewMode } from '../../components/admin/ViewModeToggle';
 import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
-import { MessageSquare, Eye, Trash2 } from 'lucide-react';
+import { MessageSquare, Eye, Trash2, Mail, Phone, Calendar, Tag } from 'lucide-react';
 import { mockRequests } from '../../mock/adminData';
 import type { Request } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
@@ -15,6 +16,7 @@ export function RequestsView() {
     const [search, setSearch] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [viewMode, setViewMode] = useState<ViewMode>('list');
 
     const [requests, setRequests] = useState<Request[]>(mockRequests);
     const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
@@ -127,6 +129,8 @@ export function RequestsView() {
             <FilterBar
                 searchQuery={search}
                 onSearchChange={setSearch}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
                 searchPlaceholder="Нэрээр хайх..."
                 filters={[
                     {
@@ -155,7 +159,80 @@ export function RequestsView() {
                 ]}
             />
 
-            <DataTable columns={columns} data={filteredRequests} onRowClick={handleView} selectable />
+            {viewMode === 'list' ? (
+                <DataTable columns={columns} data={filteredRequests} onRowClick={handleView} selectable />
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredRequests.map((request) => (
+                        <div
+                            key={request.id}
+                            onClick={() => handleView(request)}
+                            className={`group cursor-pointer rounded-3xl p-6 border transition-all duration-300 hover:shadow-xl ${theme === 'dark'
+                                ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
+                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                                }`}
+                        >
+                            <div className="flex items-start justify-between mb-4">
+                                <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} group-hover:bg-brand-secondary/10 transition-colors`}>
+                                    <MessageSquare size={24} className="text-brand-secondary" />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); handleView(request); }}
+                                        className="text-white/40 hover:text-white transition-colors"
+                                    >
+                                        <Eye size={14} />
+                                    </button>
+                                    <button
+                                        onClick={(e) => handleDeleteClick(request.id, e)}
+                                        className="text-red-500/40 hover:text-red-500 transition-colors"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2 mb-6">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-widest flex items-center gap-1">
+                                        <Tag size={10} /> {request.type}
+                                    </span>
+                                    <StatusBadge status={request.status} />
+                                </div>
+                                <h3 className={`font-bold text-base line-clamp-1 group-hover:text-brand-secondary transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                                    {request.name}
+                                </h3>
+                                <div className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-tighter w-max ${request.priority === 'high' ? 'bg-red-500/10 text-red-500' :
+                                    request.priority === 'medium' ? 'bg-orange-500/10 text-orange-500' :
+                                        'bg-blue-500/10 text-blue-500'
+                                    }`}>
+                                    {request.priority} Prio
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4 border-t border-white/5">
+                                <div className="flex items-center gap-3 text-[10px] opacity-60 font-medium">
+                                    <Mail size={12} className="text-brand-secondary/60" />
+                                    <span className="truncate">{request.email || 'И-мэйлгүй'}</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-[10px] opacity-60 font-medium">
+                                    <Phone size={12} className="text-brand-secondary/60" />
+                                    <span>{request.phone || 'Утасгүй'}</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-[10px] opacity-60 font-medium">
+                                    <Calendar size={12} className="text-brand-secondary/60" />
+                                    <span>{new Date(request.createdAt).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    {filteredRequests.length === 0 && (
+                        <div className="col-span-full py-20 text-center opacity-30 font-bold">
+                            Хүсэлт олдсонгүй
+                        </div>
+                    )}
+                </div>
+            )}
 
             <DrawerPanel
                 isOpen={isDrawOpen}

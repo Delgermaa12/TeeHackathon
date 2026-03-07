@@ -16,6 +16,12 @@ export interface Program extends BaseEntity {
     status: Status;
     description?: string;
     featured?: boolean;
+    // content centric fields
+    ageGroup?: string;
+    curriculumSummary?: string;
+    tools?: string;
+    contactInfo?: string;
+    coverImage?: string;
 }
 
 export interface Training extends BaseEntity {
@@ -25,9 +31,10 @@ export interface Training extends BaseEntity {
     format: 'online' | 'offline' | 'hybrid';
     startDate: string;
     endDate: string;
-    capacity: number;
-    enrolledCount: number;
+    price: number;
+    salesCount: number;
     status: Status;
+    type: 'free' | 'paid';
 }
 
 export interface Teacher extends BaseEntity {

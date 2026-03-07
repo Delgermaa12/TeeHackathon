@@ -2,6 +2,7 @@
 import React, { useCallback, useMemo, useReducer, useState } from 'react';
 import { PageHeader } from '../../components/admin/PageHeader';
 import { FilterBar } from '../../components/admin/FilterBar';
+import { type ViewMode } from '../../components/admin/ViewModeToggle';
 import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
@@ -663,6 +664,7 @@ export function ArticlesView() {
     const [categoryFilter, setCategoryFilter] = useState('');
 
     const [articles, setArticles] = useState<Article[]>(mockArticles);
+    const [viewMode, setViewMode] = useState<ViewMode>('list');
 
     const [deleteState, setDeleteState] = useState<{ isOpen: boolean; articleId: string | null }>({
         isOpen: false,
@@ -848,6 +850,8 @@ export function ArticlesView() {
             <FilterBar
                 searchQuery={search}
                 onSearchChange={setSearch}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
                 filters={[
                     {
                         key: 'category',
@@ -863,7 +867,84 @@ export function ArticlesView() {
                 ]}
             />
 
-            <DataTable columns={columns} data={filteredArticles} onRowClick={handleEdit} />
+            {viewMode === 'list' ? (
+                <DataTable columns={columns} data={filteredArticles} onRowClick={handleEdit} />
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredArticles.map((article) => (
+                        <div
+                            key={article.id}
+                            onClick={() => handleEdit(article)}
+                            className={`group cursor-pointer rounded-3xl overflow-hidden border transition-all duration-300 hover:shadow-xl ${theme === 'dark'
+                                ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
+                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                                }`}
+                        >
+                            <div className="relative aspect-video overflow-hidden">
+                                {article.cover && isValidHttpUrl(article.cover) ? (
+                                    <img
+                                        src={article.cover}
+                                        alt={article.title}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                ) : (
+                                    <div className={`w-full h-full flex items-center justify-center ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'}`}>
+                                        <ImageIcon size={32} className="opacity-20" />
+                                    </div>
+                                )}
+                                <div className="absolute top-3 right-3">
+                                    <StatusBadge status={article.status} />
+                                </div>
+                            </div>
+                            <div className="p-5 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-widest">
+                                        {article.category}
+                                    </span>
+                                    <span className="text-[10px] opacity-40 flex items-center gap-1">
+                                        <Clock size={10} /> {new Date(article.updatedAt).toLocaleDateString()}
+                                    </span>
+                                </div>
+                                <h3 className={`font-bold line-clamp-2 leading-snug group-hover:text-brand-secondary transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                                    {article.title || 'Гарчиггүй'}
+                                </h3>
+                                <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-6 h-6 rounded-full bg-brand-secondary/10 flex items-center justify-center text-brand-secondary">
+                                            <User size={12} />
+                                        </div>
+                                        <span className="text-[10px] font-bold opacity-60">
+                                            {getAuthorName(article.authorId)}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEdit(article);
+                                            }}
+                                            className="text-white/40 hover:text-white transition-colors"
+                                        >
+                                            <Edit3 size={14} />
+                                        </button>
+                                        <button
+                                            onClick={(e) => openDeleteDialog(article.id, e)}
+                                            className="text-red-500/40 hover:text-red-500 transition-colors"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    {filteredArticles.length === 0 && (
+                        <div className="col-span-full py-20 text-center opacity-30 font-bold">
+                            Илэрц олдсонгүй
+                        </div>
+                    )}
+                </div>
+            )}
 
             <DrawerPanel
                 isOpen={editor.isOpen}

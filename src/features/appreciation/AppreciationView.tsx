@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { PageHeader } from '../../components/admin/PageHeader';
 import { FilterBar } from '../../components/admin/FilterBar';
+import { type ViewMode } from '../../components/admin/ViewModeToggle';
 import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
-import { Heart, Star, StarOff, CheckCircle, XCircle, Trash2, Eye } from 'lucide-react';
+import { Heart, Star, StarOff, CheckCircle, XCircle, Trash2, Eye, Quote, Clock, User } from 'lucide-react';
 import { mockAppreciations, mockTeachers, mockPrograms, mockTrainings } from '../../mock/adminData';
 import type { Appreciation } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
@@ -14,6 +15,7 @@ export function AppreciationView() {
     const { theme } = useAppContext();
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [viewMode, setViewMode] = useState<ViewMode>('list');
 
     const [appreciations, setAppreciations] = useState<Appreciation[]>(mockAppreciations);
     const [selectedAppreciation, setSelectedAppreciation] = useState<Appreciation | null>(null);
@@ -163,6 +165,8 @@ export function AppreciationView() {
             <FilterBar
                 searchQuery={search}
                 onSearchChange={setSearch}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
                 searchPlaceholder="Илгээгч болон зурвасаар хайх..."
                 filters={[{
                     key: 'status',
@@ -177,7 +181,84 @@ export function AppreciationView() {
                 }]}
             />
 
-            <DataTable columns={columns} data={filteredAppreciations} onRowClick={handleView} />
+            {viewMode === 'list' ? (
+                <DataTable columns={columns} data={filteredAppreciations} onRowClick={handleView} />
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredAppreciations.map((appr) => (
+                        <div
+                            key={appr.id}
+                            onClick={() => handleView(appr)}
+                            className={`group cursor-pointer rounded-3xl p-6 border transition-all duration-300 hover:shadow-xl ${theme === 'dark'
+                                ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
+                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                                }`}
+                        >
+                            <div className="flex items-start justify-between mb-4">
+                                <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} group-hover:bg-brand-secondary/10 transition-colors`}>
+                                    <Heart size={24} className={appr.status === 'approved' ? 'text-red-500' : 'text-brand-secondary'} />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={(e) => toggleFeatured(appr.id, e)}
+                                        className={`p-1.5 rounded-lg transition-all ${appr.featured ? 'text-yellow-500 hover:bg-yellow-500/10' : 'text-white/20 hover:text-white/60'}`}
+                                    >
+                                        {appr.featured ? <Star size={16} className="fill-current" /> : <StarOff size={16} />}
+                                    </button>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); handleView(appr); }}
+                                        className="text-white/40 hover:text-white transition-colors"
+                                    >
+                                        <Eye size={16} />
+                                    </button>
+                                    <button
+                                        onClick={(e) => handleDeleteClick(appr.id, e)}
+                                        className="text-red-500/40 hover:text-red-500 transition-colors"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 mb-6">
+                                <div className="flex items-center justify-between">
+                                    <span className={`text-[10px] uppercase font-bold tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>
+                                        {appr.targetType === 'teacher' ? 'Багшид' : appr.targetType === 'program' ? 'Хөтөлбөрт' : 'Сургалтад'}
+                                    </span>
+                                    <StatusBadge status={appr.status} />
+                                </div>
+                                <h3 className={`font-bold text-sm truncate ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>
+                                    {getTargetName(appr.targetType, appr.targetId)}
+                                </h3>
+                                <div className={`relative p-4 rounded-2xl text-xs italic leading-relaxed ${theme === 'dark' ? 'bg-white/5 text-white/80' : 'bg-black/5 text-black/80'}`}>
+                                    <Quote size={12} className="absolute -top-1 -left-1 text-brand-secondary opacity-40 rotate-180" />
+                                    <p className="line-clamp-3">{appr.messagePreview}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 rounded-full bg-brand-secondary/20 flex items-center justify-center text-brand-secondary">
+                                        <User size={12} />
+                                    </div>
+                                    <span className="text-[10px] font-bold opacity-60">
+                                        {appr.sender}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-[10px] opacity-40">
+                                    <Clock size={10} />
+                                    <span>{new Date(appr.createdAt).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    {filteredAppreciations.length === 0 && (
+                        <div className="col-span-full py-20 text-center opacity-30 font-bold">
+                            Талархал олдсонгүй
+                        </div>
+                    )}
+                </div>
+            )}
 
             <DrawerPanel
                 isOpen={isDrawOpen}

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { PageHeader } from '../../components/admin/PageHeader';
 import { FilterBar } from '../../components/admin/FilterBar';
+import { type ViewMode } from '../../components/admin/ViewModeToggle';
 import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
-import { BookOpen, Edit3, Trash2, List, ArrowLeft, PlayCircle, FileText, CheckSquare, Presentation } from 'lucide-react';
+import { BookOpen, Edit3, Trash2, List, ArrowLeft, PlayCircle, FileText, CheckSquare, Presentation, Layers, BarChart, Wrench, Info, Phone, Image as ImageIcon } from 'lucide-react';
 import { mockPrograms, mockLessons } from '../../mock/adminData';
 import type { Program, Lesson } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
@@ -14,6 +15,7 @@ export function ProgramsView() {
     const { theme } = useAppContext();
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [viewMode, setViewMode] = useState<ViewMode>('list');
 
     // State for Modals & Data
     const [programs, setPrograms] = useState<Program[]>(mockPrograms);
@@ -24,7 +26,7 @@ export function ProgramsView() {
 
     // Curriculum state
     const [viewingProgram, setViewingProgram] = useState<Program | null>(null);
-    const [lessons, setLessons] = useState<Lesson[]>(mockLessons);
+    const [lessons] = useState<Lesson[]>(mockLessons);
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
     const [isLessonDrawOpen, setIsLessonDrawOpen] = useState(false);
 
@@ -257,6 +259,8 @@ export function ProgramsView() {
             <FilterBar
                 searchQuery={search}
                 onSearchChange={setSearch}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
                 searchPlaceholder="Хөтөлбөрийн нэрээр хайх..."
                 filters={[
                     {
@@ -272,11 +276,117 @@ export function ProgramsView() {
                 ]}
             />
 
-            <DataTable
-                columns={columns}
-                data={filteredPrograms}
-                onRowClick={handleEdit}
-            />
+            {viewMode === 'list' ? (
+                <DataTable
+                    columns={columns}
+                    data={filteredPrograms}
+                    onRowClick={handleEdit}
+                />
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredPrograms.map((program) => (
+                        <div
+                            key={program.id}
+                            onClick={() => handleEdit(program)}
+                            className={`group cursor-pointer rounded-3xl p-6 border transition-all duration-300 hover:shadow-xl ${theme === 'dark'
+                                ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
+                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                                }`}
+                        >
+                            <div className="flex items-start justify-between mb-4">
+                                <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} group-hover:bg-brand-secondary/10 transition-colors`}>
+                                    <BookOpen size={24} className="text-brand-secondary" />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setViewingProgram(program); }}
+                                        className="text-white/40 hover:text-brand-secondary transition-colors"
+                                        title="Хичээлүүд харах"
+                                    >
+                                        <List size={16} />
+                                    </button>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); handleEdit(program); }}
+                                        className="text-white/40 hover:text-white transition-colors"
+                                        title="Засах"
+                                    >
+                                        <Edit3 size={16} />
+                                    </button>
+                                    <button
+                                        onClick={(e) => handleDeleteClick(program.id, e)}
+                                        className="text-red-500/40 hover:text-red-500 transition-colors"
+                                        title="Устгах"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {program.coverImage && (
+                                <div className="relative h-32 mb-4 rounded-2xl overflow-hidden group-hover:shadow-lg transition-all duration-500">
+                                    <img
+                                        src={program.coverImage}
+                                        alt={program.title}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                    />
+                                    {/* Type badge removed from program level */}
+                                </div>
+                            )}
+
+                            <div className="space-y-2 mb-6">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-widest">
+                                        {program.category}
+                                    </span>
+                                    <StatusBadge status={program.status} />
+                                </div>
+                                <h3 className={`font-bold text-lg group-hover:text-brand-secondary transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                                    {program.title}
+                                </h3>
+                                <p className={`text-xs line-clamp-2 opacity-50 mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                                    {program.description}
+                                </p>
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {program.ageGroup && (
+                                        <div className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] font-medium border ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white/60' : 'bg-black/5 border-black/5 text-black/60'}`}>
+                                            <Info size={10} className="text-brand-secondary" />
+                                            {program.ageGroup}
+                                        </div>
+                                    )}
+                                    {program.tools && (
+                                        <div className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] font-medium border ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white/60' : 'bg-black/5 border-black/5 text-black/60'}`}>
+                                            <Wrench size={10} className="text-brand-secondary" />
+                                            {program.tools.split(',')[0]}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                                <div className="flex items-center gap-2">
+                                    <Layers size={14} className="text-brand-secondary/60" />
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] opacity-40 uppercase font-bold tracking-tighter">Түвшин</span>
+                                        <span className="text-xs font-bold">{program.level}</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <BarChart size={14} className="text-brand-secondary/60" />
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] opacity-40 uppercase font-bold tracking-tighter">Сургалтууд</span>
+                                        <span className="text-xs font-bold text-brand-secondary">{program.trainingsCount}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    {filteredPrograms.length === 0 && (
+                        <div className="col-span-full py-20 text-center opacity-30 font-bold">
+                            Илэрц олдсонгүй
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Sliding Form Panel for Program */}
             <DrawerPanel
@@ -291,23 +401,46 @@ export function ProgramsView() {
                 }
             >
                 <form className="space-y-5">
-                    <div className="space-y-1.5">
-                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Нэр</label>
-                        <input type="text" defaultValue={selectedProgram?.title} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Хөтөлбөрийн нэр" />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5 font-bold">
+                            <label className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Нэр</label>
+                            <input type="text" defaultValue={selectedProgram?.title} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Хөтөлбөрийн нэр" />
+                        </div>
+                        <div className="space-y-1.5 font-bold">
+                            <label className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Зураг (URL)</label>
+                            <div className="relative">
+                                <input type="text" defaultValue={selectedProgram?.coverImage} className={`w-full px-4 py-3 pl-10 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="https://..." />
+                                <ImageIcon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 opacity-30" />
+                            </div>
+                        </div>
+                    </div>
+                    {/* Type and Price fields removed from Program level */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Насны ангилал</label>
+                            <input type="text" defaultValue={selectedProgram?.ageGroup} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Жишээ: 8-12 нас" />
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Холбоо барих</label>
+                            <div className="relative">
+                                <input type="text" defaultValue={selectedProgram?.contactInfo} className={`w-full px-4 py-3 pl-10 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="9911..." />
+                                <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 opacity-30" />
+                            </div>
+                        </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
-                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Ангилал</label>
-                            <input type="text" defaultValue={selectedProgram?.category} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Жишээ: Програмчлал" />
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Тайлбар</label>
+                            <textarea rows={3} defaultValue={selectedProgram?.description} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Хөтөлбөрийн дэлгэрэнгүй мэдээлэл..." />
                         </div>
                         <div className="space-y-1.5">
-                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Түвшин</label>
-                            <input type="text" defaultValue={selectedProgram?.level} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Анхан шат" />
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Ашиглах багаж хэрэгсэл</label>
+                            <textarea rows={3} defaultValue={selectedProgram?.tools} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="VS Code, Scratch, Arduino..." />
                         </div>
                     </div>
                     <div className="space-y-1.5">
-                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Тайлбар</label>
-                        <textarea rows={4} defaultValue={selectedProgram?.description} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Хөтөлбөрийн дэлгэрэнгүй мэдээлэл..." />
+                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Хичээлийн хөтөлбөр (товч)</label>
+                        <input type="text" defaultValue={selectedProgram?.curriculumSummary} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Хичээлийн гол сэдвүүд" />
                     </div>
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Статус</label>

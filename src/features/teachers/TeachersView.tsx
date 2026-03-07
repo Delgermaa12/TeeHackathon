@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { PageHeader } from '../../components/admin/PageHeader';
 import { FilterBar } from '../../components/admin/FilterBar';
+import { type ViewMode } from '../../components/admin/ViewModeToggle';
 import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
-import { Users, Edit3, Trash2 } from 'lucide-react';
+import { Users, Edit3, Trash2, Mail, Phone, BookOpen } from 'lucide-react';
 import { mockTeachers } from '../../mock/adminData';
 import type { Teacher } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
@@ -14,6 +15,7 @@ export function TeachersView() {
     const { theme } = useAppContext();
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [viewMode, setViewMode] = useState<ViewMode>('list');
 
     const [teachers, setTeachers] = useState<Teacher[]>(mockTeachers);
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -112,6 +114,8 @@ export function TeachersView() {
             <FilterBar
                 searchQuery={search}
                 onSearchChange={setSearch}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
                 searchPlaceholder="Багшийн нэрээр хайх..."
                 filters={[{
                     key: 'status',
@@ -122,7 +126,80 @@ export function TeachersView() {
                 }]}
             />
 
-            <DataTable columns={columns} data={filteredTeachers} onRowClick={handleEdit} />
+            {viewMode === 'list' ? (
+                <DataTable columns={columns} data={filteredTeachers} onRowClick={handleEdit} />
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredTeachers.map((teacher) => (
+                        <div
+                            key={teacher.id}
+                            onClick={() => handleEdit(teacher)}
+                            className={`group cursor-pointer rounded-3xl p-6 border transition-all duration-300 hover:shadow-xl ${theme === 'dark'
+                                ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
+                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                                }`}
+                        >
+                            <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="relative">
+                                        <img
+                                            src={teacher.avatar}
+                                            alt={teacher.name}
+                                            className="w-16 h-16 rounded-2xl object-cover border-2 border-brand-secondary/20"
+                                        />
+                                        <div className="absolute -bottom-1 -right-1">
+                                            <StatusBadge status={teacher.status} />
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <h3 className={`font-bold group-hover:text-brand-secondary transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                                            {teacher.name}
+                                        </h3>
+                                        <span className="text-xs opacity-50">{teacher.specialization}</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleEdit(teacher);
+                                        }}
+                                        className="text-white/40 hover:text-white transition-colors"
+                                    >
+                                        <Edit3 size={14} />
+                                    </button>
+                                    <button
+                                        onClick={(e) => handleDeleteClick(teacher.id, e)}
+                                        className="text-red-500/40 hover:text-red-500 transition-colors"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4 border-t border-white/5">
+                                <div className="flex items-center gap-3 text-xs opacity-60">
+                                    <Mail size={14} className="text-brand-secondary" />
+                                    <span className="truncate">{teacher.email}</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-xs opacity-60">
+                                    <Phone size={14} className="text-brand-secondary" />
+                                    <span>{teacher.phone}</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-xs opacity-60">
+                                    <BookOpen size={14} className="text-brand-secondary" />
+                                    <span className="font-bold text-brand-secondary">{teacher.activeTrainingsCount} идэвхтэй сургалт</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                    {filteredTeachers.length === 0 && (
+                        <div className="col-span-full py-20 text-center opacity-30 font-bold">
+                            Илэрц олдсонгүй
+                        </div>
+                    )}
+                </div>
+            )}
 
             <DrawerPanel
                 isOpen={isDrawOpen}
