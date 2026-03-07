@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
 import { RegistrationForm } from './RegistrationForm';
+import logo from "../assets/logo.png";
 
 const Header: React.FC = () => {
   const { theme, toggleTheme, language, setLanguage } = useAppContext();
@@ -68,27 +69,12 @@ const Header: React.FC = () => {
         className="fixed top-0 left-0 w-full z-50 border-b transition-colors duration-300"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
-          <a href="#home" className="flex items-center gap-2 group shrink-0">
+          <a href="pages/HomePage" className="flex items-center gap-2 group shrink-0">
             <div className="relative">
-              <span
-                className={`text-xl sm:text-2xl font-black tracking-tighter ${
-                  theme === 'dark' ? 'text-white' : 'text-black'
-                } group-hover:text-brand-primary transition-colors duration-500`}
-              >
-                Te
-                <sup className="text-brand-primary group-hover:text-white transition-colors duration-500">
-                  3
-                </sup>
-              </span>
+              <div className="relative">
+                <img src={logo} alt="Teee" className="h-20 w-auto"
+                /></div>
             </div>
-
-            <span
-              className={`text-[9px] sm:text-[10px] uppercase tracking-[0.35em] ${
-                theme === 'dark' ? 'text-white/30' : 'text-black/30'
-              } font-bold ml-1 hidden sm:block`}
-            >
-              Education
-            </span>
           </a>
 
           <nav className="hidden lg:flex items-center gap-7">
