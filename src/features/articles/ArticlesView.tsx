@@ -26,7 +26,8 @@ import {
     Settings2,
     PlayCircle,
     Clock,
-    ArrowRight
+    ArrowRight,
+    Eye
 } from 'lucide-react';
 import { mockArticles, mockTeachers } from '../../mock/adminData';
 import type { Article, ArticleBlock, BlockType } from '../../types/admin';
@@ -464,15 +465,29 @@ function ArticleCardPreview({
                 </div>
 
                 <div className="p-8 space-y-4">
-                    <span className="text-[10px] font-bold text-[#eab308] uppercase tracking-widest">
-                        {article.category}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[10px] font-bold text-[#eab308] uppercase tracking-widest">
+                            {article.category}
+                        </span>
+                        {article.tags?.map((tag, idx) => (
+                            <span key={idx} className={`text-[9px] px-1.5 py-0.5 rounded-md font-medium uppercase tracking-wider ${theme === 'dark' ? 'bg-white/10 text-white/50' : 'bg-black/5 text-black/50'}`}>
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
                     <h3 className={`text-xl md:text-2xl font-black leading-tight tracking-tight group-hover:text-[#eab308] transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                         {article.title || 'Untitled Article'}
                     </h3>
-                    <p className={`text-sm leading-relaxed line-clamp-2 opacity-60 ${theme === 'dark' ? 'text-white/70' : 'text-black/70'}`}>
-                        {article.excerpt || 'No excerpt provided...'}
-                    </p>
+                    <div className="flex items-center gap-4">
+                        <p className={`text-sm leading-relaxed line-clamp-2 opacity-60 ${theme === 'dark' ? 'text-white/70' : 'text-black/70'}`}>
+                            {article.excerpt || 'No excerpt provided...'}
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <span className={`text-[10px] font-medium ${theme === 'dark' ? 'text-white/40' : 'text-black/40'} flex items-center gap-1.5`}>
+                            <Eye size={12} className="text-[#eab308]" /> {article.views} views
+                        </span>
+                    </div>
 
                     <div className={`pt-6 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} flex items-center justify-between`}>
                         <div className="flex items-center gap-3">
@@ -766,9 +781,42 @@ export function ArticlesView() {
                     </div>
                 ),
             },
-            { header: 'Ангилал', accessorKey: 'category' },
-            { header: 'Зохиогч', accessorKey: 'authorId', cell: ({ row }) => getAuthorName(row.authorId) },
-            { header: 'Үзсэн', accessorKey: 'views', cell: ({ row }) => (row.views ?? 0).toLocaleString() },
+            {
+                header: 'Ангилал',
+                accessorKey: 'category',
+                cell: ({ row }) => (
+                    <div className="flex flex-col gap-1">
+                        <span className="font-bold text-brand-secondary">{row.category}</span>
+                        <div className="flex flex-wrap gap-1">
+                            {row.tags?.slice(0, 2).map((tag, i) => (
+                                <span key={i} className={`text-[8px] px-1 rounded uppercase tracking-tighter ${theme === 'dark' ? 'bg-white/5 text-white/40' : 'bg-black/5 text-black/50'}`}>#{tag}</span>
+                            ))}
+                        </div>
+                    </div>
+                )
+            },
+            {
+                header: 'Зохиогч',
+                accessorKey: 'authorId',
+                cell: ({ row }) => (
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-brand-secondary/10 flex items-center justify-center text-brand-secondary">
+                            <User size={10} />
+                        </div>
+                        <span className="text-xs truncate max-w-[100px]">{getAuthorName(row.authorId)}</span>
+                    </div>
+                )
+            },
+            {
+                header: 'Үзсэн',
+                accessorKey: 'views',
+                cell: ({ row }) => (
+                    <div className="flex items-center gap-1.5 opacity-50 font-medium">
+                        <Eye size={12} className="text-brand-secondary" />
+                        <span>{(row.views ?? 0).toLocaleString()}</span>
+                    </div>
+                )
+            },
             { header: 'Статус', accessorKey: 'status', cell: ({ row }) => <StatusBadge status={row.status} /> },
             {
                 header: 'Үйлдэл',
@@ -891,12 +939,22 @@ export function ArticlesView() {
                                 </div>
                             </div>
                             <div className="p-5 space-y-3">
-                                <div className="flex items-center justify-between">
+                                <div className="flex flex-wrap items-center gap-2">
                                     <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-widest">
                                         {article.category}
                                     </span>
-                                    <span className="text-[10px] opacity-40 flex items-center gap-1">
+                                    {article.tags?.map((tag, idx) => (
+                                        <span key={idx} className={`text-[9px] px-1.5 py-0.5 rounded-md font-medium uppercase tracking-wider ${theme === 'dark' ? 'bg-white/5 text-white/40' : 'bg-black/5 text-black/50'}`}>
+                                            #{tag}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className={`text-[10px] font-medium ${theme === 'dark' ? 'text-white/40' : 'text-black/40'} flex items-center gap-1`}>
                                         <Clock size={10} /> {new Date(article.updatedAt).toLocaleDateString()}
+                                    </span>
+                                    <span className={`text-[10px] font-medium ${theme === 'dark' ? 'text-white/40' : 'text-black/40'} flex items-center gap-1`}>
+                                        <Eye size={10} /> {article.views}
                                     </span>
                                 </div>
                                 <h3 className={`font-bold line-clamp-2 leading-snug group-hover:text-brand-secondary transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
@@ -1079,6 +1137,18 @@ export function ArticlesView() {
                                         <option value="Мэдээ">Мэдээ</option>
                                         <option value="Зөвлөгөө">Зөвлөгөө</option>
                                     </select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold uppercase opacity-30">Tags (comma separated)</label>
+                                    <input
+                                        type="text"
+                                        value={selectedArticle.tags?.join(', ') ?? ''}
+                                        onChange={(e) => setArticleField('tags', e.target.value.split(',').map(t => t.trim()).filter(Boolean))}
+                                        className={`w-full p-3 rounded-xl border outline-none text-xs ${theme === 'dark' ? 'bg-black/20 border-white/5 text-white/80' : 'bg-black/5 border-black/10 text-black/80'
+                                            }`}
+                                        placeholder="Tech, Education, News..."
+                                    />
                                 </div>
 
                                 <div className="space-y-2">
