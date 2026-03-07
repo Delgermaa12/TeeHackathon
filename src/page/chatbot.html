@@ -1,0 +1,48 @@
+<!-- TEE Chat FAB -->
+<button id="tee-chat-fab" title="ChatBot нээх">
+  💬
+  <span class="tee-fab-dot"></span>
+</button>
+
+<!-- TEE Chat Panel -->
+<div id="tee-chat-panel">
+  <div class="tee-chat-header">
+    <div class="tee-chat-avatar">
+      <img src="https://tee.education/wp-content/uploads/2023/04/tee_logo_dark.png" alt="TEE"
+           onerror="this.parentElement.innerHTML='🤖'">
+    </div>
+    <div>
+      <div class="tee-chat-title">TEE Assistant</div>
+      <div class="tee-chat-subtitle"><span class="tee-chat-online"></span>Онлайн</div>
+    </div>
+    <button class="tee-chat-close" id="tee-chat-close">✕</button>
+  </div>
+
+  <div class="tee-chat-main">
+    <div class="tee-sidemenu" id="tee-sidemenu" style="display:none">
+      <button class="tee-side-chip" data-q="programs"><span class="tee-side-chip-icon">🎓</span><span class="tee-side-chip-label">Хөтөлбөр</span></button>
+      <button class="tee-side-chip" data-q="price"><span class="tee-side-chip-icon">💰</span><span class="tee-side-chip-label">Төлбөр</span></button>
+      <button class="tee-side-chip" data-q="location"><span class="tee-side-chip-icon">📍</span><span class="tee-side-chip-label">Байршил</span></button>
+      <button class="tee-side-chip" data-q="contact"><span class="tee-side-chip-icon">📞</span><span class="tee-side-chip-label">Холбоо</span></button>
+      <button class="tee-side-chip" data-q="age"><span class="tee-side-chip-icon">👶</span><span class="tee-side-chip-label">Насны анги</span></button>
+      <button class="tee-side-chip" data-q="schedule"><span class="tee-side-chip-icon">🕐</span><span class="tee-side-chip-label">Хуваарь</span></button>
+    </div>
+
+    <div class="tee-chat-body" id="tee-chat-body">
+      <div class="tee-bubble tee-bot">Сайн байна уу! 👋 Би TEE-ийн туслах. Юу мэдэхийг хүсч байна вэ?</div>
+      <div class="tee-faq" id="tee-faq">
+        <button class="tee-faq-chip" data-q="programs">🎓 Хөтөлбөрүүд</button>
+        <button class="tee-faq-chip" data-q="price">💰 Төлбөр</button>
+        <button class="tee-faq-chip" data-q="location">📍 Байршил</button>
+        <button class="tee-faq-chip" data-q="contact">📞 Холбоо</button>
+        <button class="tee-faq-chip" data-q="age">👶 Насны ангилал</button>
+        <button class="tee-faq-chip" data-q="schedule">🕐 Хуваарь</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tee-chat-footer">
+    <input class="tee-chat-input" id="tee-chat-input" placeholder="Асуулт бичнэ үү..." autocomplete="off">
+    <button class="tee-chat-send" id="tee-chat-send">➤</button>
+  </div>
+</div>

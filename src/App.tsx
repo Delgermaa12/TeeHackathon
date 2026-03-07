@@ -6,7 +6,7 @@ import { Sparkles, AmbientDecorations } from "./components/AmbientDecorations";
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 
-export default function App() {//uhuhuhajhsjahsjahjashjajhasjshj
+export default function App() {
   return (
     <main className="min-h-screen bg-[#050505] text-white selection:bg-[#D4AF37] selection:text-black relative">
       {/* Ambient Decorations (Goose & Teee) */}
