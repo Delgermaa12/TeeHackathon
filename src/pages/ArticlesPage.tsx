@@ -64,13 +64,13 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
                         <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
                             {/* Search Input */}
                             <div className="relative group w-full sm:w-80">
-                                <Search className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors duration-300 ${searchQuery ? 'text-[#eab308]' : 'opacity-30 group-focus-within:opacity-100 group-focus-within:text-[#eab308]'}`} size={20} />
+                                <Search className={`absolute right-5 top-1/2 -translate-y-1/2 transition-colors duration-300 ${searchQuery ? 'text-[#eab308]' : 'opacity-30 group-focus-within:opacity-100 group-focus-within:text-[#eab308]'}`} size={20} />
                                 <input
                                     type="text"
-                                    placeholder={language === 'mn' ? 'Мэдлэг хайх...' : 'Search knowledge...'}
+                                    placeholder={language === 'mn' ? 'Нийтлэл хайх...' : 'Search articles...'}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className={`pl-14 pr-6 py-4 rounded-2xl w-full backdrop-blur-3xl border-2 transition-all outline-none text-sm font-medium ${theme === 'dark'
+                                    className={`pl-6 pr-14 py-4 rounded-2xl w-full backdrop-blur-3xl border-2 transition-all outline-none text-sm font-medium ${theme === 'dark'
                                         ? 'bg-white/5 border-white/5 focus:border-[#eab308]/40 focus:bg-white/10'
                                         : 'bg-black/5 border-black/5 focus:border-[#eab308]/40 focus:bg-black/10'
                                         }`}
