@@ -131,18 +131,18 @@ export function TeachersView() {
                         <div
                             key={teacher.id}
                             onClick={() => handleEdit(teacher)}
-                            className={`group cursor-pointer rounded-3xl p-6 border transition-all duration-300 hover:shadow-xl ${theme === 'dark'
-                                ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
-                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                            className={`group cursor-pointer rounded-3xl p-6 md:p-8 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${theme === 'dark'
+                                ? 'bg-[#151515] border-white/5 hover:border-brand-secondary/30 shadow-none'
+                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm ring-1 ring-black/5'
                                 }`}
                         >
-                            <div className="flex items-start justify-between mb-4">
-                                <div className="flex items-center gap-4">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="flex items-center gap-5">
                                     <div className="relative">
                                         <img
                                             src={teacher.avatar}
                                             alt={teacher.name}
-                                            className="w-16 h-16 rounded-2xl object-cover border-2 border-brand-secondary/20"
+                                            className="w-16 h-16 rounded-2xl object-cover border border-black/5 shadow-sm"
                                         />
                                         <div className="absolute -bottom-1 -right-1">
                                             <StatusBadge status={teacher.status} />
@@ -181,7 +181,7 @@ export function TeachersView() {
                                 </div>
                             </div>
 
-                            <div className={`space-y-4 pt-4 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}>
+                            <div className={`space-y-5 pt-5 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}>
                                 {teacher.bio && (
                                     <p className={`text-[10px] line-clamp-2 leading-relaxed ${theme === 'dark' ? 'text-white/40' : 'text-black/60'}`}>
                                         {teacher.bio}

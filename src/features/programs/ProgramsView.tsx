@@ -289,12 +289,12 @@ export function ProgramsView() {
                         <div
                             key={program.id}
                             onClick={() => handleEdit(program)}
-                            className={`group cursor-pointer rounded-3xl p-6 border transition-all duration-300 hover:shadow-xl ${theme === 'dark'
-                                ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
-                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                            className={`group cursor-pointer rounded-3xl p-6 md:p-8 border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${theme === 'dark'
+                                ? 'bg-[#151515] border-white/5 hover:border-brand-secondary/30 shadow-none'
+                                : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm ring-1 ring-black/5'
                                 }`}
                         >
-                            <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-start justify-between mb-6">
                                 <div className={`p-3 rounded-2xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} group-hover:bg-brand-secondary/10 transition-colors`}>
                                     <BookOpen size={24} className="text-brand-secondary" />
                                 </div>

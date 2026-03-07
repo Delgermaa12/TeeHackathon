@@ -35,13 +35,12 @@ export function DataTable<T extends { id: string | number }>({
     const { theme } = useAppContext();
 
     const allSelected = data.length > 0 && selectedIds.length === data.length;
-    const someSelected = selectedIds.length > 0 && selectedIds.length < data.length;
 
     return (
-        <div className={`w-full overflow-x-auto rounded-2xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5' : 'bg-white border-black/5 shadow-sm'}`}>
+        <div className={`w-full overflow-x-auto rounded-3xl ${theme === 'dark' ? 'bg-[#151515] shadow-none' : 'bg-white shadow-sm ring-1 ring-black/5'}`}>
             <table className="w-full text-left text-sm whitespace-nowrap">
                 <thead>
-                    <tr className={`${theme === 'dark' ? 'bg-white/[0.02] text-white/40' : 'bg-black/[0.02] text-black/50'} text-xs uppercase font-bold tracking-wider border-b ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}>
+                    <tr className={`${theme === 'dark' ? 'text-white/40 border-white/5' : 'text-black/50 border-black/5'} text-[11px] uppercase font-black tracking-widest border-b`}>
                         {selectable && (
                             <th className="px-6 py-4 w-12 text-center">
                                 <button
@@ -55,7 +54,7 @@ export function DataTable<T extends { id: string | number }>({
                         {columns.map((col, i) => (
                             <th
                                 key={i}
-                                className={`px-6 py-4 ${col.sortable ? 'cursor-pointer hover:text-brand-secondary transition-colors' : ''}`}
+                                className={`px-6 py-5 ${col.sortable ? 'cursor-pointer hover:text-brand-secondary transition-colors' : ''}`}
                                 onClick={() => col.sortable && col.accessorKey && onSort?.(col.accessorKey as string)}
                             >
                                 <div className="flex items-center gap-2">
@@ -81,7 +80,7 @@ export function DataTable<T extends { id: string | number }>({
                                 key={row.id}
                                 className={`
                                     border-b ${theme === 'dark' ? 'border-white/5 hover:bg-white/[0.02]' : 'border-black/5 hover:bg-black/[0.01]'}
-                                    transition-colors ${onRowClick ? 'cursor-pointer' : ''}
+                                    transition-all hover:shadow-sm ${onRowClick ? 'cursor-pointer relative z-0 hover:z-10' : ''}
                                 `}
                                 onClick={() => onRowClick?.(row)}
                             >
@@ -102,7 +101,7 @@ export function DataTable<T extends { id: string | number }>({
                                 {columns.map((col, i) => {
                                     const val = col.accessorKey ? (row as any)[col.accessorKey] : null;
                                     return (
-                                        <td key={i} className="px-6 py-4">
+                                        <td key={i} className="px-6 py-5 font-medium">
                                             {col.cell ? col.cell({ row, getValue: () => val }) : val}
                                         </td>
                                     );

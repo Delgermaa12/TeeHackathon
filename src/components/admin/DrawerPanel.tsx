@@ -31,9 +31,9 @@ export function DrawerPanel({ isOpen, onClose, title, children, footer, maxWidth
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className={`relative w-full ${maxWidth} h-full flex flex-col shadow-2xl border-l ${theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-black/10'}`}
+                        className={`relative w-full ${maxWidth} h-full flex flex-col shadow-2xl rounded-l-3xl border-l ${theme === 'dark' ? 'bg-[#111] border-white/5 shadow-none' : 'bg-white border-black/5 ring-1 ring-black/5'}`}
                     >
-                        <div className="p-6 border-b flex justify-between items-center shrink-0">
+                        <div className={`p-6 md:p-8 flex justify-between items-center shrink-0 border-b ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}>
                             <h2 className="text-lg font-bold flex items-center gap-2">
                                 {title}
                             </h2>
@@ -45,12 +45,12 @@ export function DrawerPanel({ isOpen, onClose, title, children, footer, maxWidth
                             </button>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6 text-sm">
+                        <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 text-sm">
                             {children}
                         </div>
 
                         {footer && (
-                            <div className="p-6 border-t shrink-0 flex justify-end gap-3">
+                            <div className={`p-6 md:p-8 shrink-0 flex justify-end gap-3 border-t ${theme === 'dark' ? 'border-white/5 bg-white/[0.02]' : 'border-black/5 bg-black/[0.02]'}`}>
                                 {footer}
                             </div>
                         )}
