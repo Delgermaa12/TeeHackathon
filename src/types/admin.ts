@@ -40,11 +40,24 @@ export interface Teacher extends BaseEntity {
     status: Status;
 }
 
+export type BlockType = 'text' | 'image' | 'gallery' | 'quote' | 'video' | 'course_grid';
+
+export interface ArticleBlock {
+    id: string;
+    type: BlockType;
+    content: any; // Flexible based on type
+    order: number;
+    settings?: any;
+}
+
 export interface Article extends BaseEntity {
     title: string;
     cover?: string;
     authorId: string;
     category: string;
+    excerpt?: string;
+    blocks: ArticleBlock[]; // Replaces single content string
+    tags?: string[];
     status: Status;
     publishedDate?: string;
     views: number;

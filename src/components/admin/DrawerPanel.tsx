@@ -9,9 +9,10 @@ interface DrawerPanelProps {
     title: React.ReactNode;
     children: React.ReactNode;
     footer?: React.ReactNode;
+    maxWidth?: string;
 }
 
-export function DrawerPanel({ isOpen, onClose, title, children, footer }: DrawerPanelProps) {
+export function DrawerPanel({ isOpen, onClose, title, children, footer, maxWidth = 'max-w-md' }: DrawerPanelProps) {
     const { theme } = useAppContext();
 
     return (
@@ -30,7 +31,7 @@ export function DrawerPanel({ isOpen, onClose, title, children, footer }: Drawer
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className={`relative w-full max-w-md h-full flex flex-col shadow-2xl border-l ${theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-black/10'}`}
+                        className={`relative w-full ${maxWidth} h-full flex flex-col shadow-2xl border-l ${theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-black/10'}`}
                     >
                         <div className="p-6 border-b flex justify-between items-center shrink-0">
                             <h2 className="text-lg font-bold flex items-center gap-2">
