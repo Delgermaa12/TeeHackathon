@@ -44,7 +44,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
                     <motion.button
                         whileHover={{ scale: 1.05, x: -5 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={onBack}
+                        onClick={() => onBack()}
                         className={`flex items-center gap-3 px-6 py-3 rounded-2xl backdrop-blur-3xl border-2 ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white hover:border-[#eab308]/40' : 'bg-black/5 border-black/5 text-black hover:border-[#eab308]/40'
                             } font-black text-[10px] uppercase tracking-widest transition-all`}
                     >
@@ -161,7 +161,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                onClick={onBack}
+                                onClick={() => onBack()}
                                 className="px-12 py-5 bg-[#eab308] text-black rounded-3xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-[#eab308]/20 flex items-center gap-4 transition-all hover:shadow-[#eab308]/40 active:scale-95"
                             >
                                 <ArrowLeft size={20} />

@@ -16,14 +16,21 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      if (hash === '#articles') {
+      if (hash === '#articles' || hash.startsWith('#articles#')) {
         setView('articles');
+        const tagMatch = hash.match(/^#articles#(.*)$/);
+        if (tagMatch && tagMatch[1]) {
+          setSelectedTag(decodeURIComponent(tagMatch[1]));
+        } else if (hash === '#articles') {
+          // If explicitly navigating to #articles without a tag, clear it? 
+          // Or keep it? Usually navigation to base clears others.
+          // setSelectedTag(null); 
+        }
         window.scrollTo(0, 0);
       } else if (hash === '#admin') {
         setView('admin');
         window.scrollTo(0, 0);
       } else if (hash.startsWith('#article-')) {
-        // ... lines 21-27
         const id = hash.replace('#article-', '');
         setSelectedArticleId(id);
         setView('article-detail');
@@ -31,7 +38,6 @@ export default function App() {
         setView('home');
       }
     };
-    // ... lines 33-66
     window.addEventListener('hashchange', handleHashChange);
     handleHashChange(); // Initial check
 
@@ -73,7 +79,7 @@ export default function App() {
           <ArticleDetail
             article={selectedArticle}
             onBack={(tag) => {
-              if (tag) setSelectedTag(tag);
+              if (typeof tag === 'string') setSelectedTag(tag);
               handleNavigateToArticles();
             }}
           />

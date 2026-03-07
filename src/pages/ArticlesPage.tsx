@@ -28,6 +28,13 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick, initialTag,
     const handleSetTag = (tag: string | null) => {
         setSelectedTag(tag);
         if (onTagChange) onTagChange(tag);
+
+        // Update hash synchronously
+        if (tag) {
+            window.location.hash = `#articles#${encodeURIComponent(tag)}`;
+        } else {
+            window.location.hash = '#articles';
+        }
     };
 
     const categories = useMemo(() => {

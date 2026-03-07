@@ -119,7 +119,7 @@ export const articles: Article[] = [
       mn: '7 мин',
       en: '7 min'
     },
-    tags: ['STEM', 'Education', 'Future']
+    tags: ['STEM', 'Education', 'Future', 'Robotics']
   },
   {
     id: '5',
@@ -149,7 +149,7 @@ export const articles: Article[] = [
       mn: '10 мин',
       en: '10 min'
     },
-    tags: ['Coding', 'Web', 'Technology']
+    tags: ['Coding', 'Web', 'Technology', 'Robotics']
   },
   {
     id: '6',
