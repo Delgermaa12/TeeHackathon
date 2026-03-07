@@ -6,7 +6,12 @@ import { translations } from '../translations';
 import { RegistrationForm } from './RegistrationForm';
 import logo from "../assets/logo.png";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onArticlesClick?: () => void;
+  onHomeClick?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onArticlesClick, onHomeClick }) => {
   const { theme, toggleTheme, language, setLanguage } = useAppContext();
   const t = translations[language].nav;
   const { scrollY } = useScroll();
@@ -85,9 +90,17 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className={`text-[11px] uppercase tracking-widest font-bold ${
-                  theme === 'dark' ? 'text-white/50' : 'text-black/50'
-                } hover:text-brand-primary transition-all relative group`}
+                onClick={(e) => {
+                  if (item.key === 'articles' && onArticlesClick) {
+                    e.preventDefault();
+                    onArticlesClick();
+                  } else if (item.key === 'home' && onHomeClick) {
+                    e.preventDefault();
+                    onHomeClick();
+                  }
+                }}
+                className={`text-[11px] uppercase tracking-widest font-bold ${theme === 'dark' ? 'text-white/50' : 'text-black/50'
+                  } hover:text-brand-primary transition-all relative group`}
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-brand-primary transition-all duration-300 group-hover:w-full" />
@@ -101,9 +114,8 @@ const Header: React.FC = () => {
             >
               <button
                 type="button"
-                className={`flex items-center gap-1 text-[11px] uppercase tracking-widest font-bold ${
-                  theme === 'dark' ? 'text-white/50' : 'text-black/50'
-                } hover:text-brand-primary transition-all`}
+                className={`flex items-center gap-1 text-[11px] uppercase tracking-widest font-bold ${theme === 'dark' ? 'text-white/50' : 'text-black/50'
+                  } hover:text-brand-primary transition-all`}
               >
                 {language === 'mn' ? 'Мэдээлэл' : 'Info'}
                 <ChevronDown
@@ -118,21 +130,19 @@ const Header: React.FC = () => {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
-                    className={`absolute top-full left-0 mt-2 w-52 py-2 rounded-2xl border ${
-                      theme === 'dark'
-                        ? 'bg-[#0A0D18]/95 border-white/10'
-                        : 'bg-white/95 border-black/10'
-                    } backdrop-blur-xl shadow-2xl z-50`}
+                    className={`absolute top-full left-0 mt-2 w-52 py-2 rounded-2xl border ${theme === 'dark'
+                      ? 'bg-[#0A0D18]/95 border-white/10'
+                      : 'bg-white/95 border-black/10'
+                      } backdrop-blur-xl shadow-2xl z-50`}
                   >
                     {dropdownItems.map((item, i) => (
                       <a
                         key={i}
                         href={item.href}
-                        className={`flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider ${
-                          theme === 'dark'
-                            ? 'text-white/70 hover:text-brand-primary hover:bg-white/5'
-                            : 'text-black/70 hover:text-brand-primary hover:bg-black/5'
-                        } transition-all`}
+                        className={`flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider ${theme === 'dark'
+                          ? 'text-white/70 hover:text-brand-primary hover:bg-white/5'
+                          : 'text-black/70 hover:text-brand-primary hover:bg-black/5'
+                          } transition-all`}
                       >
                         {item.icon}
                         {item.label}
@@ -148,11 +158,10 @@ const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setLanguage(language === 'mn' ? 'en' : 'mn')}
-              className={`p-2 rounded-full ${
-                theme === 'dark'
-                  ? 'hover:bg-white/5 text-white/50'
-                  : 'hover:bg-black/5 text-black/50'
-              } transition-colors flex items-center gap-1`}
+              className={`p-2 rounded-full ${theme === 'dark'
+                ? 'hover:bg-white/5 text-white/50'
+                : 'hover:bg-black/5 text-black/50'
+                } transition-colors flex items-center gap-1`}
             >
               <Globe size={16} />
               <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:inline">
@@ -163,11 +172,10 @@ const Header: React.FC = () => {
             <button
               type="button"
               onClick={toggleTheme}
-              className={`p-2 rounded-full ${
-                theme === 'dark'
-                  ? 'hover:bg-white/5 text-white/50'
-                  : 'hover:bg-black/5 text-black/50'
-              } transition-colors`}
+              className={`p-2 rounded-full ${theme === 'dark'
+                ? 'hover:bg-white/5 text-white/50'
+                : 'hover:bg-black/5 text-black/50'
+                } transition-colors`}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
@@ -180,9 +188,8 @@ const Header: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
-              className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 ${
-                theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'
-              } hover:bg-brand-primary hover:text-white rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
+              className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 ${theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'
+                } hover:bg-brand-primary hover:text-white rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
             >
               <LogIn size={14} />
               <span>{language === 'mn' ? 'Бүртгүүлэх' : 'Register'}</span>

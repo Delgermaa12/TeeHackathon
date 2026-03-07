@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react"
-;
+  ;
 import { PATHS } from "./constants";
 
 const COLORS = {
@@ -112,11 +112,6 @@ export const CinematicLogo = () => {
     setTransitionKey((k) => k + 1);
   }, [scene]);
 
-  const reset = () => {
-    setScene(1);
-    setTransitionKey(0);
-    // Restart logic would go here if needed
-  };
 
   return (
     <div className="relative w-[600px] h-[600px] flex items-center justify-center">
@@ -211,7 +206,7 @@ export const CinematicLogo = () => {
                   r={Math.random() * 1.5}
                   fill="white"
                   initial={{ opacity: 0, x: 120, y: 120 }}
-                  animate={{ 
+                  animate={{
                     opacity: [0, 1, 0],
                     x: 120 + (Math.random() * 100 - 50),
                     y: 120 + (Math.random() * 100 - 50)
@@ -237,7 +232,7 @@ export const CinematicLogo = () => {
                 strokeWidth="0.5"
                 filter="url(#glow)"
               />
-              
+
               {/* Integrated Text Te3 */}
               <motion.text
                 x="90" y="135"

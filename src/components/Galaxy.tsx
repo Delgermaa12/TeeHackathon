@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface GalaxyProps {
   starSpeed?: number;
@@ -117,7 +117,7 @@ const Galaxy: React.FC<GalaxyProps> = ({
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fillStyle = star.color;
         ctx.globalAlpha = star.opacity;
-        
+
         if (glowIntensity > 0) {
           ctx.shadowBlur = 10 * glowIntensity;
           ctx.shadowColor = star.color;

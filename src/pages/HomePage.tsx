@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, animate } from 'motion/react';
-import { Trophy, Zap, Star, Award, Cpu, Palette, ExternalLink, Quote, Phone, Mail, Clock, MapPin, ArrowRight } from 'lucide-react';
+import { Award, Cpu, ExternalLink, ArrowRight, Trophy, Zap, Star, Palette, Quote } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
 import { PATHS } from '../constants';
@@ -18,95 +18,6 @@ const COLORS = {
   PENCIL: "#A0A0A0",
 };
 
-const TransitionScratches = ({ seed, color = COLORS.PENCIL }: { seed: number; color?: string; key?: string | number }) => {
-  const lines = useMemo(() => {
-    const rand = (n: number) => {
-      const x = Math.sin(seed * 999 + n * 1234) * 10000;
-      return x - Math.floor(x);
-    };
-    return Array.from({ length: 14 }).map((_, i) => {
-      const x1 = rand(i) * 240;
-      const y1 = rand(i + 1) * 240;
-      const x2 = rand(i + 2) * 240;
-      const y2 = rand(i + 3) * 240;
-      const cx = (x1 + x2) / 2 + (rand(i + 4) * 18 - 9);
-      const cy = (y1 + y2) / 2 + (rand(i + 5) * 18 - 9);
-      const dashA = rand(i + 7) * 10 + 6;
-      const dashB = rand(i + 8) * 40 + 18;
-      return {
-        id: i,
-        d: `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`,
-        w: rand(i + 6) * 1.2 + 0.25,
-        dashA,
-        dashB,
-        delay: rand(i + 9) * 0.18,
-        rot: rand(i + 10) * 10 - 5,
-        offset: dashA + dashB,
-      };
-    });
-  }, [seed]);
-
-  const dust = useMemo(() => {
-    const rand = (n: number) => {
-      const x = Math.sin(seed * 777 + n * 2222) * 10000;
-      return x - Math.floor(x);
-    };
-    return Array.from({ length: 10 }).map((_, i) => ({
-      id: i,
-      r: rand(i) * 0.9 + 0.25,
-      x1: 120 + (rand(i + 1) * 70 - 35),
-      y1: 120 + (rand(i + 2) * 70 - 35),
-      x2: 120 + (rand(i + 3) * 120 - 60),
-      y2: 120 + (rand(i + 4) * 120 - 60),
-      delay: 0.05 + i * 0.03,
-    }));
-  }, [seed]);
-
-  return (
-    <motion.div className="absolute inset-0 pointer-events-none" initial={{ opacity: 0 }} animate={{ opacity: [0, 0.9, 0] }} transition={{ duration: 0.9, ease: "easeInOut" }} style={{ mixBlendMode: "screen" }}>
-      <svg viewBox="0 0 240 240" className="w-full h-full">
-        <g filter="url(#glow)" opacity="0.9">
-          {lines.map((ln) => (
-            <motion.path key={ln.id} d={ln.d} fill="none" stroke={color} strokeWidth={ln.w} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={`${ln.dashA} ${ln.dashB}`} initial={{ opacity: 0, pathLength: 0, strokeDashoffset: ln.offset, rotate: ln.rot, transformOrigin: "120px 120px" }} animate={{ opacity: [0, 0.35, 0], pathLength: [0, 1], strokeDashoffset: [ln.offset, 0] }} transition={{ duration: 0.55, delay: ln.delay, ease: "easeInOut" }} />
-          ))}
-        </g>
-        {dust.map((d) => (
-          <motion.circle key={d.id} r={d.r} fill={COLORS.GOLD} initial={{ opacity: 0 }} animate={{ opacity: [0, 0.6, 0], cx: [d.x1, d.x2], cy: [d.y1, d.y2], scale: [0.6, 1.3, 0.6] }} transition={{ duration: 0.8, delay: d.delay, ease: "easeOut" }} />
-        ))}
-      </svg>
-    </motion.div>
-  );
-};
-
-const SketchDrafts = ({ path, delay = 0 }: { path: string; delay?: number }) => (
-  <g>
-    {[...Array(4)].map((_, i) => (
-      <motion.path key={i} d={path} fill="none" stroke={COLORS.PENCIL} strokeWidth="0.3" initial={{ pathLength: 0, opacity: 0, translateX: Math.random() * 4 - 2, translateY: Math.random() * 4 - 2, rotate: Math.random() * 2 - 1 }} animate={{ pathLength: [0, 1], opacity: [0, 0.15, 0] }} transition={{ duration: 2, delay: delay + i * 0.4, ease: "easeInOut" }} />
-    ))}
-  </g>
-);
-
-const LogoText = ({ scene, disintegrated = false }: { scene: number; disintegrated?: boolean }) => {
-  const characters = [
-    { char: "T", color: COLORS.RED, x: 90, y: 135, fontSize: 38, delay: 0, rotate: -5 },
-    { char: "e", color: COLORS.BLUE, x: 115, y: 135, fontSize: 34, delay: 0.2, rotate: 3 },
-    { char: "³", color: COLORS.GREEN, x: 138, y: 115, fontSize: 20, delay: 0.4, rotate: 8 },
-  ];
-  return (
-    <g>
-      {characters.map((c, i) => (
-        <React.Fragment key={i}>
-          {scene === 3 && disintegrated && (
-            <motion.text x={c.x} y={c.y} fill="none" stroke={c.color} strokeWidth="0.5" fontSize={c.fontSize} fontFamily="'Inter', sans-serif" fontWeight="900" initial={{ opacity: 0, rotate: c.rotate }} animate={{ opacity: [0, 0.8, 0] }} transition={{ duration: 3, delay: c.delay }} filter="url(#glow)">{c.char}</motion.text>
-          )}
-          {scene === 4 && (
-            <motion.text x={c.x} y={c.y} fill={c.color} fontSize={c.fontSize} fontFamily="'Inter', sans-serif" fontWeight="900" initial={{ opacity: 0, scale: 0.5, rotate: c.rotate + 10 }} animate={{ opacity: 1, scale: 1, rotate: c.rotate }} transition={{ duration: 1.2, delay: 1.5 + i * 0.1, ease: "backOut" }} filter="url(#glow)" style={{ textShadow: `0 0 15px ${c.color}66` }}>{c.char}</motion.text>
-          )}
-        </React.Fragment>
-      ))}
-    </g>
-  );
-};
 
 const DisintegratedStroke = ({ path, color, delay = 0 }: { path: string; color: string; delay?: number }) => (
   <g>
@@ -129,7 +40,7 @@ const FirstGooseScene = ({ theme }: { theme: string }) => {
   ];
 
   return (
-    <motion.g 
+    <motion.g
       key="scene1"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -189,11 +100,11 @@ const FirstGooseScene = ({ theme }: { theme: string }) => {
 const GoldenRatioScene = ({ theme }: { theme: string }) => {
   const gridLines = Array.from({ length: 11 });
   return (
-    <motion.g 
-      key="scene2" 
-      initial={{ opacity: 0, scale: 0.9 }} 
-      animate={{ opacity: 1, scale: 1 }} 
-      exit={{ opacity: 0, scale: 1.1 }} 
+    <motion.g
+      key="scene2"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.1 }}
       transition={{ duration: 1.5, ease: "easeOut" }}
     >
       {/* Grid */}
@@ -216,12 +127,12 @@ const GoldenRatioScene = ({ theme }: { theme: string }) => {
           { r: 10, color: theme === 'dark' ? "white" : "black", label: "1px", delay: 2, cx: -50, cy: -40 },
         ].map((c, i) => (
           <React.Fragment key={i}>
-            <motion.circle 
-              cx={c.cx || 0} cy={c.cy || 0} r={c.r} fill="none" stroke={c.color} strokeWidth="1.5" 
+            <motion.circle
+              cx={c.cx || 0} cy={c.cy || 0} r={c.r} fill="none" stroke={c.color} strokeWidth="1.5"
               initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, delay: c.delay }}
             />
-            <motion.text 
-              x={(c.cx || 0) + c.r + 5} y={(c.cy || 0)} fill={c.color} fontSize="8" fontWeight="bold" 
+            <motion.text
+              x={(c.cx || 0) + c.r + 5} y={(c.cy || 0)} fill={c.color} fontSize="8" fontWeight="bold"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: c.delay + 1 }}
             >{c.label}</motion.text>
           </React.Fragment>
@@ -246,7 +157,7 @@ const Counter = ({ value, color }: { value: string; color: string }) => {
 };
 
 // --- Unified Background Component ---
-const UnifiedBackground = ({ scrollY }: { scrollY: any }) => {
+const UnifiedBackground = () => {
   const { theme } = useAppContext();
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -265,20 +176,20 @@ const UnifiedBackground = ({ scrollY }: { scrollY: any }) => {
         transparent={false}
         colors={['#DB4437', '#4285F4', '#0F9D58', '#F4B400', '#D4AF37']}
       />
-      
+
       {/* Base Overlay for Theme */}
       <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-brand-dark/40' : 'bg-brand-light/80'} transition-colors duration-500`} />
-      
+
       {/* Paper Texture */}
       <div className={`absolute inset-0 ${theme === 'dark' ? 'opacity-[0.03]' : 'opacity-[0.08]'}`} style={{ filter: "url(#paper)" }} />
-      
+
       {/* Global Gradients */}
       <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]' : 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.4)_100%)]'}`} />
-      
+
       {/* Testimonial-style corner glows (subtle) */}
       <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-blue-500/5 rounded-full blur-[120px]" />
       <div className="absolute bottom-0 left-0 w-[50vw] h-[50vh] bg-brand-secondary/5 rounded-full blur-[120px]" />
-      
+
       <svg className="hidden">
         <defs>
           <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" /><feDiffuseLighting in="noise" lightingColor="#fff" surfaceScale="2"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter>
@@ -299,9 +210,7 @@ const UnifiedBackground = ({ scrollY }: { scrollY: any }) => {
 
 const HeroSection = ({ scrollY }: { scrollY: any }) => {
   const { theme, language } = useAppContext();
-  const t = translations[language].hero;
   const [scene, setScene] = useState(0);
-  const [transitionKey, setTransitionKey] = useState(0);
   const logoY = useTransform(scrollY, [0, 500], [0, 100]);
   const logoScale = useTransform(scrollY, [0, 500], [1, 0.8]);
   const logoOpacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -319,8 +228,8 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
       {FINAL_GOOSE_PATHS.map((path, i) => (
         <React.Fragment key={i}>
           <DisintegratedStroke path={path.d} color={path.color} delay={path.delay} />
-          <motion.path 
-            style={{ fill: 'none', stroke: path.color, strokeWidth: theme === 'dark' ? 1.2 : 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', strokeOpacity: 1 }} 
+          <motion.path
+            style={{ fill: 'none', stroke: path.color, strokeWidth: theme === 'dark' ? 1.2 : 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', strokeOpacity: 1 }}
             d={path.d}
             transform={path.transform}
             initial={{ pathLength: 0, opacity: 0 }}
@@ -348,19 +257,13 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
 
   useEffect(() => {
     if (scene === 0) return;
-    setTransitionKey((k) => k + 1);
   }, [scene]);
-
-  const resetAnimation = () => {
-    setScene(0);
-    setTimeout(() => setScene(1), 100);
-  };
 
   return (
     <section className="relative w-full min-h-screen flex items-center pt-32 pb-20 lg:pt-24 lg:pb-0 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-24 relative z-10">
         {/* Left Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
@@ -381,7 +284,7 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
           </h1>
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 bg-brand-secondary text-black rounded-full font-bold text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-brand-secondary/20"
@@ -389,7 +292,7 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
               {language === 'mn' ? 'Хөтөлбөрүүд' : 'Explore Programs'}
               <ArrowRight size={18} />
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`px-8 py-4 border ${theme === 'dark' ? 'border-white/10 text-white hover:bg-white/5' : 'border-black/10 text-black hover:bg-black/5'} rounded-full font-bold text-sm uppercase tracking-widest transition-all`}
@@ -400,8 +303,8 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
         </motion.div>
 
         {/* Right Logo Animation */}
-        <motion.div 
-          style={{ y: logoY, scale: logoScale, opacity: logoOpacity }} 
+        <motion.div
+          style={{ y: logoY, scale: logoScale, opacity: logoOpacity }}
           className="relative aspect-square w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[500px] mx-auto order-last lg:order-none"
         >
           <svg viewBox="0 0 240 240" className={`w-full h-full ${theme === 'dark' ? 'drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]' : 'drop-shadow-[0_0_10px_rgba(0,0,0,0.15)]'}`}>
@@ -515,7 +418,7 @@ const ClassesSection = () => {
               {language === 'mn' ? 'АНГИУД' : 'CLASSES'}
             </h2>
           </div>
-          <motion.button 
+          <motion.button
             whileHover={{ x: 10 }}
             className={`flex items-center gap-3 text-xs font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'} transition-colors pb-2`}
           >
@@ -564,9 +467,9 @@ const TestimonialsSection = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-20">
           <div className="space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }} 
-              whileInView={{ opacity: 1, x: 0 }} 
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="space-y-4"
             >
@@ -588,21 +491,21 @@ const TestimonialsSection = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end pr-0 lg:pr-20">
-            <CardSwap 
-              width={400} 
-              height={320} 
-              cardDistance={40} 
-              verticalDistance={30} 
+            <CardSwap
+              width={400}
+              height={320}
+              cardDistance={40}
+              verticalDistance={30}
               delay={4000}
               skewAmount={3}
             >
               {testimonials.map((t, index) => (
-                <Card 
+                <Card
                   key={index}
                   className={`${theme === 'dark' ? 'bg-[#111111] border-white/5' : 'bg-[#f5f5f5] border-black/5 shadow-xl'} border rounded-[2.5rem] p-8 space-y-6 flex flex-col justify-between`}
                 >
                   <Quote className={`absolute top-6 right-6 ${theme === 'dark' ? 'text-white/5' : 'text-black/5'}`} size={40} />
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="relative">
                       <div className={`w-12 h-12 rounded-xl ${t.color} flex items-center justify-center text-white font-black text-xl shadow-lg`}>
@@ -642,7 +545,7 @@ const HomePage = () => {
   const { scrollY } = useScroll();
   return (
     <main className="relative">
-      <UnifiedBackground scrollY={scrollY} />
+      <UnifiedBackground />
       <div className="relative z-10">
         <HeroSection scrollY={scrollY} />
         <StatsSection />

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Phone, Mail, Clock, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
