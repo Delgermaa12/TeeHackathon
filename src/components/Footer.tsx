@@ -1,27 +1,11 @@
 import React from 'react';
+import { Phone, Mail, Clock, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
-import { Phone, Mail, Clock, MapPin, Facebook, Instagram, Youtube, Twitter } from 'lucide-react';
 
 const Footer = () => {
   const { theme, language } = useAppContext();
   const t = translations[language].footer;
-
-  const socialLinks = [
-    { icon: <Facebook size={16} />, href: '#', label: 'Facebook' },
-    { icon: <Instagram size={16} />, href: '#', label: 'Instagram' },
-    { icon: <Youtube size={16} />, href: '#', label: 'YouTube' },
-    { icon: <Twitter size={16} />, href: '#', label: 'Twitter' },
-  ];
-
-  const pages = [
-    { name: language === 'mn' ? 'Нүүр' : 'Home', href: '#' },
-    { name: language === 'mn' ? 'Хөтөлбөр' : 'Program', href: '#' },
-    { name: language === 'mn' ? 'Сургалтууд' : 'Courses', href: '#' },
-    { name: language === 'mn' ? 'Багш нар' : 'Teachers', href: '#' },
-    { name: language === 'mn' ? 'Нийтлэл' : 'Articles', href: '#' },
-    { name: language === 'mn' ? 'Бидний тухай' : 'About', href: '#' },
-  ];
 
   const courses = [
     'Scratch Pixels',
@@ -31,93 +15,50 @@ const Footer = () => {
     'Python Programmer',
   ];
 
-  const contactInfo = [
-    { icon: <Phone size={16} />, value: '+976 90806161', href: 'tel:+97690806161' },
-    { icon: <Mail size={16} />, value: 'info@tee.education', href: 'mailto:info@tee.education' },
-    { icon: <Clock size={16} />, value: language === 'mn' ? '10:00 – 17:30' : '10:00 AM – 5:30 PM' },
-    { icon: <MapPin size={16} />, value: language === 'mn' 
-      ? 'СБД, 6-р хороо, Gem Castle 15 давхар, 1501 тоот' 
-      : 'SBD, 6th khoroo, Gem Castle 15th floor, Suite 1501' 
-    },
+  const social = [
+    { icon: <Facebook size={18} />, href: '#' },
+    { icon: <Instagram size={18} />, href: '#' },
+    { icon: <Twitter size={18} />, href: '#' },
+    { icon: <Youtube size={18} />, href: '#' },
   ];
 
   return (
-    <footer 
-      className={`relative z-10 transition-colors duration-500 ${
-        theme === 'dark' 
-          ? 'bg-[#0A0D18] border-[rgba(255,255,255,0.08)]' 
-          : 'bg-white border-[rgba(0,0,0,0.08)]'
-      } border-t`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 pb-16 border-b border-[var(--border)]">
-          
+    <footer className={`relative z-10 ${theme === 'dark' ? 'bg-brand-dark border-white/5' : 'bg-brand-light border-black/5'} border-t pt-24 pb-12 transition-colors duration-500`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
           {/* Brand Column */}
-          <div className="space-y-6">
-            <div>
-              <span className="font-['Bebas_Neue'] text-4xl tracking-[6px] text-[var(--text)]">
-                TEE
+          <div className="space-y-8">
+            <div className="flex items-center gap-2">
+              <span className={`text-3xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                Te<sup className="text-brand-primary">3</sup>
+              </span>
+              <span className={`text-[10px] uppercase tracking-[0.4em] ${theme === 'dark' ? 'text-white/30' : 'text-black/30'} font-bold ml-2`}>
+                Education
               </span>
             </div>
-            <p className="text-[0.84rem] font-light text-[var(--muted)] leading-relaxed max-w-[240px]">
-              {language === 'mn' 
-                ? 'The Essential Engineering Education — Боловсролыг инженерчилсэн Монголын №1 дижитал технологийн сургууль.'
-                : 'The Essential Engineering Education — Mongolia\'s #1 digital technology school that engineers education.'}
+            <p className={`${theme === 'dark' ? 'text-white/40' : 'text-black/40'} text-sm leading-relaxed max-w-xs`}>
+              {t.desc}
             </p>
-            <div className="flex gap-3">
-              {socialLinks.map((social, i) => (
+            <div className="flex gap-4">
+              {social.map((s, i) => (
                 <a
                   key={i}
-                  href={social.href}
-                  aria-label={social.label}
-                  className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm transition-all duration-200 border ${
-                    theme === 'dark'
-                      ? 'bg-[rgba(255,255,255,0.04)] text-[var(--muted)] border-[var(--border)] hover:border-[#00CFFF] hover:text-white hover:-translate-y-1'
-                      : 'bg-[rgba(0,0,0,0.04)] text-[var(--muted)] border-[var(--border)] hover:border-[#F5C200] hover:text-black hover:-translate-y-1'
-                  }`}
+                  href={s.href}
+                  className={`w-10 h-10 rounded-full border ${theme === 'dark' ? 'border-white/10 text-white/40 hover:text-white hover:border-white' : 'border-black/10 text-black/40 hover:text-black hover:border-black'} flex items-center justify-center transition-all`}
                 >
-                  {social.icon}
+                  {s.icon}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Pages Column */}
-          <div>
-            <h3 className={`font-['Syne'] text-[0.63rem] font-bold tracking-[3px] uppercase mb-5 ${
-              theme === 'dark' ? 'text-[#00CFFF]' : 'text-[#F5C200]'
-            }`}>
-              {language === 'mn' ? 'Хуудсууд' : 'Pages'}
-            </h3>
-            <ul className="space-y-2.5">
-              {pages.map((page, i) => (
-                <li key={i}>
-                  <a
-                    href={page.href}
-                    className="text-[0.84rem] font-light text-[var(--muted)] hover:text-[var(--text)] transition-colors"
-                  >
-                    {page.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Courses Column */}
-          <div>
-            <h3 className={`font-['Syne'] text-[0.63rem] font-bold tracking-[3px] uppercase mb-5 ${
-              theme === 'dark' ? 'text-[#00CFFF]' : 'text-[#F5C200]'
-            }`}>
-              {language === 'mn' ? 'Сургалтууд' : 'Courses'}
-            </h3>
-            <ul className="space-y-2.5">
-              {courses.map((course, i) => (
-                <li key={i}>
-                  <a
-                    href="#"
-                    className="text-[0.84rem] font-light text-[var(--muted)] hover:text-[var(--text)] transition-colors"
-                  >
+          <div className="space-y-8">
+            <h4 className={`text-xs uppercase tracking-[0.3em] font-black ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.courses}</h4>
+            <ul className="space-y-4">
+              {courses.map((course) => (
+                <li key={course}>
+                  <a href="#" className={`${theme === 'dark' ? 'text-white/40 hover:text-brand-primary' : 'text-black/40 hover:text-brand-primary'} text-sm transition-colors`}>
                     {course}
                   </a>
                 </li>
@@ -126,69 +67,63 @@ const Footer = () => {
           </div>
 
           {/* Contact Column */}
-          <div>
-            <h3 className={`font-['Syne'] text-[0.63rem] font-bold tracking-[3px] uppercase mb-5 ${
-              theme === 'dark' ? 'text-[#00CFFF]' : 'text-[#F5C200]'
-            }`}>
-              {language === 'mn' ? 'Холбоо барих' : 'Contact'}
-            </h3>
-            <ul className="space-y-4">
-              {contactInfo.map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className={`w-7 h-7 rounded-md flex items-center justify-center text-xs flex-shrink-0 ${
-                    theme === 'dark'
-                      ? 'bg-[rgba(0,207,255,0.08)] border border-[rgba(0,207,255,0.14)] text-[#00CFFF]'
-                      : 'bg-[rgba(245,194,0,0.1)] border border-[rgba(245,194,0,0.22)] text-[#F5C200]'
-                  }`}>
-                    {item.icon}
-                  </span>
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      className="text-[0.82rem] font-light text-[var(--muted)] hover:text-[var(--text)] transition-colors break-words"
-                    >
-                      {item.value}
-                    </a>
-                  ) : (
-                    <span className="text-[0.82rem] font-light text-[var(--muted)] break-words">
-                      {item.value}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
+          <div className="space-y-8 lg:col-span-2">
+            <h4 className={`text-xs uppercase tracking-[0.3em] font-black ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.contact}</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 group">
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                    <Phone size={18} />
+                  </div>
+                  <div>
+                    <p className={`${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-[10px] uppercase tracking-widest font-bold mb-1`}>Phone</p>
+                    <p className={`${theme === 'dark' ? 'text-white/60' : 'text-black/60'} text-sm font-medium`}>+976 90806161</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 group">
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                    <Mail size={18} />
+                  </div>
+                  <div>
+                    <p className={`${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-[10px] uppercase tracking-widest font-bold mb-1`}>Email</p>
+                    <p className={`${theme === 'dark' ? 'text-white/60' : 'text-black/60'} text-sm font-medium`}>info@tee.education</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4 group">
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                    <Clock size={18} />
+                  </div>
+                  <div>
+                    <p className={`${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-[10px] uppercase tracking-widest font-bold mb-1`}>Hours</p>
+                    <p className={`${theme === 'dark' ? 'text-white/60' : 'text-black/60'} text-sm font-medium`}>10:00 - 17:30</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 group">
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                    <MapPin size={18} />
+                  </div>
+                  <div>
+                    <p className={`${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-[10px] uppercase tracking-widest font-bold mb-1`}>Location</p>
+                    <p className={`${theme === 'dark' ? 'text-white/60' : 'text-black/60'} text-sm font-medium leading-relaxed`}>
+                      СБД, 6-р хороо, СУИС-ийн урд Gem Castle 15 давхарт 1501 тоот
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8">
-          <span className="text-[0.74rem] text-[var(--muted)] opacity-35">
-            © 2026 TEE · The Essential Engineering Education · {language === 'mn' ? 'Боловсролыг инженерчлэв.' : 'Engineering Education.'}
-          </span>
-          <div className="flex items-center gap-6">
-            <a
-              href="#"
-              className="text-[0.74rem] text-[var(--muted)] opacity-40 hover:opacity-80 transition-opacity"
-            >
-              {language === 'mn' ? 'Нууцлалын бодлого' : 'Privacy Policy'}
-            </a>
-            <a
-              href="#"
-              className="text-[0.74rem] text-[var(--muted)] opacity-40 hover:opacity-80 transition-opacity"
-            >
-              {language === 'mn' ? 'Үйлчилгээний нөхцөл' : 'Terms of Service'}
-            </a>
-            <a
-              href="#"
-              className={`text-[0.74rem] flex items-center gap-1.5 transition-opacity ${
-                theme === 'dark'
-                  ? 'text-[#00CFFF] opacity-60 hover:opacity-100'
-                  : 'text-[#F5C200] opacity-60 hover:opacity-100'
-              }`}
-            >
-              <span>🔐</span>
-              {language === 'mn' ? 'Нэвтрэх (Багш/Админ)' : 'Login (Staff/Admin)'}
-            </a>
+        <div className={`pt-12 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} flex flex-col md:flex-row justify-between items-center gap-8`}>
+          <p className={`${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-[10px] uppercase tracking-widest font-bold`}>
+            {t.copyright}
+          </p>
+          <div className="flex gap-8">
+            <a href="#" className={`${theme === 'dark' ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'} text-[10px] uppercase tracking-widest font-bold transition-colors`}>{t.privacy}</a>
+            <a href="#" className={`${theme === 'dark' ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'} text-[10px] uppercase tracking-widest font-bold transition-colors`}>{t.terms}</a>
           </div>
         </div>
       </div>

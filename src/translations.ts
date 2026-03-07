@@ -7,7 +7,7 @@ export const translations = {
       teachers: 'Багш нар',
       articles: 'Нийтлэл',
       about: 'Бидний тухай',
-      login: 'Нэвтрэх',
+      login: 'Бүртгүүлэх',
     },
     hero: {
       premium: 'Дээд зэрэглэлийн туршлага',
@@ -50,7 +50,7 @@ export const translations = {
       teachers: 'Teachers',
       articles: 'Articles',
       about: 'About Us',
-      login: 'Login',
+      login: 'Sign Up',
     },
     hero: {
       premium: 'Premium Experience',

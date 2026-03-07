@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, animate } from 'framer-motion';
-import { 
-  Trophy, Zap, Star, Award, Cpu, Palette, ExternalLink, 
-  Quote, Phone, Mail, Clock, MapPin, ArrowRight 
-} from 'lucide-react';
+import { motion, AnimatePresence, useScroll, useTransform, animate } from 'motion/react';
+import { Trophy, Zap, Star, Award, Cpu, Palette, ExternalLink, Quote, Phone, Mail, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
-import IntroAnimation from '../components/IntroAnimation'; // IntroAnimation импортлох
+import { PATHS } from '../constants';
+import Galaxy from '../components/Galaxy';
+import CardSwap, { Card } from '../components/CardSwap';
 
-// --- Color constants ---
+// --- Sub-components for Hero ---
 const COLORS = {
   GOLD: "#D4AF37",
   YELLOW: "#F4B400",
@@ -19,11 +18,6 @@ const COLORS = {
   PENCIL: "#A0A0A0",
 };
 
-// ============================================
-// ORIGINAL CODE - БҮГД ХАДГАЛАГДСАН
-// ============================================
-
-// --- Original: TransitionScratches ---
 const TransitionScratches = ({ seed, color = COLORS.PENCIL }: { seed: number; color?: string; key?: string | number }) => {
   const lines = useMemo(() => {
     const rand = (n: number) => {
@@ -84,7 +78,6 @@ const TransitionScratches = ({ seed, color = COLORS.PENCIL }: { seed: number; co
   );
 };
 
-// --- Original: SketchDrafts ---
 const SketchDrafts = ({ path, delay = 0 }: { path: string; delay?: number }) => (
   <g>
     {[...Array(4)].map((_, i) => (
@@ -93,7 +86,6 @@ const SketchDrafts = ({ path, delay = 0 }: { path: string; delay?: number }) => 
   </g>
 );
 
-// --- Original: LogoText ---
 const LogoText = ({ scene, disintegrated = false }: { scene: number; disintegrated?: boolean }) => {
   const characters = [
     { char: "T", color: COLORS.RED, x: 90, y: 135, fontSize: 38, delay: 0, rotate: -5 },
@@ -116,57 +108,10 @@ const LogoText = ({ scene, disintegrated = false }: { scene: number; disintegrat
   );
 };
 
-// --- Original: ParticleSystem ---
-const ParticleSystem = ({ scrollY }: { scrollY: any }) => {
-  const yRange = useTransform(scrollY, [0, 1000], [0, -200]);
-  const particles = useMemo(() => Array.from({ length: 40 }).map((_, i) => ({ id: i, x: Math.random() * 100, y: Math.random() * 100, size: Math.random() * 2 + 1, duration: Math.random() * 10 + 10, delay: Math.random() * 5 })), []);
-  
-  const { theme } = useAppContext();
-  
-  return (
-    <motion.div style={{ y: yRange }} className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map((p) => (
-        <motion.div 
-          key={p.id} 
-          className="absolute rounded-full" 
-          style={{ 
-            left: `${p.x}%`, 
-            top: `${p.y}%`, 
-            width: p.size, 
-            height: p.size, 
-            filter: "blur(1px)",
-            backgroundColor: theme === 'dark' ? 'rgba(212, 175, 55, 0.3)' : 'rgba(249, 115, 22, 0.2)'
-          }} 
-          animate={{ y: [0, -100, 0], opacity: [0, 0.8, 0], scale: [1, 1.5, 1] }} 
-          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "linear" }} 
-        />
-      ))}
-    </motion.div>
-  );
-};
-
-// --- Original: WavyLines ---
-const WavyLines = ({ scrollY }: { scrollY: any }) => {
-  const { theme } = useAppContext();
-  const yRange = useTransform(scrollY, [0, 1000], [0, 150]);
-  const lineColor = theme === 'dark' ? COLORS.GOLD : '#f97316';
-  
-  return (
-    <motion.div style={{ y: yRange }} className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-      <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-        {[1, 2, 3].map((i) => (
-          <motion.path key={i} d={`M 0 ${300 + i * 100} Q 250 ${200 + i * 50} 500 ${300 + i * 100} T 1000 ${300 + i * 100}`} fill="none" stroke={lineColor} strokeWidth="0.5" animate={{ d: [`M 0 ${300 + i * 100} Q 250 ${200 + i * 50} 500 ${300 + i * 100} T 1000 ${300 + i * 100}`, `M 0 ${350 + i * 100} Q 250 ${250 + i * 50} 500 ${350 + i * 100} T 1000 ${350 + i * 100}`, `M 0 ${300 + i * 100} Q 250 ${200 + i * 50} 500 ${300 + i * 100} T 1000 ${300 + i * 100}`] }} transition={{ duration: 15 + i * 5, repeat: Infinity, ease: "easeInOut" }} />
-        ))}
-      </svg>
-    </motion.div>
-  );
-};
-
-// --- Original: DisintegratedStroke ---
 const DisintegratedStroke = ({ path, color, delay = 0 }: { path: string; color: string; delay?: number }) => (
   <g>
     {[...Array(12)].map((_, i) => (
-      <motion.path key={i} d={path} fill="none" stroke={color} strokeWidth={Math.random() * 1.5 + 0.5} strokeDasharray={`${Math.random() * 10 + 5} ${Math.random() * 50 + 20}`} initial={{ pathLength: 0, opacity: 0, pathOffset: 0 }} animate={{ pathLength: [0, 0.3, 0], pathOffset: [0, 1.2], opacity: [0, 0.8, 0] }} transition={{ duration: 3.5, delay: delay + i * 0.05, ease: "easeInOut" }} filter="url(#glow)" />
+      <motion.path key={i} d={path} fill="none" stroke={color} strokeWidth={Math.random() * 2 + 0.8} strokeDasharray={`${Math.random() * 10 + 5} ${Math.random() * 50 + 20}`} initial={{ pathLength: 0, opacity: 0, pathOffset: 0 }} animate={{ pathLength: [0, 0.3, 0], pathOffset: [0, 1.2], opacity: [0, 0.8, 0] }} transition={{ duration: 3.5, delay: delay + i * 0.05, ease: "easeInOut" }} filter="url(#glow)" />
     ))}
     {[...Array(20)].map((_, i) => (
       <motion.circle key={`p-${i}`} r={Math.random() * 1 + 0.5} fill={color} initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0], x: [Math.random() * 20 - 10, Math.random() * 40 - 20], y: [Math.random() * 20 - 10, Math.random() * 40 - 20], scale: [0, 1.5, 0] }} transition={{ duration: 2.5, delay: delay + 1 + Math.random() * 1, ease: "easeOut" }} style={{ transformOrigin: "center", offsetPath: `path("${path}")`, offsetDistance: `${Math.random() * 100}%` }} />
@@ -174,238 +119,335 @@ const DisintegratedStroke = ({ path, color, delay = 0 }: { path: string; color: 
   </g>
 );
 
-// --- Original: Counter ---
+const FirstGooseScene = ({ theme }: { theme: string }) => {
+  const paths = [
+    { d: "m 846.82206,1110.4725 a 50.053673,51.958546 0 0 1 50.03603,-51.9756 50.053673,51.958546 0 0 1 50.07131,51.939 l -50.05367,0.02 z", color: "#37a458", width: 2.6, delay: 0 },
+    { d: "m 182.64379,1108.4485 a 72.835861,72.179535 0 0 1 72.48474,-72.2024 l 0.35111,72.1787 z", color: "#e04233", width: 3, delay: 0.2 },
+    { d: "m 601.97603,1109.3419 c 8.39573,-79.6382 -14.7458,-144.51777 -67.09322,-183.9189 -60.92992,-45.86104 -152.24938,-39.17628 -199.46477,2.302 -39.49208,34.69342 -65.51655,82.3859 -65.3039,181.8292 l 165.9309,-0.2123 z", color: "#fdbf02", width: 3.7, delay: 0.4 },
+    { d: "m 762.77781,1584.409 c 7.49539,-55.8255 -20.92788,-101.3051 -67.6616,-128.9249 -54.39583,-32.148 -122.16119,-28.6605 -164.87648,0.061 -42.38948,28.5025 -66.96437,64.1432 -63.73514,129.0128 l 148.13658,-0.1489 z", color: "#0586ff", width: 3, delay: 0.6 },
+    { d: "m 949.01016,1128.253 c 13.50819,277.3789 -171.17337,399.5018 -174.7705,387.9077 -34.41191,-110.9145 -246.55834,-164.9011 -327.70611,7.5406 -1.1357,2.4134 -207.82218,-183.0338 -177.58395,-395.8938 l 340.0302,0.4455 z", color: "#fdcb02", width: 2.8, delay: 0.8 },
+  ];
+
+  return (
+    <motion.g 
+      key="scene1"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.1 }}
+      transition={{ duration: 1.5 }}
+    >
+      <g transform="matrix(0.21706797,0,0,0.21706797,-15.429671,-136.36484)">
+        {paths.map((p, i) => (
+          <React.Fragment key={i}>
+            <DisintegratedStroke path={p.d} color={p.color} delay={p.delay} />
+            <motion.path
+              d={p.d}
+              fill="none"
+              stroke={p.color}
+              strokeWidth={p.width}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 2, delay: p.delay }}
+            />
+          </React.Fragment>
+        ))}
+        <motion.ellipse
+          cx="365.44446" cy="989.89349" rx="25.247002" ry="25.96154"
+          fill="none" stroke={theme === 'dark' ? "#fbfbf4" : "#333333"} strokeWidth="1.3"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+        />
+        <motion.ellipse
+          cx="365.40308" cy="988.8421" rx="11.255884" ry="11.574448"
+          fill="none" stroke="#518ad2" strokeWidth="1.4"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+        />
+        <motion.path
+          d="m 128.12209,413.43608 h -1.08 v -7.03467 h -2.71444 l 0.0384,-1.53333 h 6.42 v 1.62338 l -2.62556,-0.045 z"
+          transform="matrix(28.564186,0,0,24.384183,-3131.8831,-8694.778)"
+          fill="none" stroke="#e9422f" strokeWidth="0.14"
+          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 2 }}
+        />
+        <motion.path
+          d="m 686.80498,1283.3393 -81.96794,58.3491 q 13.85913,13.7598 28.48446,14.3243 14.65345,0.3582 25.83091,-7.5984 17.23197,-12.2665 18.04629,-35.7276 l 23.23866,1.3161 q -0.36235,34.673 -28.30601,54.5646 -21.42353,15.2504 -46.95407,9.985 -25.53046,-5.2654 -41.99392,-28.3327 -15.40697,-21.5872 -12.12223,-47.7371 3.31324,-26.3559 24.38744,-41.3577 20.72485,-14.7531 47.04499,-9.1194 26.23205,5.5102 44.31142,31.3338 z m -92.10983,39.7106 58.68153,-41.7725 q -24.74689,-14.0084 -43.84174,-0.4156 -20.84128,14.836 -14.83979,42.1881 z"
+          fill="none" stroke="#0586ff" strokeWidth="2.8"
+          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 2.2 }}
+        />
+        <motion.text
+          transform="matrix(14.615436,0,0,8.8028985,3236.225,-2413.9118)"
+          style={{ fontSize: '20px', fontFamily: 'Candara', fill: 'none', stroke: '#45a343', strokeWidth: 0.2 }}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.4 }}
+        >
+          <tspan x="-174.56" y="415.6">3</tspan>
+        </motion.text>
+      </g>
+    </motion.g>
+  );
+};
+
+const GoldenRatioScene = ({ theme }: { theme: string }) => {
+  const gridLines = Array.from({ length: 11 });
+  return (
+    <motion.g 
+      key="scene2" 
+      initial={{ opacity: 0, scale: 0.9 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      exit={{ opacity: 0, scale: 1.1 }} 
+      transition={{ duration: 1.5, ease: "easeOut" }}
+    >
+      {/* Grid */}
+      <g opacity="0.1">
+        {gridLines.map((_, i) => (
+          <React.Fragment key={i}>
+            <line x1={i * 24} y1="0" x2={i * 24} y2="240" stroke={theme === 'dark' ? "white" : "black"} strokeWidth="0.5" />
+            <line x1="0" y1={i * 24} x2="240" y2={i * 24} stroke={theme === 'dark' ? "white" : "black"} strokeWidth="0.5" />
+          </React.Fragment>
+        ))}
+      </g>
+
+      <g transform="translate(120, 120)">
+        {/* Fibonacci Circles */}
+        {[
+          { r: 80, color: COLORS.GOLD, label: "8px", delay: 0 },
+          { r: 50, color: COLORS.YELLOW, label: "5px", delay: 0.5, cx: -30, cy: -20 },
+          { r: 30, color: COLORS.BLUE, label: "3px", delay: 1, cx: 40, cy: 20 },
+          { r: 20, color: COLORS.RED, label: "2px", delay: 1.5, cx: -80, cy: 10 },
+          { r: 10, color: theme === 'dark' ? "white" : "black", label: "1px", delay: 2, cx: -50, cy: -40 },
+        ].map((c, i) => (
+          <React.Fragment key={i}>
+            <motion.circle 
+              cx={c.cx || 0} cy={c.cy || 0} r={c.r} fill="none" stroke={c.color} strokeWidth="1.5" 
+              initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, delay: c.delay }}
+            />
+            <motion.text 
+              x={(c.cx || 0) + c.r + 5} y={(c.cy || 0)} fill={c.color} fontSize="8" fontWeight="bold" 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: c.delay + 1 }}
+            >{c.label}</motion.text>
+          </React.Fragment>
+        ))}
+      </g>
+
+      <motion.rect x="0" y="0" width="240" height="240" fill="url(#shineGradient)" initial={{ x: -240 }} animate={{ x: 240 }} transition={{ duration: 2, delay: 1.5, repeat: Infinity, repeatDelay: 3 }} style={{ mixBlendMode: "overlay" }} />
+    </motion.g>
+  );
+};
+
+// --- Sub-components for Stats ---
 const Counter = ({ value, color }: { value: string; color: string }) => {
   const [displayValue, setDisplayValue] = useState("0");
   const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
   const suffix = value.replace(/[0-9]/g, '');
   useEffect(() => {
-    const controls = animate(0, numericValue, { duration: 2, ease: "easeOut", onUpdate: (latest: number) => setDisplayValue(Math.floor(latest).toLocaleString() + suffix) });
+    const controls = animate(0, numericValue, { duration: 2, ease: "easeOut", onUpdate: (latest) => setDisplayValue(Math.floor(latest).toLocaleString() + suffix) });
     return () => controls.stop();
   }, [numericValue, suffix]);
   return <span className={`text-5xl md:text-7xl font-black tracking-tighter ${color}`}>{displayValue}</span>;
 };
 
-// ============================================
-// UPDATED SECTIONS WITH IMAGE DATA
-// ============================================
+// --- Unified Background Component ---
+const UnifiedBackground = ({ scrollY }: { scrollY: any }) => {
+  const { theme } = useAppContext();
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Galaxy Background */}
+      <Galaxy
+        starSpeed={0.2}
+        density={0.2}
+        hueShift={70}
+        speed={0.5}
+        glowIntensity={0.1}
+        saturation={0}
+        mouseRepulsion={false}
+        repulsionStrength={2}
+        twinkleIntensity={0.1}
+        rotationSpeed={0}
+        transparent={false}
+        colors={['#DB4437', '#4285F4', '#0F9D58', '#F4B400', '#D4AF37']}
+      />
+      
+      {/* Base Overlay for Theme */}
+      <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-brand-dark/40' : 'bg-brand-light/80'} transition-colors duration-500`} />
+      
+      {/* Paper Texture */}
+      <div className={`absolute inset-0 ${theme === 'dark' ? 'opacity-[0.03]' : 'opacity-[0.08]'}`} style={{ filter: "url(#paper)" }} />
+      
+      {/* Global Gradients */}
+      <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]' : 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.4)_100%)]'}`} />
+      
+      {/* Testimonial-style corner glows (subtle) */}
+      <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-blue-500/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vh] bg-brand-secondary/5 rounded-full blur-[120px]" />
+      
+      <svg className="hidden">
+        <defs>
+          <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" /><feDiffuseLighting in="noise" lightingColor="#fff" surfaceScale="2"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation={theme === 'dark' ? "2.5" : "1"} result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+    </div>
+  );
+};
 
-// --- Hero Section (Зурагнаас авсан мэдээлэл + IntroAnimation) ---
-const HeroSection = () => {
+// --- Main Page Sections ---
+
+const HeroSection = ({ scrollY }: { scrollY: any }) => {
   const { theme, language } = useAppContext();
   const t = translations[language].hero;
   const [scene, setScene] = useState(0);
   const [transitionKey, setTransitionKey] = useState(0);
-  const { scrollY } = useScroll();
-  const contentY = useTransform(scrollY, [0, 500], [0, 100]);
-  const contentScale = useTransform(scrollY, [0, 500], [1, 0.9]);
-  const contentOpacity = useTransform(scrollY, [0, 300], [1, 0.3]);
+  const logoY = useTransform(scrollY, [0, 500], [0, 100]);
+  const logoScale = useTransform(scrollY, [0, 500], [1, 0.8]);
+  const logoOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  // IntroAnimation-ийн scene утгыг ашиглах
+  const FINAL_GOOSE_PATHS = [
+    { d: "m 178.17877,120.88071 a 66.469612,75.498703 0 0 1 -66.40473,75.49866 66.469612,75.498703 0 0 1 -66.534366,-75.35129 l 66.469486,-0.14737 z", color: theme === 'dark' ? '#d5d23a' : '#b5b22a', delay: 0 },
+    { d: "m 100.08727,-131.51253 a 26.137545,28.808369 0 0 1 26.17064,-28.51937 26.137545,28.808369 0 0 1 26.10242,28.5952 l -26.13683,0.21314 z", color: theme === 'dark' ? '#0787ff' : '#0066cc', delay: 0.5, transform: "scale(1,-1)" },
+    { d: "m 45.332363,120.92373 a 42.851646,50.954716 0 0 1 21.341187,-44.323659 42.851646,50.954716 0 0 1 42.95204,-0.04671 42.851646,50.954716 0 0 1 21.40932,44.277175 l -42.851431,-0.16028 z", color: theme === 'dark' ? '#d5d23a' : '#b5b22a', delay: 1 },
+    { d: "m 45.651262,130.92383 a 17.090006,18.832779 0 0 1 -12.150756,-5.46272 17.090006,18.832779 0 0 1 -5.053683,-13.34597 l 17.089993,-0.0237 z", color: theme === 'dark' ? '#f43434' : '#d32f2f', delay: 1.5 },
+    { d: "m -152.72255,-92.90889 a 25.337103,28.122721 0 0 1 -18.03724,-8.20108 25.337103,28.122721 0 0 1 -7.45291,-19.99097 l 25.33703,0.0698 z", color: theme === 'dark' ? '#078127' : '#05661e', delay: 2, transform: "scale(-1)" },
+  ];
+
+  const FINAL_GOOSE_PATH = (
+    <g id="layer1">
+      {FINAL_GOOSE_PATHS.map((path, i) => (
+        <React.Fragment key={i}>
+          <DisintegratedStroke path={path.d} color={path.color} delay={path.delay} />
+          <motion.path 
+            style={{ fill: 'none', stroke: path.color, strokeWidth: theme === 'dark' ? 1.2 : 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', strokeOpacity: 1 }} 
+            d={path.d}
+            transform={path.transform}
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 2, delay: path.delay, ease: "easeInOut" }}
+            filter="url(#glow)"
+          />
+        </React.Fragment>
+      ))}
+      <motion.ellipse style={{ fill: 'none', stroke: theme === 'dark' ? '#ffffff' : '#000000', strokeWidth: 0.5, strokeOpacity: 1 }} cx="73.994774" cy="93.564285" rx="8.2766819" ry="9.029108" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }} />
+      <motion.ellipse style={{ fill: 'none', stroke: theme === 'dark' ? '#ffffff' : '#000000', strokeWidth: 0.3, strokeOpacity: 1 }} cx="72.44487" cy="89.95108" rx="2.1292045" ry="2.3227687" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.7 }} />
+      <motion.ellipse style={{ fill: 'none', stroke: theme === 'dark' ? '#ffffff' : '#000000', strokeWidth: 0.2, strokeOpacity: 1 }} cx="76.167404" cy="89.354385" rx="1.1686611" ry="1.2749032" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.9 }} />
+      <motion.ellipse style={{ fill: 'none', stroke: theme === 'dark' ? '#000000' : '#ffffff', strokeWidth: 0.4, strokeOpacity: 1 }} cx="72.393433" cy="93.407776" rx="6.8816948" ry="7.3576117" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.1 }} />
+    </g>
+  );
+
   useEffect(() => {
-    // Эхний scene-г харуулах
-    setScene(1);
+    const timers = [
+      setTimeout(() => setScene(1), 500),
+      setTimeout(() => setScene(2), 4500),
+      setTimeout(() => setScene(3), 8500),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, []);
 
-  // Зурагнаас авсан статистик мэдээлэл
-  const stats = [
-    { value: '7+', label: 'ЖИЛИЙН ТУРШЛАГА', color: theme === 'dark' ? 'text-red-500' : 'text-red-600' },
-    { value: '10+', label: 'ХӨТӨЛБӨР', color: theme === 'dark' ? 'text-green-500' : 'text-green-600' },
-    { value: '2000+', label: 'НИЙТ ТӨГСӨГЧ', color: theme === 'dark' ? 'text-yellow-500' : 'text-yellow-600' },
-    { value: '5000+', label: 'ЧАДАВРЖСАН СУРАГЧ', color: theme === 'dark' ? 'text-blue-500' : 'text-blue-600' },
-  ];
+  useEffect(() => {
+    if (scene === 0) return;
+    setTransitionKey((k) => k + 1);
+  }, [scene]);
+
+  const resetAnimation = () => {
+    setScene(0);
+    setTimeout(() => setScene(1), 100);
+  };
 
   return (
-    <section className={`relative w-full min-h-screen ${theme === 'dark' ? 'bg-brand-dark' : 'bg-brand-light'} flex items-center justify-center overflow-hidden transition-colors duration-500`}>
-      {/* Background effects */}
-      <div className={`absolute inset-0 ${theme === 'dark' ? 'opacity-[0.03]' : 'opacity-[0.08]'} pointer-events-none`} style={{ filter: "url(#paper)" }} />
-      <ParticleSystem scrollY={scrollY} />
-      <WavyLines scrollY={scrollY} />
-      
-      {/* Gradient overlay */}
-      <div className={`absolute inset-0 pointer-events-none ${
-        theme === 'dark' 
-          ? 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]' 
-          : 'bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.8)_100%)]'
-      }`} />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
-          {/* Left Content - Text and Stats */}
-          <motion.div 
-            style={{ y: contentY, scale: contentScale, opacity: contentOpacity }}
-            className="w-full lg:w-1/2 text-center lg:text-left"
-          >
-            <div>
-              {/* Hero Tag */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D4AF37] text-[#D4AF37] mb-7"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
-                <span className="text-[0.68rem] tracking-widest uppercase font-mono">
-                  Монголын №1 дижитал технологийн сургууль
-                </span>
-              </motion.div>
-              
-              {/* Main Title */}
-              <motion.h1
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1, delay: 0.6 }}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light tracking-tighter leading-[1.1] mb-4"
-              >
-                БОЛОВСРОЛЫГ<br />
-                <span className="italic font-serif text-[#D4AF37]">инженерчлэв.</span>
-              </motion.h1>
-              
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.85 }}
-                className="text-sm sm:text-base text-[var(--muted)] mb-8 max-w-[520px]"
-              >
-                3-р ангиас 9-р анги хүртэл · Python · Robotics · Game Dev · Electronics
-              </motion.p>
-              
-              {/* Buttons */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 1 }}
-                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12"
-              >
-                <button className="group flex items-center justify-center gap-3 bg-[#D4AF37] text-black px-8 py-4 rounded-full font-medium hover:scale-105 transition-transform w-full sm:w-auto">
-                  БҮРТГҮҮЛЭХ
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button className={`flex items-center justify-center gap-3 px-8 py-4 rounded-full border ${
-                  theme === 'dark' 
-                    ? 'border-white/10 hover:bg-white/5 text-white' 
-                    : 'border-black/10 hover:bg-black/5 text-black'
-                } transition-colors w-full sm:w-auto`}>
-                  ХӨТӨЛБӨРҮҮД ҮЗЭХ
-                </button>
-              </motion.div>
-
-              {/* Stats Row */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.2 }}
-                className="flex flex-wrap justify-center lg:justify-start gap-6 md:gap-8"
-              >
-                {stats.map((stat, i) => (
-                  <div key={i} className="text-center">
-                    <div className={`text-2xl md:text-3xl font-bold ${stat.color}`}>{stat.value}</div>
-                    <div className="text-[0.65rem] uppercase tracking-wider text-[var(--muted)] whitespace-nowrap">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Right Side - IntroAnimation */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.8, delay: 0.3 }}
-            className="w-full lg:w-1/2 h-[400px] md:h-[500px] lg:h-[600px] relative"
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <IntroAnimation />
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// --- Classes Section (Зурагнаас авсан мэдээлэл) ---
-const ClassesSection = () => {
-  const { theme } = useAppContext();
-  
-  const classes = [
-    { grade: '3-Р АНГИ', teacher: 'Ш.Бонор' },
-    { grade: '5-Р АНГИ', teacher: 'М.Зоригт' },
-    { grade: '7-Р АНГИ', teacher: 'Ж.Солонго' },
-    { grade: '9-Р АНГИ', teacher: 'У.Санж-Очир' },
-  ];
-
-  return (
-    <section className={`py-20 px-4 sm:px-6 lg:px-12 ${theme === 'dark' ? 'bg-brand-dark' : 'bg-white'} transition-colors`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <div className="flex items-center gap-2.5 font-['Syne'] text-[0.65rem] font-bold tracking-[4px] uppercase mb-4 text-[#D4AF37] before:content-[''] before:block before:w-7 before:h-[1.5px] before:bg-current">
-              Шинэ элсэлт 2025–2026
-            </div>
-            <h2 className={`text-4xl md:text-5xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-              АНГИУД
-            </h2>
+    <section className="relative w-full min-h-screen flex items-center pt-32 pb-20 lg:pt-24 lg:pb-0 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-24 relative z-10">
+        {/* Left Content */}
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="space-y-8 text-center lg:text-left"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-secondary/10 border border-brand-secondary/20">
+            <div className="w-1.5 h-1.5 rounded-full bg-brand-secondary animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-brand-secondary">
+              {language === 'mn' ? 'Элсэлт авч байна 2026' : 'Now Enrolling for 2026'}
+            </span>
           </div>
-          <a href="#" className={`flex items-center gap-2 text-sm font-medium ${theme === 'dark' ? 'text-white/60 hover:text-white' : 'text-black/60 hover:text-black'} transition-colors`}>
-            БҮХ АНГИУД →
-          </a>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {classes.map((c, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className={`p-6 rounded-2xl border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} hover:scale-105 transition-transform`}
+          <h1 className={`text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+            {language === 'mn' ? 'Технологийн' : 'The Future of'} <br />
+            <span className="text-brand-secondary italic font-serif">
+              {language === 'mn' ? 'Ирээдүйг Бүтээнэ.' : 'Technical Minds.'}
+            </span>
+          </h1>
+
+          <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 bg-brand-secondary text-black rounded-full font-bold text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-brand-secondary/20"
             >
-              <div className="text-2xl font-bold mb-2">{c.grade}</div>
-              <div className={`text-sm ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>{c.teacher}</div>
-            </motion.div>
-          ))}
-        </div>
+              {language === 'mn' ? 'Хөтөлбөрүүд' : 'Explore Programs'}
+              <ArrowRight size={18} />
+            </motion.button>
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-8 py-4 border ${theme === 'dark' ? 'border-white/10 text-white hover:bg-white/5' : 'border-black/10 text-black hover:bg-black/5'} rounded-full font-bold text-sm uppercase tracking-widest transition-all`}
+            >
+              {language === 'mn' ? 'Бидний тухай' : 'Our Philosophy'}
+            </motion.button>
+          </div>
+        </motion.div>
+
+        {/* Right Logo Animation */}
+        <motion.div 
+          style={{ y: logoY, scale: logoScale, opacity: logoOpacity }} 
+          className="relative aspect-square w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[500px] mx-auto order-last lg:order-none"
+        >
+          <svg viewBox="0 0 240 240" className={`w-full h-full ${theme === 'dark' ? 'drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]' : 'drop-shadow-[0_0_10px_rgba(0,0,0,0.15)]'}`}>
+            <defs>
+              <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#FDF5E6" /><stop offset="50%" stopColor={COLORS.GOLD} /><stop offset="100%" stopColor="#8B7355" /></linearGradient>
+              <linearGradient id="shineGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="transparent" /><stop offset="50%" stopColor="white" stopOpacity="0.5" /><stop offset="100%" stopColor="transparent" /></linearGradient>
+              <mask id="pathMask"><path d={PATHS.GOLDEN_RATIO} fill="white" /></mask>
+              <mask id="finalMask"><path d={PATHS.GOOSE_JPG} fill="white" /></mask>
+            </defs>
+            <AnimatePresence mode="wait">
+              {scene === 1 && <FirstGooseScene theme={theme} />}
+              {scene === 2 && <GoldenRatioScene theme={theme} />}
+              {scene === 3 && (
+                <motion.g key="scene3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
+                  {FINAL_GOOSE_PATH}
+                </motion.g>
+              )}
+            </AnimatePresence>
+          </svg>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-// --- Stats Section (Зурагнаас авсан мэдээлэл) ---
 const StatsSection = () => {
-  const { theme } = useAppContext();
-  
-  // Зурагнаас авсан статистик
+  const { theme, language } = useAppContext();
+  const t = translations[language].stats;
   const stats = [
-    { value: '7+', label: 'ЖИЛИЙН ТУРШЛАГА', color: theme === 'dark' ? 'text-red-500' : 'text-red-600' },
-    { value: '10+', label: 'ХӨТӨЛБӨР', color: theme === 'dark' ? 'text-green-500' : 'text-green-600' },
-    { value: '2000+', label: 'НИЙТ ТӨГСӨГЧ', color: theme === 'dark' ? 'text-yellow-500' : 'text-yellow-600' },
-    { value: '5000+', label: 'ЧАДАВРЖСАН СУРАГЧ', color: theme === 'dark' ? 'text-blue-500' : 'text-blue-600' },
+    { value: '6+', label: t.experience, color: 'text-red-500' },
+    { value: '14+', label: t.programs, color: 'text-brand-primary' },
+    { value: '110+', label: t.graduations, color: 'text-brand-accent' },
+    { value: '2,100+', label: t.students, color: 'text-blue-500' },
   ];
-
   return (
-    <section className={`py-16 ${theme === 'dark' ? 'bg-brand-dark border-white/5' : 'bg-white border-black/5'} border-y relative overflow-hidden transition-colors duration-500`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+    <section className="py-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-24 space-y-4">
+          <h2 className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.title.split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-secondary to-brand-accent">{t.title.split(' ')[1]}</span> {t.title.split(' ').slice(2).join(' ')}</h2>
+          <div className="h-1 w-20 bg-brand-secondary mx-auto rounded-full" />
+        </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-8">
           {stats.map((stat, index) => (
-            <motion.div 
-              key={index} 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true }} 
-              transition={{ delay: index * 0.1 }} 
-              className="text-center"
-            >
-              <div className="relative">
-                <Counter value={stat.value} color={stat.color} />
-              </div>
-              <div className={`text-[0.65rem] uppercase tracking-wider font-medium ${theme === 'dark' ? 'text-white/40' : 'text-black/40'} mt-2`}>
-                {stat.label}
-              </div>
+            <motion.div key={index} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ type: "spring", stiffness: 100, damping: 20, delay: index * 0.1 }} className={`group flex flex-col items-center text-center space-y-6 p-8 rounded-3xl ${theme === 'dark' ? 'hover:bg-white/[0.02]' : 'hover:bg-black/[0.02]'} transition-colors duration-500`}>
+              <div className="relative"><Counter value={stat.value} color={stat.color} /><motion.div className={`absolute -inset-4 ${stat.color.replace('text', 'bg')}/10 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500`} /></div>
+              <span className={`text-xs uppercase tracking-[0.4em] ${theme === 'dark' ? 'text-white/30 group-hover:text-white/60' : 'text-black/30 group-hover:text-black/60'} font-bold transition-colors`}>{stat.label}</span>
             </motion.div>
           ))}
         </div>
@@ -414,123 +456,6 @@ const StatsSection = () => {
   );
 };
 
-// --- Achievements Section (Зурагнаас авсан мэдээлэл) ---
-const AchievementsSection = () => {
-  const { theme } = useAppContext();
-  
-  const achievements = [
-    { title: '1-р байр', desc: 'Улаанбаатар 2024', color: 'from-yellow-500/20' },
-    { title: '2-р байр', desc: 'Улаанбаатар 2024', color: 'from-gray-500/20' },
-    { title: '1-р байр', desc: 'Electrikid 2024', color: 'from-blue-500/20' },
-    { title: 'Web Design 101', desc: '2024', color: 'from-green-500/20' },
-    { title: 'Arduino Robot', desc: 'Тэмцээн', color: 'from-purple-500/20' },
-    { title: 'Zero 2 Hero', desc: '2024 төгсөгчид', color: 'from-orange-500/20' },
-    { title: 'Python', desc: 'Топ төгсөгчид', color: 'from-red-500/20' },
-  ];
-
-  return (
-    <section className={`py-20 px-4 sm:px-6 lg:px-12 ${theme === 'dark' ? 'bg-brand-dark' : 'bg-brand-light'} transition-colors`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className={`text-4xl md:text-5xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} mb-4`}>
-            ХҮҮХДҮҮДИЙН АМЖИЛТ
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {achievements.map((a, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              viewport={{ once: true }}
-              className={`relative p-6 rounded-2xl overflow-hidden border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} group hover:scale-105 transition-all`}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${a.color} to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
-              <div className="relative z-10">
-                <h3 className="text-xl font-bold mb-2">{a.title}</h3>
-                <p className={`text-sm ${theme === 'dark' ? 'text-white/60' : 'text-black/60'}`}>{a.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// --- Testimonials Section (Зурагнаас авсан мэдээлэл) ---
-const TestimonialsSection = () => {
-  const { theme } = useAppContext();
-  
-  const testimonials = [
-    { 
-      initial: 'Б', 
-      color: 'bg-green-500', 
-      text: '“Хүүхэд маань TEE-д 2 жил суралцсанаас хойш технологид маш их сонирхолтой болсон. Одоо өөрийн вэбсайт хийж чаддаг болсон.”', 
-      name: 'Б. Батбаяр', 
-      role: 'Эцэг, 7-р ангийн сурагчийн' 
-    },
-    { 
-      initial: 'Д', 
-      color: 'bg-blue-500', 
-      text: '“Scratch програмчлал сурснаас хойш хүүхэд маань логик сэтгэлгээ маш их хөгжсөн. Математикийн хичээлд ч илүү сайн болсон.”', 
-      name: 'Д. Сарангэрэл', 
-      role: 'Ээж, 5-р ангийн сурагчийн' 
-    },
-    { 
-      initial: 'Э', 
-      color: 'bg-orange-500', 
-      text: '“Би TEE-д Arduino робот хийж сурсан. Маш сонирхолтой! Ирээдүйд робот инженер болмоор байна.”', 
-      name: 'Э. Тэмүүлэн', 
-      role: '6-р ангийн сурагч' 
-    },
-  ];
-
-  return (
-    <section className={`py-20 px-4 sm:px-6 lg:px-12 ${theme === 'dark' ? 'bg-brand-dark' : 'bg-white'} relative overflow-hidden transition-colors duration-500`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className={`text-4xl md:text-5xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-            БИДНИЙ ТУХАЙ — ТЭДНИЙ ҮГ
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <motion.div 
-              key={index} 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true }} 
-              transition={{ delay: index * 0.1 }} 
-              className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} relative group hover:scale-105 transition-all`}
-            >
-              <Quote className={`absolute top-4 right-4 ${theme === 'dark' ? 'text-white/10' : 'text-black/10'}`} size={40} />
-              
-              <div className="flex items-center gap-4 mb-4">
-                <div className={`w-12 h-12 rounded-xl ${testimonial.color} flex items-center justify-center text-white font-bold text-xl`}>
-                  {testimonial.initial}
-                </div>
-                <div>
-                  <h4 className="font-bold">{testimonial.name}</h4>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>{testimonial.role}</p>
-                </div>
-              </div>
-              
-              <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-white/70' : 'text-black/70'}`}>
-                {testimonial.text}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// --- Success Stories Section (Original - хадгалагдсан) ---
 const SuccessStoriesSection = () => {
   const { theme, language } = useAppContext();
   const t = translations[language].success;
@@ -542,46 +467,22 @@ const SuccessStoriesSection = () => {
     { icon: <Cpu className="text-brand-accent" />, name: 'Б. Номин-Эрдэнэ', grade: language === 'mn' ? '9-р анги' : '9th Grade', achievement: language === 'mn' ? 'Олон улсын роботикийн олимпиадад оролцсон' : 'Participated in International Robotics Olympiad', color: 'from-blue-500/20 to-transparent', borderColor: 'border-blue-500/50' },
     { icon: <Palette className="text-brand-accent" />, name: 'Д. Ариунзаяа', grade: language === 'mn' ? '5-р анги' : '5th Grade', achievement: language === 'mn' ? 'Хамгийн бүтээлч програмчлалын төсөл шагнал' : 'Most creative programming project award', color: 'from-brand-primary/20 to-transparent', borderColor: 'border-brand-primary/50' },
   ];
-  
   return (
-    <section className={`py-20 ${theme === 'dark' ? 'bg-brand-dark' : 'bg-brand-light'} relative overflow-hidden transition-colors duration-500`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="flex flex-col items-center text-center mb-12 space-y-4">
-          <motion.div initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="px-4 py-1.5 rounded-full border border-brand-secondary/30 bg-brand-secondary/5 text-brand-secondary text-[10px] uppercase tracking-[0.3em] font-bold">
-            Hall of Fame
-          </motion.div>
-          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={`text-3xl md:text-5xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-            {t.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary">{t.subtitle}</span>
-          </motion.h2>
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className={`${theme === 'dark' ? 'text-white/30' : 'text-black/30'} text-xs uppercase tracking-[0.4em] font-bold max-w-lg`}>
-            {t.desc}
-          </motion.p>
+    <section className="py-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="flex flex-col items-center text-center mb-24 space-y-6">
+          <motion.div initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="px-4 py-1.5 rounded-full border border-brand-secondary/30 bg-brand-secondary/5 text-brand-secondary text-[10px] uppercase tracking-[0.3em] font-bold">Hall of Fame</motion.div>
+          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-secondary">{t.title}</span></motion.h2>
+          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className={`${theme === 'dark' ? 'text-white/30' : 'text-black/30'} text-xs uppercase tracking-[0.4em] font-bold max-w-lg leading-loose`}>{t.desc}</motion.p>
         </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {stories.map((story, index) => (
-            <motion.div 
-              key={index} 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true }} 
-              transition={{ delay: index * 0.1 }} 
-              whileHover={{ y: -10 }} 
-              className={`group relative ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10 border-white/10' : 'bg-black/5 hover:bg-black/10 border-black/10'} border rounded-2xl p-8 flex flex-col items-center text-center space-y-4 transition-all duration-500 overflow-hidden`}
-            >
+            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} whileHover={{ y: -15 }} className={`group relative ${theme === 'dark' ? 'bg-white/[0.02] hover:bg-white/[0.05] border-white/5' : 'bg-black/[0.02] hover:bg-black/[0.05] border-black/5'} border rounded-[2rem] p-10 flex flex-col items-center text-center space-y-6 transition-all duration-500 overflow-hidden`}>
               <div className={`absolute -bottom-20 -right-20 w-40 h-40 bg-gradient-to-br ${story.color} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-              <div className="relative">
-                <div className={`${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'} w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  {story.icon}
-                </div>
-              </div>
-              <div>
-                <h4 className={`font-bold text-lg ${theme === 'dark' ? 'text-white' : 'text-black'} group-hover:text-brand-accent transition-colors`}>
-                  {story.name}
-                </h4>
-                <p className="text-blue-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-1">{story.grade}</p>
-              </div>
-              <p className={`${theme === 'dark' ? 'text-white/40' : 'text-black/40'} text-sm`}>{story.achievement}</p>
+              <div className="relative"><div className={`${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} w-20 h-20 rounded-3xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>{story.icon}</div><motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 3, repeat: Infinity }} className="absolute -inset-4 bg-yellow-500/10 blur-xl rounded-full" /></div>
+              <div className="space-y-2 relative z-10"><h4 className={`font-black text-xl ${theme === 'dark' ? 'text-white' : 'text-black'} group-hover:text-brand-accent transition-colors`}>{story.name}</h4><div className="flex items-center justify-center gap-2"><span className={`w-8 h-px ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'}`} /><p className="text-blue-500 text-[10px] font-black uppercase tracking-[0.3em]">{story.grade}</p><span className={`w-8 h-px ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'}`} /></div></div>
+              <p className={`${theme === 'dark' ? 'text-white/40' : 'text-black/40'} text-sm leading-relaxed font-medium relative z-10`}>{story.achievement}</p>
+              <motion.div whileHover={{ scale: 1.1 }} className="pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 relative z-10"><button className={`flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold ${theme === 'dark' ? 'text-white/60 hover:text-white' : 'text-black/60 hover:text-black'} transition-colors`}>{t.more} <ExternalLink size={12} /></button></motion.div>
             </motion.div>
           ))}
         </div>
@@ -590,35 +491,165 @@ const SuccessStoriesSection = () => {
   );
 };
 
-// --- Main HomePage Component ---
-const HomePage = () => {
-  return (
-    <main className="relative overflow-x-hidden">
-      {/* SVG Definitions */}
-      <svg className="absolute w-0 h-0">
-        <defs>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter id="paper">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" />
-            <feDiffuseLighting in="noise" lightingColor="#fff" surfaceScale="2">
-              <feDistantLight azimuth="45" elevation="60" />
-            </feDiffuseLighting>
-          </filter>
-        </defs>
-      </svg>
+const ClassesSection = () => {
+  const { theme, language } = useAppContext();
+  const classes = [
+    { grade: language === 'mn' ? '3-Р АНГИ' : '3RD GRADE', teacher: language === 'mn' ? 'Ш.Бонор' : 'Sh.Bonor' },
+    { grade: language === 'mn' ? '5-Р АНГИ' : '5TH GRADE', teacher: language === 'mn' ? 'М.Зоригт' : 'M.Zorigt' },
+    { grade: language === 'mn' ? '7-Р АНГИ' : '7TH GRADE', teacher: language === 'mn' ? 'Ж.Солонго' : 'J.Solongo' },
+    { grade: language === 'mn' ? '9-Р АНГИ' : '9TH GRADE', teacher: language === 'mn' ? 'У.Санж-Очир' : 'U.Sanj-Ochir' },
+  ];
 
-      <HeroSection />
-      <ClassesSection />
-      <StatsSection />
-      <AchievementsSection />
-      <TestimonialsSection />
-      <SuccessStoriesSection />
+  return (
+    <section className="py-24 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-1 bg-brand-secondary" />
+              <span className="text-brand-secondary text-xs font-black uppercase tracking-[0.4em]">
+                {language === 'mn' ? 'ШИНЭ ЭЛСЭЛТ 2025-2026' : 'NEW ENROLLMENT 2025-2026'}
+              </span>
+            </div>
+            <h2 className={`text-6xl md:text-8xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-black'} leading-none`}>
+              {language === 'mn' ? 'АНГИУД' : 'CLASSES'}
+            </h2>
+          </div>
+          <motion.button 
+            whileHover={{ x: 10 }}
+            className={`flex items-center gap-3 text-xs font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'} transition-colors pb-2`}
+          >
+            {language === 'mn' ? 'БҮХ АНГИУД' : 'ALL CLASSES'} <ArrowRight size={16} />
+          </motion.button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {classes.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ y: -8, backgroundColor: theme === 'dark' ? '#1a1a1a' : '#f0f0f0' }}
+              className={`p-12 rounded-[2rem] border ${theme === 'dark' ? 'bg-[#111111] border-white/5' : 'bg-[#f5f5f5] border-black/5'} transition-all duration-500 group cursor-pointer`}
+            >
+              <h3 className={`text-3xl font-black mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'} tracking-tight`}>
+                {item.grade}
+              </h3>
+              <p className={`${theme === 'dark' ? 'text-white/30' : 'text-black/30'} text-sm font-bold tracking-wide group-hover:text-brand-secondary transition-colors`}>
+                {item.teacher}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const TestimonialsSection = () => {
+  const { theme, language } = useAppContext();
+  const t = translations[language].testimonials;
+  const testimonials = [
+    { initial: 'Б', color: 'bg-brand-primary', text: language === 'mn' ? '“Хүүхэд маань TEE-д 2 жил суралцсанаас хойш технологид маш их сонирхолтой болсон. Одоо өөрийн вэбсайт хийж чаддаг болсон.”' : '“My child has been interested in technology since studying at TEE for 2 years. Now they can make their own website.”', name: 'Б. Батбаяр', role: language === 'mn' ? 'Эцэг, 7-р ангийн сурагчийн' : 'Parent of 7th grade student' },
+    { initial: 'Д', color: 'bg-blue-500', text: language === 'mn' ? '“Scratch програмчлал сурснаас хойш хүүхэд маань логик сэтгэлгээ маш их хөгжсөн. Математикийн хичээлд ч илүү сайн болсон.”' : '“Since learning Scratch programming, my child\'s logical thinking has developed a lot. They even got better at math.”', name: 'Д. Сарангэрэл', role: language === 'mn' ? 'Ээж, 5-р ангийн сурагчийн' : 'Mother of 5th grade student' },
+    { initial: 'Э', color: 'bg-brand-secondary', text: language === 'mn' ? '“Би TEE-д Arduino робот хийж сурсан. Маш сонирхолтой! Ирээдүйд робот инженер болмоор байна.”' : '“I learned to make Arduino robots at TEE. Very interesting! I want to be a robot engineer in the future.”', name: 'Э. Тэмүүлэн', role: language === 'mn' ? '6-р ангийн сурагч' : '6th grade student' },
+    { initial: 'О', color: 'bg-brand-accent', text: language === 'mn' ? '“Бага ангиас эхлэн технологийн суурийг тавьж байгаа нь маш чухал. TEE-ийн хөтөлбөр нь олон улсын стандартад нийцсэн.”' : '“It is very important to lay the foundation of technology starting from elementary school. TEE\'s program meets international standards.”', name: 'О. Номин', role: language === 'mn' ? 'Ээж, 3-р ангийн сурагчийн' : 'Mother of 3rd grade student' },
+    { initial: 'А', color: 'bg-purple-500', text: language === 'mn' ? '“TEE-д Python сурснаас хойш тоглоом хөгжүүлж чаддаг болсон. Маш их зүйл сурлаа!”' : '“Since learning Python at TEE, I can develop games. I learned a lot!”', name: 'А. Анужин', role: language === 'mn' ? '8-р ангийн сурагч' : '8th grade student' },
+  ];
+
+  return (
+    <section className="py-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-20">
+          <div className="space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }} 
+              whileInView={{ opacity: 1, x: 0 }} 
+              viewport={{ once: true }}
+              className="space-y-4"
+            >
+              <h2 className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-tight`}>
+                {t.title} <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-500">
+                  {t.subtitle}
+                </span>
+              </h2>
+              <p className={`${theme === 'dark' ? 'text-white/30' : 'text-black/30'} text-xs uppercase tracking-[0.4em] font-bold`}>
+                {t.desc}
+              </p>
+            </motion.div>
+
+            <div className="flex gap-4">
+              <div className={`w-12 h-12 rounded-full border ${theme === 'dark' ? 'border-white/10 text-white/40 hover:text-white hover:border-white' : 'border-black/10 text-black/40 hover:text-black hover:border-black'} flex items-center justify-center transition-all cursor-pointer`}>←</div>
+              <div className={`w-12 h-12 rounded-full border ${theme === 'dark' ? 'border-white/10 text-white/40 hover:text-white hover:border-white' : 'border-black/10 text-black/40 hover:text-black hover:border-black'} flex items-center justify-center transition-all cursor-pointer`}>→</div>
+            </div>
+          </div>
+
+          <div className="flex justify-center lg:justify-end pr-0 lg:pr-20">
+            <CardSwap 
+              width={400} 
+              height={320} 
+              cardDistance={40} 
+              verticalDistance={30} 
+              delay={4000}
+              skewAmount={3}
+            >
+              {testimonials.map((t, index) => (
+                <Card 
+                  key={index}
+                  className={`${theme === 'dark' ? 'bg-[#111111] border-white/5' : 'bg-[#f5f5f5] border-black/5 shadow-xl'} border rounded-[2.5rem] p-8 space-y-6 flex flex-col justify-between`}
+                >
+                  <Quote className={`absolute top-6 right-6 ${theme === 'dark' ? 'text-white/5' : 'text-black/5'}`} size={40} />
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="relative">
+                      <div className={`w-12 h-12 rounded-xl ${t.color} flex items-center justify-center text-white font-black text-xl shadow-lg`}>
+                        {t.initial}
+                      </div>
+                    </div>
+                    <div className={`${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex gap-1 px-3 py-1.5 rounded-full backdrop-blur-sm`}>
+                      {[...Array(5)].map((_, i) => (<Star key={i} size={10} className="fill-brand-accent text-brand-accent" />))}
+                    </div>
+                  </div>
+
+                  <p className={`${theme === 'dark' ? 'text-white/70' : 'text-black/70'} text-base leading-relaxed font-medium italic`}>
+                    {t.text}
+                  </p>
+
+                  <div className={`pt-6 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} flex items-center gap-4`}>
+                    <div className="space-y-1">
+                      <h4 className={`font-bold text-sm ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                        {t.name}
+                      </h4>
+                      <p className={`${theme === 'dark' ? 'text-white/30' : 'text-black/30'} text-[9px] uppercase tracking-[0.2em] font-bold`}>
+                        {t.role}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </CardSwap>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const HomePage = () => {
+  const { scrollY } = useScroll();
+  return (
+    <main className="relative">
+      <UnifiedBackground scrollY={scrollY} />
+      <div className="relative z-10">
+        <HeroSection scrollY={scrollY} />
+        <StatsSection />
+        <ClassesSection />
+        <TestimonialsSection />
+        <SuccessStoriesSection />
+      </div>
     </main>
   );
 };
