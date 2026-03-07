@@ -30,10 +30,7 @@ const Footer = () => {
           <div className="space-y-8">
             <div className="flex items-center gap-2">
               <span className={`text-3xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                Te<sup className="text-brand-primary">3</sup>
-              </span>
-              <span className={`text-[10px] uppercase tracking-[0.4em] ${theme === 'dark' ? 'text-white/30' : 'text-black/30'} font-bold ml-2`}>
-                Education
+                Te<sup className="text-brand-accent">3</sup>
               </span>
             </div>
             <p className={`${theme === 'dark' ? 'text-white/40' : 'text-black/40'} text-sm leading-relaxed max-w-xs`}>
@@ -58,7 +55,7 @@ const Footer = () => {
             <ul className="space-y-4">
               {courses.map((course) => (
                 <li key={course}>
-                  <a href="#" className={`${theme === 'dark' ? 'text-white/40 hover:text-brand-primary' : 'text-black/40 hover:text-brand-primary'} text-sm transition-colors`}>
+                  <a href="#" className={`${theme === 'dark' ? 'text-white/40 hover:text-brand-accent' : 'text-black/40 hover:text-brand-accent'} text-sm transition-colors`}>
                     {course}
                   </a>
                 </li>
@@ -72,7 +69,7 @@ const Footer = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div className="flex items-start gap-4 group">
-                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition-all`}>
                     <Phone size={18} />
                   </div>
                   <div>
@@ -81,7 +78,7 @@ const Footer = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-4 group">
-                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition-all`}>
                     <Mail size={18} />
                   </div>
                   <div>
@@ -92,7 +89,7 @@ const Footer = () => {
               </div>
               <div className="space-y-6">
                 <div className="flex items-start gap-4 group">
-                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition-all`}>
                     <Clock size={18} />
                   </div>
                   <div>
@@ -101,7 +98,7 @@ const Footer = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-4 group">
-                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all`}>
+                  <div className={`w-10 h-10 rounded-xl ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white transition-all`}>
                     <MapPin size={18} />
                   </div>
                   <div>
