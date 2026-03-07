@@ -301,14 +301,14 @@ export function ProgramsView() {
                                 <div className="flex gap-2">
                                     <button
                                         onClick={(e) => { e.stopPropagation(); setViewingProgram(program); }}
-                                        className="text-white/40 hover:text-brand-secondary transition-colors"
+                                        className={`${theme === 'dark' ? 'text-white/40' : 'text-black/40'} hover:text-brand-secondary transition-colors`}
                                         title="Хичээлүүд харах"
                                     >
                                         <List size={16} />
                                     </button>
                                     <button
                                         onClick={(e) => { e.stopPropagation(); handleEdit(program); }}
-                                        className="text-white/40 hover:text-white transition-colors"
+                                        className={`${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'} transition-colors`}
                                         title="Засах"
                                     >
                                         <Edit3 size={16} />

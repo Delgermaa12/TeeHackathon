@@ -217,11 +217,11 @@ function BlockHeader({
 }) {
     return (
         <>
-            <div className="absolute right-4 top-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+            <div className={`absolute right-4 top-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all z-10`}>
                 <button
                     onClick={onMoveUp}
                     disabled={disableUp}
-                    className={`p-1.5 rounded-lg hover:bg-white/10 ${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'
+                    className={`p-1.5 rounded-lg ${theme === 'dark' ? 'hover:bg-white/10 text-white/40 hover:text-white' : 'hover:bg-black/10 text-black/40 hover:text-black'
                         } disabled:opacity-0`}
                     type="button"
                 >
@@ -230,7 +230,7 @@ function BlockHeader({
                 <button
                     onClick={onMoveDown}
                     disabled={disableDown}
-                    className={`p-1.5 rounded-lg hover:bg-white/10 ${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'
+                    className={`p-1.5 rounded-lg ${theme === 'dark' ? 'hover:bg-white/10 text-white/40 hover:text-white' : 'hover:bg-black/10 text-black/40 hover:text-black'
                         } disabled:opacity-0`}
                     type="button"
                 >
@@ -246,10 +246,10 @@ function BlockHeader({
             </div>
 
             <div className="flex items-center gap-2 mb-4 opacity-40 group-hover:opacity-100 transition-all">
-                <div className="p-1.5 rounded-lg bg-white/5">
+                <div className={`p-1.5 rounded-lg ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'}`}>
                     <GripVertical size={14} />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider">{type}</span>
+                <span className={`text-[10px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{type}</span>
             </div>
         </>
     );
@@ -532,11 +532,11 @@ function ArticlePreview({
                         </span>
                     </div>
 
-                    <h1 className={`text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white shadow-2xl`}>
+                    <h1 className={`text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white`}>
                         {article.title?.trim() ? article.title : 'Гарчиггүй нийтлэл'}
                     </h1>
 
-                    <div className="flex items-center justify-center gap-6 text-[11px] font-black uppercase tracking-[0.2em] text-white/70">
+                    <div className="flex items-center justify-center gap-6 text-[11px] font-black uppercase tracking-[0.2em] text-white">
                         <div className="flex items-center gap-2">
                             <User size={16} className="text-[#eab308]" /> {getAuthorName(article.authorId)}
                         </div>
@@ -902,12 +902,12 @@ export function ArticlesView() {
                                 <h3 className={`font-bold line-clamp-2 leading-snug group-hover:text-brand-secondary transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                                     {article.title || 'Гарчиггүй'}
                                 </h3>
-                                <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                                <div className={`flex items-center justify-between pt-2 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}>
                                     <div className="flex items-center gap-2">
                                         <div className="w-6 h-6 rounded-full bg-brand-secondary/10 flex items-center justify-center text-brand-secondary">
                                             <User size={12} />
                                         </div>
-                                        <span className="text-[10px] font-bold opacity-60">
+                                        <span className={`text-[10px] font-bold ${theme === 'dark' ? 'opacity-60' : 'opacity-80 text-black/70'}`}>
                                             {getAuthorName(article.authorId)}
                                         </span>
                                     </div>
@@ -917,7 +917,7 @@ export function ArticlesView() {
                                                 e.stopPropagation();
                                                 handleEdit(article);
                                             }}
-                                            className="text-white/40 hover:text-white transition-colors"
+                                            className={`${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'} transition-colors`}
                                         >
                                             <Edit3 size={14} />
                                         </button>
@@ -947,10 +947,10 @@ export function ArticlesView() {
                 title={
                     <div className="flex items-center gap-4">
                         <span className="opacity-40">/</span>
-                        <div className="flex bg-white/5 p-1 rounded-xl">
+                        <div className={`flex ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} p-1 rounded-xl`}>
                             <button
                                 onClick={() => setEditorMode('edit')}
-                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${editor.mode === 'edit' ? 'bg-brand-secondary text-black shadow-lg' : 'text-white/40 hover:text-white'
+                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${editor.mode === 'edit' ? 'bg-brand-secondary text-black shadow-lg' : theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'
                                     }`}
                                 type="button"
                             >
@@ -958,7 +958,7 @@ export function ArticlesView() {
                             </button>
                             <button
                                 onClick={() => setEditorMode('preview')}
-                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${editor.mode === 'preview' ? 'bg-brand-secondary text-black shadow-lg' : 'text-white/40 hover:text-white'
+                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${editor.mode === 'preview' ? 'bg-brand-secondary text-black shadow-lg' : theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'
                                     }`}
                                 type="button"
                             >
@@ -966,7 +966,7 @@ export function ArticlesView() {
                             </button>
                             <button
                                 onClick={() => setEditorMode('card')}
-                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${editor.mode === 'card' ? 'bg-brand-secondary text-black shadow-lg' : 'text-white/40 hover:text-white'
+                                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${editor.mode === 'card' ? 'bg-brand-secondary text-black shadow-lg' : theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'
                                     }`}
                                 type="button"
                             >
@@ -977,7 +977,7 @@ export function ArticlesView() {
                 }
                 footer={
                     <div className="flex w-full justify-between items-center">
-                        <div className="flex items-center gap-4 text-xs opacity-40">
+                        <div className={`flex items-center gap-4 text-xs ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>
                             <Settings2 size={16} /> Auto-saving enabled
                         </div>
                         <div className="flex gap-3">
@@ -1012,11 +1012,11 @@ export function ArticlesView() {
                                     type="text"
                                     value={selectedArticle.title ?? ''}
                                     onChange={(e) => setArticleField('title', e.target.value)}
-                                    className={`w-full bg-transparent text-4xl font-black outline-none placeholder:opacity-20 ${theme === 'dark' ? 'text-white' : 'text-black'
+                                    className={`w-full bg-transparent text-4xl font-black outline-none ${theme === 'dark' ? 'text-white placeholder:text-white/20' : 'text-black placeholder:text-black/30'
                                         }`}
-                                    placeholder="Enter title here..."
+                                    placeholder="Гарчиг оруулах..."
                                 />
-                                <div className="h-0.5 bg-white/5 w-full" />
+                                <div className={`h-0.5 w-full ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'}`} />
                             </div>
 
                             <div className="space-y-6">
@@ -1035,10 +1035,10 @@ export function ArticlesView() {
                                 ))}
                             </div>
 
-                            <div className="py-10 border-2 border-dashed border-white/5 rounded-[2rem] flex flex-col items-center justify-center gap-6 group hover:border-brand-secondary/40 transition-all">
+                            <div className={`py-10 border-2 border-dashed ${theme === 'dark' ? 'border-white/5' : 'border-black/10'} rounded-[2rem] flex flex-col items-center justify-center gap-6 group hover:border-brand-secondary/40 transition-all`}>
                                 <div className="text-center space-y-1">
-                                    <p className="font-bold opacity-40 group-hover:opacity-80 transition-all">Блок нэмэхийн тулд / дарна уу</p>
-                                    <p className="text-[10px] opacity-20 uppercase tracking-widest">эсвэл доорхыг сонгоно уу</p>
+                                    <p className={`font-bold ${theme === 'dark' ? 'opacity-40' : 'opacity-60 text-black'} group-hover:opacity-80 transition-all`}>Блок нэмэхийн тулд / дарна уу</p>
+                                    <p className={`text-[10px] ${theme === 'dark' ? 'opacity-20' : 'opacity-40 text-black'} uppercase tracking-widest`}>эсвэл доорхыг сонгоно уу</p>
                                 </div>
 
                                 <div className="flex gap-4">
@@ -1052,11 +1052,11 @@ export function ArticlesView() {
                                         <button
                                             key={btn.type}
                                             onClick={() => addBlock(btn.type as BlockType)}
-                                            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-brand-secondary/10 hover:border-brand-secondary/40 transition-all w-24"
+                                            className={`flex flex-col items-center gap-2 p-4 rounded-2xl ${theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-white border-black/10 shadow-sm'} hover:bg-brand-secondary/10 hover:border-brand-secondary/40 transition-all w-24`}
                                             type="button"
                                         >
                                             <btn.icon size={20} className="text-brand-secondary" />
-                                            <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">{btn.label}</span>
+                                            <span className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'opacity-40' : 'opacity-60 text-black'}`}>{btn.label}</span>
                                         </button>
                                     ))}
                                 </div>
@@ -1064,8 +1064,8 @@ export function ArticlesView() {
                         </div>
 
                         <div className="col-span-4 space-y-8">
-                            <div className="p-6 bg-white/5 rounded-3xl border border-white/5 space-y-6">
-                                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4">Post Settings</h3>
+                            <div className={`p-6 ${theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-white border-black/10 shadow-sm'} rounded-3xl border space-y-6`}>
+                                <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] ${theme === 'dark' ? 'opacity-40' : 'opacity-60 text-black'} mb-4`}>Post Settings</h3>
 
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold uppercase opacity-30">Category</label>
@@ -1123,8 +1123,8 @@ export function ArticlesView() {
                                     </div>
                                 </div>
 
-                                <div className="pt-4 border-t border-white/5">
-                                    <label className="text-[10px] font-bold uppercase opacity-30 mb-2 block">Author</label>
+                                <div className={`pt-4 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}>
+                                    <label className={`text-[10px] font-bold uppercase ${theme === 'dark' ? 'opacity-30' : 'opacity-50 text-black'} mb-2 block`}>Author</label>
                                     <select
                                         value={selectedArticle.authorId ?? ''}
                                         onChange={(e) => setArticleField('authorId', e.target.value)}
@@ -1138,11 +1138,11 @@ export function ArticlesView() {
                                         ))}
                                     </select>
 
-                                    <div className="mt-3 flex items-center gap-3 p-2 bg-white/5 rounded-xl border border-white/5">
+                                    <div className={`mt-3 flex items-center gap-3 p-2 ${theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-black/5 border-black/5'} rounded-xl border`}>
                                         <div className="w-8 h-8 rounded-full bg-brand-secondary flex items-center justify-center font-bold text-black text-xs">
                                             {(getAuthorName(selectedArticle.authorId)[0] ?? 'A').toUpperCase()}
                                         </div>
-                                        <span className="text-xs font-bold">{getAuthorName(selectedArticle.authorId)}</span>
+                                        <span className={`text-xs font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{getAuthorName(selectedArticle.authorId)}</span>
                                     </div>
                                 </div>
                             </div>

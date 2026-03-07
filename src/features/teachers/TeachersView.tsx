@@ -168,7 +168,7 @@ export function TeachersView() {
                                             e.stopPropagation();
                                             handleEdit(teacher);
                                         }}
-                                        className="text-white/40 hover:text-white transition-colors"
+                                        className={`${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'} transition-colors`}
                                     >
                                         <Edit3 size={14} />
                                     </button>
@@ -181,21 +181,21 @@ export function TeachersView() {
                                 </div>
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-white/5">
+                            <div className={`space-y-4 pt-4 border-t ${theme === 'dark' ? 'border-white/5' : 'border-black/5'}`}>
                                 {teacher.bio && (
-                                    <p className={`text-[10px] line-clamp-2 leading-relaxed ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>
+                                    <p className={`text-[10px] line-clamp-2 leading-relaxed ${theme === 'dark' ? 'text-white/40' : 'text-black/60'}`}>
                                         {teacher.bio}
                                     </p>
                                 )}
                                 <div className="flex flex-wrap gap-1.5">
                                     {teacher.skills?.slice(0, 3).map((skill, index) => (
-                                        <span key={index} className={`px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'bg-white/5 text-white/40' : 'bg-black/5 text-black/40'}`}>
+                                        <span key={index} className={`px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'bg-white/5 text-white/40' : 'bg-black/5 text-black/60 font-bold'}`}>
                                             {skill}
                                         </span>
                                     ))}
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3 text-xs opacity-60">
+                                    <div className={`flex items-center gap-3 text-xs ${theme === 'dark' ? 'opacity-60' : 'text-black/70 font-medium'}`}>
                                         <Mail size={14} className="text-brand-secondary" />
                                         <span className="truncate max-w-[120px]">{teacher.email}</span>
                                     </div>

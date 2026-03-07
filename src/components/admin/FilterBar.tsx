@@ -43,7 +43,7 @@ export function FilterBar({
                     value={searchQuery}
                     onChange={(e) => onSearchChange(e.target.value)}
                     placeholder={searchPlaceholder}
-                    className={`w-full bg-transparent border-none outline-none px-3 py-2.5 text-sm font-medium ${theme === 'dark' ? 'text-white placeholder:text-white/20' : 'text-black placeholder:text-black/30'}`}
+                    className={`w-full bg-transparent border-none outline-none px-3 py-2.5 text-sm font-medium ${theme === 'dark' ? 'text-white placeholder:text-white/40' : 'text-black placeholder:text-black/40'}`}
                 />
             </div>
 
