@@ -144,9 +144,12 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
                                     <Tag size={14} className="text-[#eab308]" />
                                     Tags:
                                 </div>
-                                {['Education', 'Technology', 'Future'].map(tag => (
-                                    <span key={tag} className={`text-[10px] font-black uppercase tracking-widest px-5 py-2 rounded-2xl border-2 transition-all cursor-pointer ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white/50 hover:border-[#eab308]/40 hover:text-white' : 'bg-black/5 border-black/5 text-black/50 hover:border-[#eab308]/40 hover:text-black'
-                                        }`}>
+                                {article.tags?.map(tag => (
+                                    <span
+                                        key={tag}
+                                        onClick={() => onBack()} // For now just go back, ideally pass tag
+                                        className={`text-[10px] font-black uppercase tracking-widest px-5 py-2 rounded-2xl border-2 transition-all cursor-pointer ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white/50 hover:border-[#eab308]/40 hover:text-white' : 'bg-black/5 border-black/5 text-black/50 hover:border-[#eab308]/40 hover:text-black'
+                                            }`}>
                                         #{tag}
                                     </span>
                                 ))}

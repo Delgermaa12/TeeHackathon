@@ -28,7 +28,8 @@ export const articles: Article[] = [
     readTime: {
       mn: '5 мин',
       en: '5 min'
-    }
+    },
+    tags: ['AI', 'Education', 'Technology']
   },
   {
     id: '2',
@@ -57,7 +58,8 @@ export const articles: Article[] = [
     readTime: {
       mn: '4 мин',
       en: '4 min'
-    }
+    },
+    tags: ['Robotics', 'STEM', 'Education']
   },
   {
     id: '3',
@@ -86,6 +88,7 @@ export const articles: Article[] = [
     readTime: {
       mn: '6 мин',
       en: '6 min'
-    }
+    },
+    tags: ['Coding', 'Future', 'Education']
   }
 ];

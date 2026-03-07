@@ -27,4 +27,5 @@ export interface Article {
     mn: string;
     en: string;
   };
+  tags?: string[];
 }

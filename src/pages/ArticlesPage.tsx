@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Clock, User, ArrowRight, ChevronDown } from 'lucide-react';
+import { Search, Clock, User, ArrowRight, ChevronDown, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { articles } from '../data/articles';
 import Galaxy from '../components/Galaxy';
@@ -15,6 +15,8 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+    const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
     const categories = useMemo(() => {
         const cats = new Set(articles.map(a => a.category[language]));
         return Array.from(cats);
@@ -25,9 +27,10 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
             const matchesSearch = article.title[language].toLowerCase().includes(searchQuery.toLowerCase()) ||
                 article.excerpt[language].toLowerCase().includes(searchQuery.toLowerCase());
             const matchesCategory = !selectedCategory || article.category[language] === selectedCategory;
-            return matchesSearch && matchesCategory;
+            const matchesTag = !selectedTag || (article.tags?.includes(selectedTag));
+            return matchesSearch && matchesCategory && matchesTag;
         });
-    }, [searchQuery, selectedCategory, language]);
+    }, [searchQuery, selectedCategory, selectedTag, language]);
 
     return (
         <div className={`min-h-screen ${theme === 'dark' ? 'bg-brand-dark text-white' : 'bg-brand-light text-black'}`}>
@@ -143,6 +146,29 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
                         </div>
                     </div>
 
+                    {/* Active Filters */}
+                    <AnimatePresence>
+                        {selectedTag && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="flex items-center gap-3 mb-10"
+                            >
+                                <span className="text-xs font-bold uppercase tracking-widest opacity-40">
+                                    {language === 'mn' ? 'Шүүлтүүр:' : 'Filter:'}
+                                </span>
+                                <button
+                                    onClick={() => setSelectedTag(null)}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#eab308]/20 border border-[#eab308]/30 text-[#eab308] text-[10px] font-black uppercase tracking-widest hover:bg-[#eab308] hover:text-black transition-all"
+                                >
+                                    #{selectedTag}
+                                    <X size={14} />
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
                     {/* Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <AnimatePresence mode="popLayout">
@@ -175,9 +201,23 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick }) => {
                                     </div>
 
                                     <div className="p-8 space-y-4">
-                                        <span className="text-[10px] font-bold text-[#eab308] uppercase tracking-widest">
-                                            {article.category[language]}
-                                        </span>
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className="text-[10px] font-bold text-[#eab308] uppercase tracking-widest">
+                                                {article.category[language]}
+                                            </span>
+                                            {article.tags?.map(tag => (
+                                                <button
+                                                    key={tag}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedTag(tag);
+                                                    }}
+                                                    className={`text-[8px] px-2 py-1 rounded-md bg-white/5 border border-white/5 hover:border-[#eab308]/40 transition-all font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-white/40 hover:text-[#eab308]' : 'text-black/40 hover:text-[#eab308]'}`}
+                                                >
+                                                    #{tag}
+                                                </button>
+                                            ))}
+                                        </div>
                                         <h3 className={`text-xl md:text-2xl font-black leading-tight tracking-tight group-hover:text-[#eab308] transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                                             {article.title[language]}
                                         </h3>
