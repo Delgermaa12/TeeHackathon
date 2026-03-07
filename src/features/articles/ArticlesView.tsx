@@ -7,6 +7,7 @@ import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
+import { ImageUpload } from '../../components/admin/ImageUpload';
 import {
     FileText,
     Edit3,
@@ -14,7 +15,6 @@ import {
     Image as ImageIcon,
     User,
     Calendar,
-    Plus,
     ChevronUp,
     ChevronDown,
     Quote,
@@ -408,18 +408,12 @@ function BlockEditor({
 
             {block.type === 'image' && (
                 <div className="space-y-3">
-                    <div className="flex gap-2">
-                        <input
-                            type="text"
-                            value={safePlainText(block.content?.url ?? '')}
-                            onChange={(e) => onUpdateContent(block.id, { ...block.content, url: e.target.value })}
-                            className={`flex-1 p-3 rounded-xl outline-none text-xs ${theme === 'dark' ? 'bg-white/5 text-white/80' : 'bg-black/5 text-black/80'}`}
-                            placeholder="Image URL..."
-                        />
-                        <button className={`px-4 rounded-xl transition-all ${theme === 'dark' ? 'bg-white/5 hover:bg-white/10' : 'bg-black/5 hover:bg-black/10'}`} type="button">
-                            <Plus size={16} />
-                        </button>
-                    </div>
+                    <ImageUpload
+                        label="Зураг"
+                        value={block.content?.url}
+                        onChange={(val) => onUpdateContent(block.id, { ...block.content, url: val })}
+                        aspectRatio="video"
+                    />
 
                     <input
                         type="text"
@@ -1099,22 +1093,12 @@ export function ArticlesView() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase opacity-30">Featured Image</label>
-                                    <input
-                                        type="text"
-                                        value={selectedArticle.cover ?? ''}
-                                        onChange={(e) => setArticleField('cover', e.target.value)}
-                                        className={`w-full p-3 rounded-xl border outline-none text-xs ${theme === 'dark' ? 'bg-black/20 border-white/5 text-white/80' : 'bg-black/5 border-black/10 text-black/80'
-                                            }`}
-                                        placeholder="Cover image URL..."
+                                    <ImageUpload
+                                        label="Featured Image"
+                                        value={selectedArticle.cover}
+                                        onChange={(val) => setArticleField('cover', val)}
+                                        aspectRatio="video"
                                     />
-                                    <div
-                                        className={`aspect-video rounded-xl border border-dashed flex flex-col items-center justify-center gap-2 ${theme === 'dark' ? 'bg-black/20 border-white/10' : 'bg-black/5 border-black/10'
-                                            }`}
-                                    >
-                                        <ImageIcon size={20} className="opacity-30" />
-                                        <span className="text-[10px] opacity-40 font-bold">Paste URL above</span>
-                                    </div>
                                 </div>
 
                                 <div className="space-y-2">

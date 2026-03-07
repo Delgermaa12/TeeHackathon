@@ -43,6 +43,11 @@ export interface Teacher extends BaseEntity {
     specialization: string;
     email: string;
     phone: string;
+    age?: number;
+    gender?: 'male' | 'female' | 'other';
+    skills?: string[];
+    bio?: string;
+    socialLinks?: { platform: 'facebook' | 'instagram' | 'linkedin' | 'website', url: string }[];
     activeTrainingsCount: number;
     status: Status;
 }

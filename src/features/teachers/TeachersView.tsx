@@ -6,7 +6,8 @@ import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
-import { Users, Edit3, Trash2, Mail, Phone, BookOpen } from 'lucide-react';
+import { ImageUpload } from '../../components/admin/ImageUpload';
+import { Users, Edit3, Trash2, Mail, Facebook, Instagram, Linkedin, Globe, Star } from 'lucide-react';
 import { mockTeachers } from '../../mock/adminData';
 import type { Teacher } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
@@ -43,6 +44,7 @@ export function TeachersView() {
         if (teacherToDelete) {
             setTeachers(teachers.filter(t => t.id !== teacherToDelete));
             setTeacherToDelete(null);
+            setIsDeleteDialogOpen(false);
         }
     };
 
@@ -74,11 +76,6 @@ export function TeachersView() {
                     <span className={`text-[10px] ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>{row.email}</span>
                 </div>
             )
-        },
-        {
-            header: 'Идэвхтэй сургалт',
-            accessorKey: 'activeTrainingsCount',
-            cell: ({ row }) => <span className="font-medium bg-brand-secondary/10 text-brand-secondary px-2 py-1 rounded">{row.activeTrainingsCount}</span>
         },
         {
             header: 'Статус',
@@ -155,7 +152,14 @@ export function TeachersView() {
                                         <h3 className={`font-bold group-hover:text-brand-secondary transition-colors ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
                                             {teacher.name}
                                         </h3>
-                                        <span className="text-xs opacity-50">{teacher.specialization}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[10px] opacity-50">{teacher.specialization}</span>
+                                            {teacher.age && (
+                                                <span className={`text-[10px] px-1.5 rounded bg-brand-secondary/10 text-brand-secondary font-bold`}>
+                                                    {teacher.age} нас
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
@@ -177,18 +181,36 @@ export function TeachersView() {
                                 </div>
                             </div>
 
-                            <div className="space-y-3 pt-4 border-t border-white/5">
-                                <div className="flex items-center gap-3 text-xs opacity-60">
-                                    <Mail size={14} className="text-brand-secondary" />
-                                    <span className="truncate">{teacher.email}</span>
+                            <div className="space-y-4 pt-4 border-t border-white/5">
+                                {teacher.bio && (
+                                    <p className={`text-[10px] line-clamp-2 leading-relaxed ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>
+                                        {teacher.bio}
+                                    </p>
+                                )}
+                                <div className="flex flex-wrap gap-1.5">
+                                    {teacher.skills?.slice(0, 3).map((skill, index) => (
+                                        <span key={index} className={`px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'bg-white/5 text-white/40' : 'bg-black/5 text-black/40'}`}>
+                                            {skill}
+                                        </span>
+                                    ))}
                                 </div>
-                                <div className="flex items-center gap-3 text-xs opacity-60">
-                                    <Phone size={14} className="text-brand-secondary" />
-                                    <span>{teacher.phone}</span>
-                                </div>
-                                <div className="flex items-center gap-3 text-xs opacity-60">
-                                    <BookOpen size={14} className="text-brand-secondary" />
-                                    <span className="font-bold text-brand-secondary">{teacher.activeTrainingsCount} идэвхтэй сургалт</span>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3 text-xs opacity-60">
+                                        <Mail size={14} className="text-brand-secondary" />
+                                        <span className="truncate max-w-[120px]">{teacher.email}</span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        {teacher.socialLinks?.map((link, i) => {
+                                            const Icon = link.platform === 'facebook' ? Facebook :
+                                                link.platform === 'instagram' ? Instagram :
+                                                    link.platform === 'linkedin' ? Linkedin : Globe;
+                                            return (
+                                                <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-100 transition-opacity">
+                                                    <Icon size={12} />
+                                                </a>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -212,16 +234,14 @@ export function TeachersView() {
                     </>
                 }
             >
-                <form className="space-y-5">
-                    <div className="flex items-center justify-center mb-6">
-                        <div className={`w-24 h-24 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden ${theme === 'dark' ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5'}`}>
-                            {selectedTeacher?.avatar ? (
-                                <img src={selectedTeacher.avatar} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-50">Зураг оруулах</span>
-                            )}
-                        </div>
-                    </div>
+                <form className="space-y-6">
+                    <ImageUpload
+                        label="Багшийн зураг"
+                        value={selectedTeacher?.avatar}
+                        onChange={(val) => {
+                            if (selectedTeacher) setSelectedTeacher({ ...selectedTeacher, avatar: val });
+                        }}
+                    />
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Нэр</label>
                         <input type="text" defaultValue={selectedTeacher?.name} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
@@ -238,6 +258,44 @@ export function TeachersView() {
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>И-мэйл</label>
                             <input type="email" defaultValue={selectedTeacher?.email} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Нас</label>
+                            <input type="number" defaultValue={selectedTeacher?.age} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Хүйс</label>
+                            <select defaultValue={selectedTeacher?.gender || 'male'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                                <option value="male">Эрэгтэй</option>
+                                <option value="female">Эмэгтэй</option>
+                                <option value="other">Бусад</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Ур чадвар (таслалаар тусгаарлах)</label>
+                        <div className="relative">
+                            <input type="text" defaultValue={selectedTeacher?.skills?.join(', ')} className={`w-full px-4 py-3 pl-10 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="React, Node.js, UI/UX" />
+                            <Star size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 opacity-30" />
+                        </div>
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Дэлгэрэнгүй тайлбар (Bio)</label>
+                        <textarea defaultValue={selectedTeacher?.bio} rows={3} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none resize-none`} placeholder="Багшийн танилцуулга..." />
+                    </div>
+                    <div className="space-y-3">
+                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Холбоотой линкүүд</label>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="relative">
+                                <Facebook size={14} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-40" />
+                                <input type="text" placeholder="Facebook URL" className={`w-full pl-9 pr-4 py-2 text-xs rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            </div>
+                            <div className="relative">
+                                <Instagram size={14} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-40" />
+                                <input type="text" placeholder="Instagram URL" className={`w-full pl-9 pr-4 py-2 text-xs rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            </div>
                         </div>
                     </div>
                 </form>

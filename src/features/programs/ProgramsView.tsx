@@ -6,7 +6,8 @@ import { DataTable, type Column } from '../../components/admin/DataTable';
 import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
-import { BookOpen, Edit3, Trash2, List, ArrowLeft, PlayCircle, FileText, CheckSquare, Presentation, Layers, BarChart, Wrench, Info, Phone, Image as ImageIcon } from 'lucide-react';
+import { ImageUpload } from '../../components/admin/ImageUpload';
+import { BookOpen, Edit3, Trash2, List, ArrowLeft, PlayCircle, FileText, CheckSquare, Presentation, Layers, BarChart, Wrench, Info, Phone } from 'lucide-react';
 import { mockPrograms, mockLessons } from '../../mock/adminData';
 import type { Program, Lesson } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
@@ -406,13 +407,14 @@ export function ProgramsView() {
                             <label className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Нэр</label>
                             <input type="text" defaultValue={selectedProgram?.title} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="Хөтөлбөрийн нэр" />
                         </div>
-                        <div className="space-y-1.5 font-bold">
-                            <label className={`text-[10px] uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Зураг (URL)</label>
-                            <div className="relative">
-                                <input type="text" defaultValue={selectedProgram?.coverImage} className={`w-full px-4 py-3 pl-10 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="https://..." />
-                                <ImageIcon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 opacity-30" />
-                            </div>
-                        </div>
+                        <ImageUpload
+                            label="Нүүр зураг"
+                            value={selectedProgram?.coverImage}
+                            onChange={(val) => {
+                                if (selectedProgram) setSelectedProgram({ ...selectedProgram, coverImage: val });
+                            }}
+                            aspectRatio="video"
+                        />
                     </div>
                     {/* Type and Price fields removed from Program level */}
                     <div className="grid grid-cols-2 gap-4">

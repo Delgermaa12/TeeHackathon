@@ -112,6 +112,14 @@ export const mockTeachers: Teacher[] = [
         specialization: 'Вэб хөгжүүлэлт',
         email: 'baterdene@teeeducation.mn',
         phone: '99112233',
+        age: 28,
+        gender: 'male',
+        skills: ['React', 'Node.js', 'UI/UX'],
+        bio: 'Вэб хөгжүүлэлтийн чиглэлээр 5 жил ажилласан туршлагатай. Орчин үеийн вэб технологиудыг заах дуртай.',
+        socialLinks: [
+            { platform: 'facebook', url: 'https://facebook.com' },
+            { platform: 'linkedin', url: 'https://linkedin.com' }
+        ],
         activeTrainingsCount: 2,
         status: 'active',
         createdAt: '2024-05-10T09:00:00Z',
@@ -124,6 +132,13 @@ export const mockTeachers: Teacher[] = [
         specialization: 'Python & Өгөгдлийн шинжлэх ухаан',
         email: 'oyunchimeg@teeeducation.mn',
         phone: '88997766',
+        age: 32,
+        gender: 'female',
+        skills: ['Python', 'Data Science', 'Machine Learning'],
+        bio: 'Өгөгдлийн шинжлэх ухааны доктор. Математик болон алгоритмын суурь мэдлэгийг хялбараар заадаг.',
+        socialLinks: [
+            { platform: 'instagram', url: 'https://instagram.com' }
+        ],
         activeTrainingsCount: 3,
         status: 'active',
         createdAt: '2025-02-20T11:15:00Z',
@@ -136,6 +151,13 @@ export const mockTeachers: Teacher[] = [
         specialization: 'Робототехник',
         email: 'temuulen@teeeducation.mn',
         phone: '99001122',
+        age: 25,
+        gender: 'male',
+        skills: ['Arduino', 'Robotics', 'C++'],
+        bio: 'Робототехник сонирхогч. Хүүхдүүдэд бүтээлч сэтгэлгээг роботоор дамжуулан олгохыг эрмэлздэг.',
+        socialLinks: [
+            { platform: 'website', url: 'https://teeeducation.mn' }
+        ],
         activeTrainingsCount: 1,
         status: 'active',
         createdAt: '2025-08-05T10:30:00Z',
