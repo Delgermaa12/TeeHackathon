@@ -16,8 +16,8 @@ export function StatCard({ title, value, icon, colorClass, trend }: StatCardProp
     const { theme } = useAppContext();
 
     return (
-        <div className={`p-6 rounded-2xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5' : 'bg-white border-black/5 shadow-sm'} flex items-center gap-5 transition-all hover:shadow-md`}>
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${theme === 'dark' ? 'bg-white/5' : 'bg-black/5'} ${colorClass}`}>
+        <div className={`p-5 lg:p-6 rounded-3xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5 shadow-none' : 'bg-white border-black/5 shadow-sm'} flex items-center gap-4 transition-all hover:shadow-md group`}>
+            <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center shrink-0 ${theme === 'dark' ? 'bg-white/5 group-hover:bg-white/10' : 'bg-black/5 group-hover:bg-black/10'} ${colorClass} transition-colors`}>
                 {icon}
             </div>
             <div className="flex-1">

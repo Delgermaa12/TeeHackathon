@@ -14,6 +14,11 @@ import gallery3 from '../assets/gallery-3.jpg';
 import gallery4 from '../assets/gallery-4.jpg';
 import gallery5 from '../assets/gallery-5.jpg';
 import gallery6 from '../assets/gallery-6.jpg';
+import scratchImage from '../assets/scratch.jpg';
+import grade5Image from '../assets/5th_grade.jpg';
+import grade7Image from '../assets/7th_grade.jpg';
+import grade9Image from '../assets/9th_grade.jpg';
+import { Link } from 'react-router';
 
 // --- Sub-components for Hero ---
 const COLORS = {
@@ -498,7 +503,7 @@ const SuccessStoriesSection = () => {
   const { theme, language } = useAppContext();
 
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section className="pt-12 pb-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
 
         <div className="flex flex-col items-center text-center mb-16 space-y-4">
@@ -538,55 +543,203 @@ const SuccessStoriesSection = () => {
   );
 };
 
-const ClassesSection = () => {
+const ProgramsPreviewSection = () => {
   const { theme, language } = useAppContext();
-  const classes = [
-    { grade: language === 'mn' ? '3-Р АНГИ' : '3RD GRADE', teacher: language === 'mn' ? 'Ш.Бонор' : 'Sh.Bonor' },
-    { grade: language === 'mn' ? '5-Р АНГИ' : '5TH GRADE', teacher: language === 'mn' ? 'М.Зоригт' : 'M.Zorigt' },
-    { grade: language === 'mn' ? '7-Р АНГИ' : '7TH GRADE', teacher: language === 'mn' ? 'Ж.Солонго' : 'J.Solongo' },
-    { grade: language === 'mn' ? '9-Р АНГИ' : '9TH GRADE', teacher: language === 'mn' ? 'У.Санж-Очир' : 'U.Sanj-Ochir' },
+
+  const featuredPrograms = [
+    {
+      grade: '3',
+      title: language === 'mn' ? '3 дугаар ангийн хөтөлбөр' : '3rd Grade Program',
+      description:
+        language === 'mn'
+          ? 'Компьютерын үндэс, алгоритм, програмчлалын анхан шатыг сурах'
+          : 'Learn computer basics, algorithms, and programming fundamentals',
+      duration: language === 'mn' ? '9 сар' : '9 months',
+      level: language === 'mn' ? 'Анхан шат' : 'Beginner',
+      age: language === 'mn' ? '8-9 нас' : '8-9 years',
+      image: scratchImage,
+      accent: 'bg-blue-600/90',
+    },
+    {
+      grade: '5',
+      title: language === 'mn' ? '5-р ангийн хөтөлбөр' : '5th Grade Program',
+      description:
+        language === 'mn'
+          ? 'Вэб хөгжүүлэлт, HTML, CSS, JavaScript сурах'
+          : 'Web development, HTML, CSS, JavaScript learning',
+      duration: language === 'mn' ? '9 сар' : '9 months',
+      level: language === 'mn' ? 'Суурь шат' : 'Foundation',
+      age: language === 'mn' ? '10-11 нас' : '10-11 years',
+      image: grade5Image,
+      accent: 'bg-purple-600/90',
+    },
+    {
+      grade: '7',
+      title: language === 'mn' ? '7-р ангийн хөтөлбөр' : '7th Grade Program',
+      description:
+        language === 'mn'
+          ? 'Мобайл хэрэгслэлийн хөгжүүлэлт ба дизайн'
+          : 'Mobile app development and design',
+      duration: language === 'mn' ? '9 сар' : '9 months',
+      level: language === 'mn' ? 'Дунд шат' : 'Intermediate',
+      age: language === 'mn' ? '12-13 нас' : '12-13 years',
+      image: grade7Image,
+      accent: 'bg-orange-600/90',
+    },
+    {
+      grade: '9',
+      title: language === 'mn' ? '9-р ангийн хөтөлбөр' : '9th Grade Program',
+      description:
+        language === 'mn'
+          ? 'AI, машин сургалт ба системүүдийн зарчим'
+          : 'AI, machine learning and systems principles',
+      duration: language === 'mn' ? '9 сар' : '9 months',
+      level: language === 'mn' ? 'Ахисан шат' : 'Advanced',
+      age: language === 'mn' ? '14-15 нас' : '14-15 years',
+      image: grade9Image,
+      accent: 'bg-emerald-600/90',
+    },
   ];
 
   return (
     <section className="py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
           <div className="space-y-6">
             <div className="flex items-center gap-4">
               <div className="w-12 h-1 bg-brand-secondary" />
               <span className="text-brand-secondary text-xs font-black uppercase tracking-[0.4em]">
-                {language === 'mn' ? 'ШИНЭ ЭЛСЭЛТ 2025-2026' : 'NEW ENROLLMENT 2025-2026'}
+                {language === 'mn' ? 'ҮНДСЭН ХӨТӨЛБӨРҮҮД' : 'MAIN PROGRAMS'}
               </span>
             </div>
-            <h2 className={`text-6xl md:text-8xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-black'} leading-none`}>
-              {language === 'mn' ? 'АНГИУД' : 'CLASSES'}
+
+            <h2
+              className={`text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter ${
+                theme === 'dark' ? 'text-white' : 'text-black'
+              } leading-none`}
+            >
+              {language === 'mn' ? 'ХӨТӨЛБӨРҮҮД' : 'PROGRAMS'}
             </h2>
+
+            <p
+              className={`max-w-2xl text-sm md:text-base ${
+                theme === 'dark' ? 'text-white/50' : 'text-black/50'
+              }`}
+            >
+              {language === 'mn'
+                ? '3-9-р ангийн сурагчдад зориулсан шаталсан технологийн сургалтын хөтөлбөрүүд.'
+                : 'Structured technology learning programs for students from grades 3 to 9.'}
+            </p>
           </div>
-          <motion.button 
-            whileHover={{ x: 10 }}
-            className={`flex items-center gap-3 text-xs font-black uppercase tracking-widest ${theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'} transition-colors pb-2`}
+
+          <Link
+            to="/programm"
+            className={`inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest ${
+              theme === 'dark'
+                ? 'text-white/40 hover:text-white'
+                : 'text-black/40 hover:text-black'
+            } transition-colors pb-2`}
           >
-            {language === 'mn' ? 'БҮХ АНГИУД' : 'ALL CLASSES'} <ArrowRight size={16} />
-          </motion.button>
+            {language === 'mn' ? 'БҮХ ХӨТӨЛБӨР' : 'ALL PROGRAMS'}
+            <ArrowRight size={16} />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {classes.map((item, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {featuredPrograms.map((program, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              key={program.grade}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -8, backgroundColor: theme === 'dark' ? '#1a1a1a' : '#f0f0f0' }}
-              className={`p-12 rounded-[2rem] border ${theme === 'dark' ? 'bg-[#111111] border-white/5' : 'bg-[#f5f5f5] border-black/5'} transition-all duration-500 group cursor-pointer`}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              className="h-full"
             >
-              <h3 className={`text-3xl font-black mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'} tracking-tight`}>
-                {item.grade}
-              </h3>
-              <p className={`${theme === 'dark' ? 'text-white/30' : 'text-black/30'} text-sm font-bold tracking-wide group-hover:text-brand-secondary transition-colors`}>
-                {item.teacher}
-              </p>
+              <Link to={`/grade/${program.grade}`} className="block h-full">
+                <div
+                  className={`relative group overflow-hidden rounded-[2rem] border h-full transition-all duration-500 hover:-translate-y-2 ${
+                    theme === 'dark'
+                      ? 'bg-[#111111] border-white/5 hover:border-white/10'
+                      : 'bg-white border-black/5 hover:border-black/10 shadow-xl'
+                  }`}
+                >
+                  <div className="relative h-56 overflow-hidden">
+                    <img
+                      src={program.image}
+                      alt={program.title}
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                    <div className="absolute top-4 left-4">
+                      <div
+                        className={`inline-flex items-center px-4 py-2 rounded-xl text-white text-sm font-black backdrop-blur-sm ${program.accent}`}
+                      >
+                        {language === 'mn'
+                          ? `${program.grade} дугаар анги`
+                          : `Grade ${program.grade}`}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col h-[calc(100%-14rem)]">
+                    <h3
+                      className={`text-xl font-black mb-3 ${
+                        theme === 'dark' ? 'text-white' : 'text-black'
+                      }`}
+                    >
+                      {program.title}
+                    </h3>
+
+                    <p
+                      className={`text-sm leading-relaxed mb-5 flex-grow ${
+                        theme === 'dark' ? 'text-white/60' : 'text-black/60'
+                      }`}
+                    >
+                      {program.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <span
+                        className={`px-3 py-1.5 rounded-full font-semibold ${
+                          theme === 'dark'
+                            ? 'bg-blue-500/15 text-blue-300'
+                            : 'bg-blue-100 text-blue-700'
+                        }`}
+                      >
+                        {program.duration}
+                      </span>
+
+                      <span
+                        className={`px-3 py-1.5 rounded-full font-semibold ${
+                          theme === 'dark'
+                            ? 'bg-purple-500/15 text-purple-300'
+                            : 'bg-purple-100 text-purple-700'
+                        }`}
+                      >
+                        {program.level}
+                      </span>
+
+                      <span
+                        className={`px-3 py-1.5 rounded-full font-semibold ${
+                          theme === 'dark'
+                            ? 'bg-pink-500/15 text-pink-300'
+                            : 'bg-pink-100 text-pink-700'
+                        }`}
+                      >
+                        {program.age}
+                      </span>
+                    </div>
+
+                    <div className="mt-6 inline-flex items-center gap-2 text-brand-secondary font-bold text-sm">
+                      {language === 'mn' ? 'Дэлгэрэнгүй үзэх' : 'View details'}
+                      <ArrowRight size={16} />
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>
@@ -693,7 +846,7 @@ const HomePage = () => {
       <div className="relative z-10">
         <HeroSection scrollY={scrollY} />
         <StatsSection />
-        <ClassesSection />
+        <ProgramsPreviewSection />
         <StudentProjectSection />
         <TestimonialsSection />
         <SuccessStoriesSection />

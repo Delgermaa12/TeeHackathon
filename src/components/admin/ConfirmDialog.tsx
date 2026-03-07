@@ -48,11 +48,18 @@ export function ConfirmDialog({
                                 <AlertTriangle size={20} />
                             </div>
                             <button
-                                onClick={onClose}
-                                className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'hover:bg-white/10 text-white/40' : 'hover:bg-black/5 text-black/40'}`}
-                            >
-                                <X size={16} />
-                            </button>
+  type="button"
+  onClick={onClose}
+  aria-label="Close"
+  title="Close"
+  className={`p-1.5 rounded-lg transition-all ${
+    theme === 'dark'
+      ? 'hover:bg-white/10 text-white/40'
+      : 'hover:bg-black/5 text-black/40'
+  }`}
+>
+  <X size={16} aria-hidden="true" />
+</button>
                         </div>
 
                         <h3 className="text-lg font-bold mb-2">{title}</h3>

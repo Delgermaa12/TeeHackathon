@@ -16,6 +16,11 @@ export interface Program extends BaseEntity {
     status: Status;
     description?: string;
     featured?: boolean;
+    coverImage?: string;
+    ageGroup?: string;
+    tools?: string;
+    contactInfo?: string;
+    curriculumSummary?: string;
 }
 
 export interface Training extends BaseEntity {
@@ -38,6 +43,14 @@ export interface Teacher extends BaseEntity {
     phone: string;
     activeTrainingsCount: number;
     status: Status;
+    age?: number;
+    gender?: 'male' | 'female' | 'other';
+    bio?: string;
+    skills?: string[];
+    socialLinks?: Array<{
+        platform: 'facebook' | 'instagram' | 'linkedin' | string;
+        url: string;
+    }>;
 }
 
 export type BlockType = 'text' | 'image' | 'gallery' | 'quote' | 'video' | 'course_grid';

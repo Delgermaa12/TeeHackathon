@@ -1,0 +1,83 @@
+.orbit-container {
+  position: relative;
+  width: var(--orbit-container-width, 100%);
+  height: var(--orbit-container-height, 100%);
+  overflow: visible;
+}
+
+.orbit-container--responsive {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.orbit-scaling-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.orbit-scaling-container--responsive {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--orbit-base-width);
+  height: var(--orbit-base-width);
+  transform: translate(-50%, -50%) scale(var(--orbit-scale, 1));
+  transform-origin: center center;
+}
+
+.orbit-rotation-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform: rotate(var(--orbit-rotation, 0deg));
+}
+
+.orbit-path-svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.orbit-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--orbit-item-size, 64px);
+  height: var(--orbit-item-size, 64px);
+  transform: translate(-50%, -50%);
+  offset-path: var(--orbit-path);
+  offset-rotate: 0deg;
+  offset-anchor: center center;
+  pointer-events: auto;
+}
+
+.orbit-item-content {
+  width: 100%;
+  height: 100%;
+  transform: rotate(var(--orbit-item-rotation, 0deg));
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.orbit-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.orbit-center-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}

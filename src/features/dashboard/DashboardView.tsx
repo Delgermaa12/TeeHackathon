@@ -1,4 +1,3 @@
-import React from 'react';
 import { PageHeader } from '../../components/admin/PageHeader';
 import { StatCard } from '../../components/admin/StatCard';
 import { BookOpen, GraduationCap, Users, FileText, MessageSquare, Heart } from 'lucide-react';
@@ -67,12 +66,12 @@ export function DashboardView() {
             {/* Widgets Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
                 {/* Recent Requests Widget */}
-                <div className={`rounded-2xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5' : 'bg-white border-black/5'} overflow-hidden shadow-sm`}>
-                    <div className="p-5 border-b border-white/5 flex justify-between items-center">
-                        <h3 className="font-bold text-sm tracking-wide">Сүүлд ирсэн хүсэлтүүд</h3>
+                <div className={`rounded-3xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5 shadow-none' : 'bg-white border-black/5 shadow-sm'} overflow-hidden`}>
+                    <div className={`p-6 border-b ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} flex justify-between items-center`}>
+                        <h3 className={`font-bold text-sm tracking-wide ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Сүүлд ирсэн хүсэлтүүд</h3>
                     </div>
                     <div className="p-0">
-                        {mockRequests.slice(0, 3).map((req, i) => (
+                        {mockRequests.slice(0, 3).map((req) => (
                             <div key={req.id} className={`p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b last:border-0 ${theme === 'dark' ? 'border-white/5 hover:bg-white/[0.02]' : 'border-black/5 hover:bg-black/[0.02]'} transition-colors`}>
                                 <div>
                                     <p className="font-bold text-sm">{req.name}</p>
@@ -87,9 +86,9 @@ export function DashboardView() {
                 </div>
 
                 {/* Latest Appreciation Widget */}
-                <div className={`rounded-2xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5' : 'bg-white border-black/5'} overflow-hidden shadow-sm`}>
-                    <div className="p-5 border-b border-white/5 flex justify-between items-center">
-                        <h3 className="font-bold text-sm tracking-wide">Хамгийн сүүлийн талархал</h3>
+                <div className={`rounded-3xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5 shadow-none' : 'bg-white border-black/5 shadow-sm'} overflow-hidden`}>
+                    <div className={`p-6 border-b ${theme === 'dark' ? 'border-white/5' : 'border-black/5'} flex justify-between items-center`}>
+                        <h3 className={`font-bold text-sm tracking-wide ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Хамгийн сүүлийн талархал</h3>
                     </div>
                     <div className="p-0">
                         {mockAppreciations.slice(0, 3).map((appr) => (

@@ -1,37 +1,36 @@
 import React from 'react';
 import { useAppContext } from '../../context/AppContext';
-import { LucideIcon } from 'lucide-react';
 
-interface EmptyStateProps {
-    icon: LucideIcon;
+interface StatCardProps {
     title: string;
-    description: string;
-    actionLabel?: string;
-    onAction?: () => void;
+    value: string | number;
+    icon: React.ReactNode;
+    colorClass: string;
+    trend?: {
+        value: number;
+        isPositive: boolean;
+    };
 }
 
-export function EmptyState({ icon: Icon, title, description, actionLabel, onAction }: EmptyStateProps) {
+export function StatCard({ title, value, icon, colorClass, trend }: StatCardProps) {
     const { theme } = useAppContext();
 
     return (
-        <div className={`p-12 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed ${theme === 'dark' ? 'bg-[#151515]/50 border-white/10' : 'bg-black/[0.02] border-black/10'}`}>
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 ${theme === 'dark' ? 'bg-white/5 text-brand-secondary' : 'bg-black/5 text-brand-secondary'}`}>
-                <Icon size={32} />
+        <div className={`p-5 lg:p-6 rounded-3xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5 shadow-none' : 'bg-white border-black/5 shadow-sm'} flex items-center gap-4 transition-all hover:shadow-md group`}>
+            <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center shrink-0 ${theme === 'dark' ? 'bg-white/5 group-hover:bg-white/10' : 'bg-black/5 group-hover:bg-black/10'} ${colorClass} transition-colors`}>
+                {icon}
             </div>
-            <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                {title}
-            </h3>
-            <p className={`text-sm max-w-sm mb-8 ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>
-                {description}
-            </p>
-            {actionLabel && onAction && (
-                <button
-                    onClick={onAction}
-                    className="px-6 py-2.5 bg-brand-secondary text-black text-sm font-bold rounded-xl hover:brightness-105 transition-all shadow-md"
-                >
-                    {actionLabel}
-                </button>
-            )}
+            <div className="flex-1">
+                <p className={`${theme === 'dark' ? 'text-white/40' : 'text-black/50'} text-[11px] font-bold uppercase tracking-wider mb-0.5 line-clamp-1`}>{title}</p>
+                <div className="flex items-end gap-3">
+                    <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{value}</p>
+                    {trend && (
+                        <p className={`text-[10px] font-bold pb-1 flex items-center gap-0.5 ${trend.isPositive ? 'text-green-500' : 'text-red-500'}`}>
+                            {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
+                        </p>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

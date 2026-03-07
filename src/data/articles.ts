@@ -28,7 +28,8 @@ export const articles: Article[] = [
     readTime: {
       mn: '5 мин',
       en: '5 min'
-    }
+    },
+    tags: ['AI', 'Education', 'Technology']
   },
   {
     id: '2',
@@ -57,7 +58,8 @@ export const articles: Article[] = [
     readTime: {
       mn: '4 мин',
       en: '4 min'
-    }
+    },
+    tags: ['Robotics', 'STEM', 'Education']
   },
   {
     id: '3',
@@ -86,6 +88,97 @@ export const articles: Article[] = [
     readTime: {
       mn: '6 мин',
       en: '6 min'
-    }
+    },
+    tags: ['Coding', 'Future', 'Education']
+  },
+  {
+    id: '4',
+    title: {
+      mn: 'STEM боловсролын давуу тал',
+      en: 'Advantages of STEM Education'
+    },
+    excerpt: {
+      mn: 'Шинжлэх ухаан, технологи, инженерчлэл, математикийн нэгдмэл сургалт.',
+      en: 'Integrated learning of science, technology, engineering, and math.'
+    },
+    content: {
+      mn: 'STEM боловсрол нь хүүхдийг ирээдүйн нийгэмд бэлтгэх хамгийн үр дүнтэй арга юм.',
+      en: 'STEM education is the most effective way to prepare children for future society.'
+    },
+    date: '2026-03-05',
+    author: {
+      mn: 'О. Тэмүүлэн',
+      en: 'O. Temuulen'
+    },
+    image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800',
+    category: {
+      mn: 'Боловсрол',
+      en: 'Education'
+    },
+    readTime: {
+      mn: '7 мин',
+      en: '7 min'
+    },
+    tags: ['STEM', 'Education', 'Future', 'Robotics']
+  },
+  {
+    id: '5',
+    title: {
+      mn: 'Веб хөгжүүлэлтийн эхлэл',
+      en: 'Introduction to Web Development'
+    },
+    excerpt: {
+      mn: 'HTML, CSS, JavaScript-ийг хэрхэн хурдан сурах вэ?',
+      en: 'How to learn HTML, CSS, and JavaScript quickly?'
+    },
+    content: {
+      mn: 'Веб хөгжүүлэлт нь орчин үеийн хамгийн эрэлттэй чадваруудын нэг юм.',
+      en: 'Web development is one of the most in-demand skills today.'
+    },
+    date: '2026-03-06',
+    author: {
+      mn: 'А. Эрдэнэ',
+      en: 'A. Erdene'
+    },
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800',
+    category: {
+      mn: 'Програмчлал',
+      en: 'Programming'
+    },
+    readTime: {
+      mn: '10 мин',
+      en: '10 min'
+    },
+    tags: ['Coding', 'Web', 'Technology', 'Robotics']
+  },
+  {
+    id: '6',
+    title: {
+      mn: 'Дижитал зургийн урлаг',
+      en: 'Digital Art'
+    },
+    excerpt: {
+      mn: 'Технологи ашиглан бүтээлч байдлаа илэрхийлэх нь.',
+      en: 'Expressing creativity through technology.'
+    },
+    content: {
+      mn: 'Дижитал зураг нь орчин үеийн урлагийн шинэ хэлбэр болон хөгжиж байна.',
+      en: 'Digital drawing is developing as a new form of modern art.'
+    },
+    date: '2026-03-07',
+    author: {
+      mn: 'М. Ану',
+      en: 'M. Anu'
+    },
+    image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=800',
+    category: {
+      mn: 'Урлаг',
+      en: 'Art'
+    },
+    readTime: {
+      mn: '4 мин',
+      en: '4 min'
+    },
+    tags: ['Art', 'Design', 'Technology']
   }
 ];
