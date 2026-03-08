@@ -285,8 +285,8 @@ const UnifiedBackground = ({ scrollY }: { scrollY: any }) => {
       {/* Subtle gradient overlay */}
       <div
         className={`absolute inset-0 ${theme === "dark"
-            ? "bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.45)_100%)]"
-            : "bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.45)_100%)]"
+          ? "bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.45)_100%)]"
+          : "bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.45)_100%)]"
           }`}
       />
 
@@ -381,21 +381,26 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
           </h1>
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-brand-accent text-black rounded-full font-bold text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-brand-accent/20"
-            >
-              {language === 'mn' ? 'Хөтөлбөрүүд' : 'Explore Programs'}
-              <ArrowRight size={18} />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-8 py-4 border ${theme === 'dark' ? 'border-white/10 text-white hover:bg-white/5' : 'border-black/10 text-black hover:bg-black/5'} rounded-full font-bold text-sm uppercase tracking-widest transition-all`}
-            >
-              {language === 'mn' ? 'Бидний тухай' : 'Our Philosophy'}
-            </motion.button>
+            <Link to="/programm">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-brand-accent text-black rounded-full font-bold text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-brand-accent/20"
+              >
+                {language === 'mn' ? 'Хөтөлбөрүүд' : 'Explore Programs'}
+                <ArrowRight size={18} />
+              </motion.button>
+            </Link>
+
+            <Link to="/about">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-8 py-4 border ${theme === 'dark' ? 'border-white/10 text-white hover:bg-white/5' : 'border-black/10 text-black hover:bg-black/5'} rounded-full font-bold text-sm uppercase tracking-widest transition-all`}
+              >
+                {language === 'mn' ? 'Бидний тухай' : 'Our Philosophy'}
+              </motion.button>
+            </Link>
           </div>
         </motion.div>
 
@@ -589,8 +594,8 @@ const ProgramsPreviewSection = () => {
           <Link
             to="/programm"
             className={`inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest ${theme === 'dark'
-                ? 'text-white/40 hover:text-white'
-                : 'text-black/40 hover:text-black'
+              ? 'text-white/40 hover:text-white'
+              : 'text-black/40 hover:text-black'
               } transition-colors pb-2`}
           >
             {language === 'mn' ? 'БҮХ ХӨТӨЛБӨР' : 'ALL PROGRAMS'}
@@ -611,8 +616,8 @@ const ProgramsPreviewSection = () => {
               <Link to={`/programm/course/${program.id}`} className="block h-full">
                 <div
                   className={`relative group overflow-hidden rounded-[2rem] border h-full transition-all duration-500 hover:-translate-y-2 ${theme === 'dark'
-                      ? 'bg-[#111111] border-white/5 hover:border-white/10'
-                      : 'bg-white border-black/5 hover:border-black/10 shadow-xl'
+                    ? 'bg-[#111111] border-white/5 hover:border-white/10'
+                    : 'bg-white border-black/5 hover:border-black/10 shadow-xl'
                     }`}
                 >
                   <div className="relative h-56 overflow-hidden">
@@ -654,8 +659,8 @@ const ProgramsPreviewSection = () => {
                     <div className="flex flex-wrap gap-2 text-xs">
                       <span
                         className={`px-3 py-1.5 rounded-full font-semibold ${theme === 'dark'
-                            ? 'bg-blue-500/15 text-blue-300'
-                            : 'bg-blue-100 text-blue-700'
+                          ? 'bg-blue-500/15 text-blue-300'
+                          : 'bg-blue-100 text-blue-700'
                           }`}
                       >
                         {program.duration}
@@ -663,8 +668,8 @@ const ProgramsPreviewSection = () => {
 
                       <span
                         className={`px-3 py-1.5 rounded-full font-semibold ${theme === 'dark'
-                            ? 'bg-purple-500/15 text-purple-300'
-                            : 'bg-purple-100 text-purple-700'
+                          ? 'bg-purple-500/15 text-purple-300'
+                          : 'bg-purple-100 text-purple-700'
                           }`}
                       >
                         {program.level}
@@ -672,8 +677,8 @@ const ProgramsPreviewSection = () => {
 
                       <span
                         className={`px-3 py-1.5 rounded-full font-semibold ${theme === 'dark'
-                            ? 'bg-pink-500/15 text-pink-300'
-                            : 'bg-pink-100 text-pink-700'
+                          ? 'bg-pink-500/15 text-pink-300'
+                          : 'bg-pink-100 text-pink-700'
                           }`}
                       >
                         {program.age}
