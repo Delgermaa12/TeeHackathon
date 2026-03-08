@@ -3,6 +3,7 @@
   perspective: 2000px;
   margin: 0 auto;
   transform-style: preserve-3d;
+  /* Width and height set via inline styles */
 }
 
 .card-swap-item {

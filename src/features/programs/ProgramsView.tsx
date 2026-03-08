@@ -299,7 +299,7 @@ export function ProgramsView() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1.5">
                                 <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Төрөл</label>
-                                <select name="type" defaultValue={selectedLesson?.type || 'video'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                                <select aria-label='Төрөл' name="type" defaultValue={selectedLesson?.type || 'video'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
                                     <option value="video">Бичлэг</option>
                                     <option value="reading">Унших</option>
                                     <option value="assignment">Даалгавар</option>
@@ -313,7 +313,7 @@ export function ProgramsView() {
                         </div>
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Статус</label>
-                            <select name="status" defaultValue={selectedLesson?.status || 'published'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                            <select aria-label='Статус' name="status" defaultValue={selectedLesson?.status || 'published'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
                                 <option value="published">Нийтлэгдсэн</option>
                                 <option value="draft">Ноорог</option>
                             </select>
@@ -496,14 +496,14 @@ export function ProgramsView() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Ангилал</label>
-                            <select name="category" defaultValue={selectedProgram?.category || 'bogino'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                            <select aria-label="Ангилал" name="category" defaultValue={selectedProgram?.category || 'bogino'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
                                 <option value="bogino">Богино хугацааны</option>
                                 <option value="zuslaan">Зуслан</option>
                             </select>
                         </div>
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Түвшин</label>
-                            <select name="level" defaultValue={selectedProgram?.level || 'Анхан шат'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                            <select aria-label="Түвшин" name="level" defaultValue={selectedProgram?.level || 'Анхан шат'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
                                 <option value="Анхан шат">Анхан шат</option>
                                 <option value="Суурь шат">Суурь шат</option>
                                 <option value="Дунд шат">Дунд шат</option>
@@ -560,7 +560,7 @@ export function ProgramsView() {
                     </div>
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Статус</label>
-                        <select name="status" defaultValue={selectedProgram ? selectedProgram.status : 'active'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                        <select aria-label="Статус" name="status" defaultValue={selectedProgram ? selectedProgram.status : 'active'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
                             <option value="active">Идэвхтэй</option>
                             <option value="draft">Ноорог</option>
                             <option value="archived">Архивлагдсан</option>

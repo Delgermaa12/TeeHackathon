@@ -1,4 +1,4 @@
-import React, { Children, cloneElement, forwardRef, isValidElement, useEffect, useMemo, useRef } from 'react';
+import React, { Children, cloneElement, forwardRef, isValidElement, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import gsap from 'gsap';
 import './CardSwap.css';
 
@@ -46,18 +46,19 @@ const placeNow = (el: HTMLElement | null, slot: any, skew: number) => {
   });
 };
 
-const CardSwap: React.FC<CardSwapProps> = ({
-  width = 500,
-  height = 400,
-  cardDistance = 30,
-  verticalDistance = 20,
-  delay = 5000,
-  pauseOnHover = false,
-  onCardClick,
-  skewAmount = 2,
-  easing = 'elastic',
-  children
-}) => {
+const CardSwap = forwardRef((props: CardSwapProps, ref) => {
+  const {
+    width = 500,
+    height = 400,
+    cardDistance = 30,
+    verticalDistance = 20,
+    delay = 5000,
+    pauseOnHover = false,
+    onCardClick,
+    skewAmount = 2,
+    easing = 'elastic',
+    children
+  } = props;
   const config =
     easing === 'elastic'
       ? {
@@ -87,6 +88,9 @@ const CardSwap: React.FC<CardSwapProps> = ({
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const intervalRef = useRef<number | undefined>(undefined);
   const container = useRef<HTMLDivElement>(null);
+  const swapRef = useRef(() => {});
+
+  useImperativeHandle(ref, () => ({ swap: swapRef.current }));
 
   useEffect(() => {
     const total = refs.length;
@@ -155,6 +159,8 @@ const CardSwap: React.FC<CardSwapProps> = ({
       });
     };
 
+    swapRef.current = swap;
+
     intervalRef.current = window.setInterval(swap, delay);
 
     if (pauseOnHover) {
@@ -193,10 +199,19 @@ const CardSwap: React.FC<CardSwapProps> = ({
   );
 
   return (
-    <div ref={container} className="card-swap-container" style={{ width, height }}>
+    <div 
+      ref={container} 
+      className="card-swap-container" 
+      style={{ 
+        width: typeof width === 'string' ? width : `${width}px`,
+        height: typeof height === 'string' ? height : `${height}px`
+      }}
+    >
       {rendered}
     </div>
   );
-};
+});
+
+CardSwap.displayName = 'CardSwap';
 
 export default CardSwap;

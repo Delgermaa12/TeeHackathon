@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, animate } from 'motion/react';
 import { Trophy, Zap, Star, Award, Cpu, Palette, ExternalLink, Quote, Phone, Mail, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
@@ -699,12 +699,14 @@ const TestimonialsSection = () => {
   const { theme, language } = useAppContext();
   const { appreciations } = useDataContext();
   const t = translations[language].testimonials;
+  const cardSwapRef = React.useRef<any>(null);
 
   const dynamicTestimonials = appreciations
     .filter((a) => a.status === 'approved' && a.featured)
+    .slice(0, 5)
     .map((a, idx) => ({
       initial: a.sender.charAt(0).toUpperCase(),
-      color: ['bg-brand-primary', 'bg-blue-500', 'bg-brand-accent', 'bg-purple-500'][idx % 4],
+      color: ['bg-brand-primary', 'bg-blue-500', 'bg-brand-accent', 'bg-purple-500', 'bg-green-500'][idx % 5],
       text: `“${a.fullMessage}”`,
       name: a.sender,
       role: a.targetType === 'teacher' ? (language === 'mn' ? 'Сурагч' : 'Student') : (language === 'mn' ? 'Эцэг эх' : 'Parent'),
@@ -750,12 +752,15 @@ const TestimonialsSection = () => {
 
           <div className="flex justify-center lg:justify-end pr-0 lg:pr-20">
             <CardSwap
+              ref={cardSwapRef}
               width={400}
               height={320}
-              cardDistance={40}
-              verticalDistance={30}
-              delay={4000}
-              skewAmount={3}
+              cardDistance={50}
+              verticalDistance={50}
+              delay={5000}
+              skewAmount={5}
+              easing="elastic"
+              onCardClick={() => cardSwapRef.current?.swap()}
             >
               {testimonials.map((t, index) => (
                 <Card
