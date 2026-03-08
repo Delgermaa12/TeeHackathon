@@ -63,7 +63,7 @@ const Header: React.FC = () => {
 
   const navClass = `text-[11px] uppercase tracking-widest font-bold ${
     theme === 'dark' ? 'text-white/50' : 'text-black/70'
-  } hover:text-brand-primary transition-all relative group`;
+  } hover:text-brand-accent transition-all relative group`;
 
   const mobileNavClass = `px-3 py-3 rounded-xl text-[12px] font-bold uppercase tracking-wider ${
     theme === 'dark'
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
   }`;
 
   const navUnderline = (
-    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-brand-primary transition-all duration-300 group-hover:w-full" />
+    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-brand-accent transition-all duration-300 group-hover:w-full" />
   );
 
   const closeMobileMenu = () => {
@@ -134,7 +134,7 @@ const Header: React.FC = () => {
                 type="button"
                 className={`flex items-center gap-1 text-[11px] uppercase tracking-widest font-bold ${
                   theme === 'dark' ? 'text-white/50' : 'text-black/70'
-                } hover:text-brand-primary transition-all`}
+                } hover:text-brand-accent transition-all`}
               >
                 {aboutLabel}
                 <ChevronDown
@@ -163,8 +163,8 @@ const Header: React.FC = () => {
                         to={item.to}
                         className={`flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider ${
                           theme === 'dark'
-                            ? 'text-white/70 hover:text-brand-primary hover:bg-white/5'
-                            : 'text-black/70 hover:text-brand-primary hover:bg-black/5'
+                            ? 'text-white/70 hover:text-brand-accent hover:bg-white/5'
+                            : 'text-black/70 hover:text-brand-accent hover:bg-black/5'
                         } transition-all`}
                       >
                         {item.icon}
@@ -214,7 +214,7 @@ const Header: React.FC = () => {
               whileTap={{ scale: 0.96 }}
               className={`hidden sm:flex items-center gap-2 px-4 sm:px-5 py-2.5 ${
                 theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'
-              } hover:bg-brand-primary hover:text-white rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
+              } hover:bg-brand-accent hover:text-white rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
             >
               <LogIn size={14} />
               <span>{language === 'mn' ? 'БҮРТГҮҮЛЭХ' : 'Register'}</span>
@@ -325,7 +325,7 @@ const Header: React.FC = () => {
                   whileTap={{ scale: 0.97 }}
                   className={`sm:hidden mt-2 flex items-center justify-center gap-2 px-4 py-3 ${
                     theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white'
-                  } hover:bg-brand-primary hover:text-white rounded-full text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
+                  } hover:bg-brand-accent hover:text-white rounded-full text-[11px] font-bold uppercase tracking-wider transition-all shadow-lg`}
                 >
                   <LogIn size={14} />
                   <span>{language === 'mn' ? 'БҮРТГҮҮЛЭХ' : 'Register'}</span>

@@ -29,12 +29,15 @@ function AppLayout() {
   const isAdminPage = location.pathname === "/admin";
 
   return (
-    <div className="min-h-screen bg-brand-dark dark:bg-brand-dark light:bg-brand-light text-white dark:text-white light:text-black selection:bg-brand-secondary/30 selection:text-brand-secondary transition-colors duration-500">
-      
-      {/* Header */}
+    <div
+      className={`min-h-screen transition-colors duration-500 ${
+        theme === "dark"
+          ? "bg-brand-dark text-white"
+          : "bg-brand-light text-black"
+      } selection:bg-brand-secondary/30 selection:text-brand-secondary`}
+    >
       {!isAdminPage && <Header />}
 
-      {/* Routes */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
@@ -48,10 +51,7 @@ function AppLayout() {
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
 
-      {/* Chatbot */}
       {!isAdminPage && <TeeChatbot />}
-
-      {/* Footer */}
       {!isAdminPage && <Footer />}
     </div>
   );

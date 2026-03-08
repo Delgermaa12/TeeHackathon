@@ -293,7 +293,7 @@ const UnifiedBackground = ({ scrollY }: { scrollY: any }) => {
 
       {/* Ambient glow */}
       <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-blue-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vh] bg-brand-secondary/10 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vh] bg-brand-accent/10 rounded-full blur-[120px]" />
     </div>
   );
 };
@@ -370,16 +370,16 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
           transition={{ duration: 1, delay: 0.5 }}
           className="space-y-8 text-center lg:text-left"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-secondary/10 border border-brand-secondary/20">
-            <div className="w-1.5 h-1.5 rounded-full bg-brand-secondary animate-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-brand-secondary">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-accent/10 border border-brand-accent/20">
+            <div className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-brand-accent">
               {language === 'mn' ? 'Элсэлт авч байна 2026' : 'Now Enrolling for 2026'}
             </span>
           </div>
 
           <h1 className={`text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
             {language === 'mn' ? 'монголын n1 дижитал' : 'The Future of'} <br />
-            <span className="text-brand-secondary italic font-serif">
+            <span className="text-brand-accent italic font-serif">
               {language === 'mn' ? 'технологийн сургууль.' : 'Technical Minds.'}
             </span>
           </h1>
@@ -388,7 +388,7 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-brand-secondary text-black rounded-full font-bold text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-brand-secondary/20"
+              className="px-8 py-4 bg-brand-accent text-black rounded-full font-bold text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-brand-accent/20"
             >
               {language === 'mn' ? 'Хөтөлбөрүүд' : 'Explore Programs'}
               <ArrowRight size={18} />
@@ -444,8 +444,8 @@ const StatsSection = () => {
     <section className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-24 space-y-4">
-          <h2 className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.title.split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-secondary to-brand-accent">{t.title.split(' ')[1]}</span> {t.title.split(' ').slice(2).join(' ')}</h2>
-          <div className="h-1 w-20 bg-brand-secondary mx-auto rounded-full" />
+          <h2 className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.title.split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-accent">{t.title.split(' ')[1]}</span> {t.title.split(' ').slice(2).join(' ')}</h2>
+          <div className="h-1 w-20 bg-brand-accent mx-auto rounded-full" />
         </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-8">
           {stats.map((stat, index) => (
@@ -607,8 +607,8 @@ const ProgramsPreviewSection = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
           <div className="space-y-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-1 bg-brand-secondary" />
-              <span className="text-brand-secondary text-xs font-black uppercase tracking-[0.4em]">
+              <div className="w-12 h-1 bg-brand-accent" />
+              <span className="text-brand-accent text-xs font-black uppercase tracking-[0.4em]">
                 {language === 'mn' ? 'ҮНДСЭН ХӨТӨЛБӨРҮҮД' : 'MAIN PROGRAMS'}
               </span>
             </div>
@@ -733,7 +733,7 @@ const ProgramsPreviewSection = () => {
                       </span>
                     </div>
 
-                    <div className="mt-6 inline-flex items-center gap-2 text-brand-secondary font-bold text-sm">
+                    <div className="mt-6 inline-flex items-center gap-2 text-brand-accent font-bold text-sm">
                       {language === 'mn' ? 'Дэлгэрэнгүй үзэх' : 'View details'}
                       <ArrowRight size={16} />
                     </div>
@@ -754,7 +754,7 @@ const TestimonialsSection = () => {
   const testimonials = [
     { initial: 'Б', color: 'bg-brand-primary', text: language === 'mn' ? '“Хүүхэд маань TEE-д 2 жил суралцсанаас хойш технологид маш их сонирхолтой болсон. Одоо өөрийн вэбсайт хийж чаддаг болсон.”' : '“My child has been interested in technology since studying at TEE for 2 years. Now they can make their own website.”', name: 'Б. Батбаяр', role: language === 'mn' ? 'Эцэг, 7-р ангийн сурагчийн' : 'Parent of 7th grade student' },
     { initial: 'Д', color: 'bg-blue-500', text: language === 'mn' ? '“Scratch програмчлал сурснаас хойш хүүхэд маань логик сэтгэлгээ маш их хөгжсөн. Математикийн хичээлд ч илүү сайн болсон.”' : '“Since learning Scratch programming, my child\'s logical thinking has developed a lot. They even got better at math.”', name: 'Д. Сарангэрэл', role: language === 'mn' ? 'Ээж, 5-р ангийн сурагчийн' : 'Mother of 5th grade student' },
-    { initial: 'Э', color: 'bg-brand-secondary', text: language === 'mn' ? '“Би TEE-д Arduino робот хийж сурсан. Маш сонирхолтой! Ирээдүйд робот инженер болмоор байна.”' : '“I learned to make Arduino robots at TEE. Very interesting! I want to be a robot engineer in the future.”', name: 'Э. Тэмүүлэн', role: language === 'mn' ? '6-р ангийн сурагч' : '6th grade student' },
+    { initial: 'Э', color: 'bg-brand-accent', text: language === 'mn' ? '“Би TEE-д Arduino робот хийж сурсан. Маш сонирхолтой! Ирээдүйд робот инженер болмоор байна.”' : '“I learned to make Arduino robots at TEE. Very interesting! I want to be a robot engineer in the future.”', name: 'Э. Тэмүүлэн', role: language === 'mn' ? '6-р ангийн сурагч' : '6th grade student' },
     { initial: 'О', color: 'bg-brand-accent', text: language === 'mn' ? '“Бага ангиас эхлэн технологийн суурийг тавьж байгаа нь маш чухал. TEE-ийн хөтөлбөр нь олон улсын стандартад нийцсэн.”' : '“It is very important to lay the foundation of technology starting from elementary school. TEE\'s program meets international standards.”', name: 'О. Номин', role: language === 'mn' ? 'Ээж, 3-р ангийн сурагчийн' : 'Mother of 3rd grade student' },
     { initial: 'А', color: 'bg-purple-500', text: language === 'mn' ? '“TEE-д Python сурснаас хойш тоглоом хөгжүүлж чаддаг болсон. Маш их зүйл сурлаа!”' : '“Since learning Python at TEE, I can develop games. I learned a lot!”', name: 'А. Анужин', role: language === 'mn' ? '8-р ангийн сурагч' : '8th grade student' },
   ];
