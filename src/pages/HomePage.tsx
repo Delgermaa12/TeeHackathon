@@ -708,7 +708,6 @@ const TestimonialsSection = () => {
 
   const dynamicTestimonials = appreciations
     .filter((a) => a.status === 'approved' && a.featured)
-    .slice(0, 5)
     .map((a, idx) => ({
       initial: a.sender.charAt(0).toUpperCase(),
       color: ['bg-brand-primary', 'bg-blue-500', 'bg-brand-accent', 'bg-purple-500', 'bg-green-500'][idx % 5],
@@ -725,7 +724,10 @@ const TestimonialsSection = () => {
     { initial: 'А', color: 'bg-purple-500', text: language === 'mn' ? '“TEE-д Python сурснаас хойш тоглоом хөгжүүлж чаддаг болсон. Маш их зүйл сурлаа!”' : '“Since learning Python at TEE, I can develop games. I learned a lot!”', name: 'А. Анужин', role: language === 'mn' ? '8-р ангийн сурагч' : '8th grade student' },
   ];
 
-  const testimonials = dynamicTestimonials.length > 0 ? dynamicTestimonials : fallbackTestimonials;
+  const testimonials = [
+    ...dynamicTestimonials,
+    ...fallbackTestimonials.filter(f => !dynamicTestimonials.some(d => d.name === f.name))
+  ].slice(0, 5);
 
   return (
     <section className="py-32 relative overflow-hidden">
@@ -750,23 +752,24 @@ const TestimonialsSection = () => {
             </motion.div>
 
             <div className="flex gap-4">
-              <div className={`w-12 h-12 rounded-full border ${theme === 'dark' ? 'border-white/10 text-white/40 hover:text-white hover:border-white' : 'border-black/10 text-black/40 hover:text-black hover:border-black'} flex items-center justify-center transition-all cursor-pointer`}>←</div>
-              <div className={`w-12 h-12 rounded-full border ${theme === 'dark' ? 'border-white/10 text-white/40 hover:text-white hover:border-white' : 'border-black/10 text-black/40 hover:text-black hover:border-black'} flex items-center justify-center transition-all cursor-pointer`}>→</div>
+              <div onClick={() => cardSwapRef.current?.swap()} className={`w-12 h-12 rounded-full border ${theme === 'dark' ? 'border-white/10 text-white/40 hover:text-white hover:border-white' : 'border-black/10 text-black/40 hover:text-black hover:border-black'} flex items-center justify-center transition-all cursor-pointer`}>←</div>
+              <div onClick={() => cardSwapRef.current?.swap()} className={`w-12 h-12 rounded-full border ${theme === 'dark' ? 'border-white/10 text-white/40 hover:text-white hover:border-white' : 'border-black/10 text-black/40 hover:text-black hover:border-black'} flex items-center justify-center transition-all cursor-pointer`}>→</div>
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end pr-0 lg:pr-20">
-            <CardSwap
-              ref={cardSwapRef}
-              width={400}
-              height={320}
-              cardDistance={50}
-              verticalDistance={50}
-              delay={5000}
-              skewAmount={5}
-              easing="elastic"
-              onCardClick={() => cardSwapRef.current?.swap()}
-            >
+          <div className="flex justify-center lg:justify-end w-full pr-0 lg:pr-10">
+            <div className="relative w-full max-w-[320px] sm:max-w-[400px] h-[280px] sm:h-[320px] group mt-16 lg:mt-0">
+              <CardSwap
+                ref={cardSwapRef}
+                width="100%"
+                height="100%"
+                cardDistance={60}
+                verticalDistance={70}
+                delay={5000}
+                skewAmount={6}
+                easing="elastic"
+                onCardClick={() => cardSwapRef.current?.swap()}
+              >
               {testimonials.map((t, index) => (
                 <Card
                   key={index}
@@ -802,6 +805,7 @@ const TestimonialsSection = () => {
                 </Card>
               ))}
             </CardSwap>
+          </div>
           </div>
         </div>
       </div>

@@ -24,12 +24,16 @@ interface CardSwapProps {
   children: React.ReactNode;
 }
 
-const makeSlot = (i: number, distX: number, distY: number, total: number) => ({
-  x: i * distX,
-  y: -i * distY,
-  z: -i * distX * 1.5,
-  zIndex: total - i
-});
+const makeSlot = (i: number, distX: number, distY: number, total: number) => {
+  const offsetX = total > 1 ? ((total - 1) * distX) / 2 : 0;
+  const offsetY = total > 1 ? ((total - 1) * distY) / 2 : 0;
+  return {
+    x: i * distX - offsetX,
+    y: -(i * distY - offsetY),
+    z: -i * Math.abs(distX || 30) * 1.5,
+    zIndex: total - i
+  };
+};
 
 const placeNow = (el: HTMLElement | null, slot: any, skew: number) => {
   if (!el) return;
@@ -50,12 +54,12 @@ const CardSwap = forwardRef((props: CardSwapProps, ref) => {
   const {
     width = 500,
     height = 400,
-    cardDistance = 30,
-    verticalDistance = 20,
+    cardDistance = 60,
+    verticalDistance = 70,
     delay = 5000,
     pauseOnHover = false,
     onCardClick,
-    skewAmount = 2,
+    skewAmount = 6,
     easing = 'elastic',
     children
   } = props;
