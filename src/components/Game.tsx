@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, X, Play, Box, Sparkles } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
+import { useDataContext } from "../context/DataContext";
 import OrbitImages from "./OrbitImages";
 
 type ProjectType = "scratch" | "tinkercad";
@@ -26,7 +27,7 @@ const projects: ProjectItem[] = [
     embedUrl: "https://scratch.mit.edu/projects/1249565877/embed",
     openUrl: "https://scratch.mit.edu/projects/1249565877",
     student: "Anu",
-    color: "from-orange-400 to-yellow-300",
+    color: "bg-orange-400",
   },
   {
     id: 2,
@@ -36,7 +37,7 @@ const projects: ProjectItem[] = [
     embedUrl: "https://scratch.mit.edu/projects/1201982030/embed",
     openUrl: "https://scratch.mit.edu/projects/1201982030",
     student: "Nomin",
-    color: "from-orange-400 to-pink-400",
+    color: "bg-orange-400",
   },
   {
     id: 3,
@@ -46,7 +47,7 @@ const projects: ProjectItem[] = [
     embedUrl: "https://scratch.mit.edu/projects/1204900026/embed",
     openUrl: "https://scratch.mit.edu/projects/1204900026",
     student: "Saraa",
-    color: "from-orange-300 to-red-400",
+    color: "bg-orange-300",
   },
   {
     id: 4,
@@ -56,7 +57,7 @@ const projects: ProjectItem[] = [
     openUrl:
       "https://www.tinkercad.com/things/lDrYycuCToU-funky-jaban-amberis",
     student: "Bilguun",
-    color: "from-cyan-400 to-blue-400",
+    color: "bg-cyan-400",
   },
 ];
 
@@ -84,8 +85,25 @@ const StudentProjectSection: React.FC = () => {
     };
   }, [selectedProject]);
 
+  const { studentProjects } = useDataContext();
+
+  const dynamicProjects: ProjectItem[] = (studentProjects || [])
+    .filter(p => p.status === 'active')
+    .map(p => ({
+      id: parseInt(p.id.replace('sp_', '')), // Best effort to map id
+      title: p.title,
+      type: p.type,
+      thumbnail: p.thumbnail,
+      embedUrl: p.embedUrl,
+      openUrl: p.openUrl,
+      student: p.studentName,
+      color: p.color
+    }));
+
+  const allProjects = dynamicProjects.length > 0 ? dynamicProjects : projects;
+
   const orbitCards = useMemo(() => {
-    return projects.map((project, index) => (
+    return allProjects.map((project, index) => (
       <motion.button
         key={project.id}
         type="button"
@@ -105,12 +123,12 @@ const StudentProjectSection: React.FC = () => {
           draggable={false}
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-black/50" />
 
         <div className="absolute top-3 left-3">
           <div
-            className={`inline-flex items-center justify-center text-[10px] px-3 py-2 rounded-full font-black uppercase bg-gradient-to-r text-black ${
-              project.color || "from-orange-400 to-yellow-300"
+            className={`inline-flex items-center justify-center text-[10px] px-3 py-2 rounded-full font-black uppercase text-black ${
+              project.color || "bg-orange-400"
             }`}
           >
             {project.type === "scratch" ? (
@@ -131,7 +149,7 @@ const StudentProjectSection: React.FC = () => {
         </div>
       </motion.button>
     ));
-  }, []);
+  }, [allProjects]);
 
   return (
     <>

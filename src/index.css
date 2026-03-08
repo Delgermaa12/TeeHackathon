@@ -18,7 +18,7 @@
 
 :root {
   --brand-primary: #22c55e;
-  --brand-secondary: #eab308;
+  --brand-secondary: #f97316;
   --brand-accent: #eab308;
   --brand-dark: #101010;
   --brand-light: #fcfcfd;
@@ -58,3 +58,46 @@
 .markdown-body h2 { @apply text-xl font-bold mb-3; }
 .markdown-body p { @apply mb-4; }
 .markdown-body ul { @apply list-disc pl-5 mb-4; }
+
+/* Accessibility Modifier Classes */
+.a11y-high-contrast {
+  filter: contrast(125%) saturate(120%);
+}
+
+.a11y-invert-colors {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.a11y-protanopia { filter: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><filter id="protanopia"><feColorMatrix type="matrix" values="0.567, 0.433, 0, 0, 0, 0.558, 0.442, 0, 0, 0, 0, 0.242, 0.758, 0, 0, 0, 0, 0, 1, 0"/></filter></svg>#protanopia'); }
+.a11y-deuteranopia { filter: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><filter id="deuteranopia"><feColorMatrix type="matrix" values="0.625, 0.375, 0, 0, 0, 0.7, 0.3, 0, 0, 0, 0, 0.3, 0.7, 0, 0, 0, 0, 0, 1, 0"/></filter></svg>#deuteranopia'); }
+.a11y-tritanopia { filter: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><filter id="tritanopia"><feColorMatrix type="matrix" values="0.95, 0.05, 0, 0, 0, 0, 0.433, 0.567, 0, 0, 0, 0.475, 0.525, 0, 0, 0, 0, 0, 1, 0"/></filter></svg>#tritanopia'); }
+.a11y-grayscale { filter: grayscale(100%); }
+
+html.a11y-large-cursor, .a11y-large-cursor * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%23000' stroke='%23FFF' stroke-width='2' d='M6 6v20.4l5.4-5.4 3.7 8.6 4-1.8-3.7-8.6H24z'/%3E%3C/svg%3E"), auto !important;
+}
+
+.a11y-large-text {
+  font-size: 115% !important;
+}
+
+.a11y-letter-spacing {
+  letter-spacing: 0.05em !important;
+}
+
+.a11y-heading-spacing h1,
+.a11y-heading-spacing h2,
+.a11y-heading-spacing h3,
+.a11y-heading-spacing h4,
+.a11y-heading-spacing h5,
+.a11y-heading-spacing h6 {
+  margin-bottom: 2rem !important;
+}
+
+.a11y-highlight-links a,
+.a11y-highlight-links button {
+  text-decoration: underline !important;
+  text-decoration-color: var(--color-brand-secondary) !important;
+  text-decoration-thickness: 3px !important;
+  text-underline-offset: 4px !important;
+}

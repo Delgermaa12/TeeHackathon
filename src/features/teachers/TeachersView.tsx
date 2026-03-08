@@ -8,17 +8,23 @@ import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
 import { ImageUpload } from '../../components/admin/ImageUpload';
 import { Users, Edit3, Trash2, Mail, Facebook, Instagram, Linkedin, Globe, Star } from 'lucide-react';
-import { mockTeachers } from '../../mock/adminData';
 import type { Teacher } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
+import { useDataContext } from '../../context/DataContext';
+import { useAlertContext } from '../../context/AlertContext';
+import { useAdminTranslation } from '../../hooks/useAdminTranslation';
 
 export function TeachersView() {
     const { theme } = useAppContext();
+    const t = useAdminTranslation();
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [typeFilter, setTypeFilter] = useState('');
     const [viewMode, setViewMode] = useState<ViewMode>('list');
 
-    const [teachers, setTeachers] = useState<Teacher[]>(mockTeachers);
+    const { teachers, addTeacher, updateTeacher, deleteTeacher } = useDataContext();
+    const { showAlert } = useAlertContext();
+
     const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
     const [isDrawOpen, setIsDrawOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -42,16 +48,66 @@ export function TeachersView() {
 
     const confirmDelete = () => {
         if (teacherToDelete) {
-            setTeachers(teachers.filter(t => t.id !== teacherToDelete));
+            deleteTeacher(teacherToDelete);
+            showAlert(t.alerts.deleted, 'success');
             setTeacherToDelete(null);
             setIsDeleteDialogOpen(false);
         }
     };
 
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
+        const skillsString = formData.get('skills') as string;
+        const skills = skillsString ? skillsString.split(',').map(s => s.trim()).filter(s => s) : [];
+
+        const socialLinks: any[] = [];
+        const fb = formData.get('facebook') as string;
+        const ig = formData.get('instagram') as string;
+        if (fb) socialLinks.push({ platform: 'facebook', url: fb });
+        if (ig) socialLinks.push({ platform: 'instagram', url: ig });
+
+        const certsString = formData.get('certificates') as string;
+        const certificates = certsString ? certsString.split('\n').map(line => {
+            const [title, image] = line.split('|').map(s => s.trim());
+            return title && image ? { title, image } : null;
+        }).filter(c => c) : [];
+
+        const teacherData: any = {
+            name: formData.get('name'),
+            specialization: formData.get('specialization'),
+            phone: formData.get('phone'),
+            email: formData.get('email'),
+            age: Number(formData.get('age')),
+            gender: formData.get('gender'),
+            bio: formData.get('bio'),
+            experience: formData.get('experience'),
+            education: formData.get('education'),
+            philosophy: formData.get('philosophy'),
+            github: formData.get('github'),
+            type: formData.get('type'),
+            skills: skills,
+            status: 'active',
+            avatar: selectedTeacher?.avatar || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=200&h=200',
+            socialLinks: socialLinks,
+            certificates: certificates
+        };
+
+        if (selectedTeacher) {
+            updateTeacher(selectedTeacher.id, teacherData);
+            showAlert(t.alerts.updated, 'success');
+        } else {
+            addTeacher(teacherData);
+            showAlert(t.alerts.saved, 'success');
+        }
+        setIsDrawOpen(false);
+    };
+
     const filteredTeachers = teachers.filter(t => {
         const matchesSearch = t.name.toLowerCase().includes(search.toLowerCase());
         const matchesStatus = statusFilter ? t.status === statusFilter : true;
-        return matchesSearch && matchesStatus;
+        const matchesType = typeFilter ? t.type === typeFilter : true;
+        return matchesSearch && matchesStatus && matchesType;
     });
 
     const columns: Column<Teacher>[] = [
@@ -67,6 +123,15 @@ export function TeachersView() {
             sortable: true
         },
         { header: 'Мэргэжил', accessorKey: 'specialization' },
+        {
+            header: 'Төрөл',
+            accessorKey: 'type',
+            cell: ({ row }) => (
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${row.type === 'udirdlaga' ? 'bg-purple-500/10 text-purple-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                    {row.type === 'udirdlaga' ? 'Удирдлага' : 'Багш'}
+                </span>
+            )
+        },
         {
             header: 'Холбоо барих',
             accessorKey: 'phone',
@@ -101,10 +166,10 @@ export function TeachersView() {
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <PageHeader
-                title="Багш нар"
+                title={t.sidebar.teachers}
                 description="Бүртгэлтэй сургагч багш нарын мэдээлэл"
                 icon={Users}
-                actionLabel="Шинэ багш"
+                actionLabel={t.common.add}
                 onAction={handleAdd}
             />
 
@@ -113,14 +178,23 @@ export function TeachersView() {
                 onSearchChange={setSearch}
                 viewMode={viewMode}
                 onViewModeChange={setViewMode}
-                searchPlaceholder="Багшийн нэрээр хайх..."
-                filters={[{
-                    key: 'status',
-                    label: 'Статус',
-                    value: statusFilter,
-                    onChange: setStatusFilter,
-                    options: [{ label: 'Идэвхтэй', value: 'active' }, { label: 'Идэвхгүй', value: 'inactive' }]
-                }]}
+                searchPlaceholder={t.common.search}
+                filters={[
+                    {
+                        key: 'status',
+                        label: t.common.status,
+                        value: statusFilter,
+                        onChange: setStatusFilter,
+                        options: [{ label: 'Бүх', value: '' }, { label: 'Идэвхтэй', value: 'active' }, { label: 'Идэвхгүй', value: 'inactive' }]
+                    },
+                    {
+                        key: 'type',
+                        label: 'Төрөл',
+                        value: typeFilter,
+                        onChange: setTypeFilter,
+                        options: [{ label: 'Бүх', value: '' }, { label: 'Удирдлага', value: 'udirdlaga' }, { label: 'Багш', value: 'bagsh' }]
+                    }
+                ]}
             />
 
             {viewMode === 'list' ? (
@@ -159,6 +233,9 @@ export function TeachersView() {
                                                     {teacher.age} нас
                                                 </span>
                                             )}
+                                            <span className={`text-[10px] px-1.5 rounded font-bold ${teacher.type === 'udirdlaga' ? 'bg-purple-500/10 text-purple-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                                                {teacher.type === 'udirdlaga' ? 'Удирдлага' : 'Багш'}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -193,6 +270,10 @@ export function TeachersView() {
                                             {skill}
                                         </span>
                                     ))}
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-[9px] opacity-60">
+                                    {teacher.experience && <div><span className="font-bold">Туршлага:</span> {teacher.experience}</div>}
+                                    {teacher.education && <div><span className="font-bold">Боловсрол:</span> {teacher.education}</div>}
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <div className={`flex items-center gap-3 text-xs ${theme === 'dark' ? 'opacity-60' : 'text-black/70 font-medium'}`}>
@@ -229,12 +310,12 @@ export function TeachersView() {
                 title={selectedTeacher ? 'Багшийн мэдээлэл засах' : 'Шинэ багш'}
                 footer={
                     <>
-                        <button onClick={() => setIsDrawOpen(false)} className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/60' : 'border-black/10 hover:bg-black/5 text-black/60'}`}>Цуцлах</button>
-                        <button onClick={() => setIsDrawOpen(false)} className="px-5 py-2 rounded-xl text-xs font-bold bg-brand-secondary text-black shadow-md hover:brightness-105 transition-all">Хадгалах</button>
+                        <button type="button" onClick={() => setIsDrawOpen(false)} className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/60' : 'border-black/10 hover:bg-black/5 text-black/60'}`}>Цуцлах</button>
+                        <button form="teacher-form" type="submit" className="px-5 py-2 rounded-xl text-xs font-bold bg-brand-accent text-black shadow-md hover:brightness-105 transition-all">Хадгалах</button>
                     </>
                 }
             >
-                <form className="space-y-6">
+                <form id="teacher-form" onSubmit={handleSave} className="space-y-6">
                     <ImageUpload
                         label="Багшийн зураг"
                         value={selectedTeacher?.avatar}
@@ -244,57 +325,78 @@ export function TeachersView() {
                     />
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Нэр</label>
-                        <input aria-label="Нэр" type="text" defaultValue={selectedTeacher?.name} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                        <input aria-label="Нэр" name="name" type="text" defaultValue={selectedTeacher?.name} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} required />
                     </div>
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Мэргэжил</label>
-                        <input aria-label="Мэргэжил" type="text" defaultValue={selectedTeacher?.specialization} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                        <input aria-label="Мэргэжил" name="specialization" type="text" defaultValue={selectedTeacher?.specialization} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} required />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Утас</label>
-                            <input aria-label="Утас" type="text" defaultValue={selectedTeacher?.phone} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            <input aria-label="Утас" name="phone" type="text" defaultValue={selectedTeacher?.phone} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                         </div>
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>И-мэйл</label>
-                            <input aria-label="И-мэйл" type="email" defaultValue={selectedTeacher?.email} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            <input aria-label="И-мэйл" name="email" type="email" defaultValue={selectedTeacher?.email} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Нас</label>
-                            <input aria-label="Нас" type="number" defaultValue={selectedTeacher?.age} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            <input aria-label="Нас" name="age" type="number" defaultValue={selectedTeacher?.age} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                         </div>
                         <div className="space-y-1.5">
-                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Хүйс</label>
-                            <select aria-label="Хүйс" defaultValue={selectedTeacher?.gender || 'male'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
-                                <option value="male">Эрэгтэй</option>
-                                <option value="female">Эмэгтэй</option>
-                                <option value="other">Бусад</option>
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Ажилтан төрөл</label>
+                            <select aria-label="Төрөл" name="type" defaultValue={selectedTeacher?.type || 'bagsh'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                                <option value="udirdlaga">Удирдлага</option>
+                                <option value="bagsh">Багш</option>
                             </select>
                         </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Туршлага</label>
+                            <input aria-label="Туршлага" name="experience" type="text" defaultValue={selectedTeacher?.experience} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Боловсрол</label>
+                            <input aria-label="Боловсрол" name="education" type="text" defaultValue={selectedTeacher?.education} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                        </div>
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>GitHub Link</label>
+                        <input aria-label="GitHub" name="github" type="text" defaultValue={selectedTeacher?.github} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Философи</label>
+                        <textarea name="philosophy" defaultValue={selectedTeacher?.philosophy} rows={2} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none resize-none`} placeholder="Багшийн баримталдаг зарчим..." />
                     </div>
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Ур чадвар (таслалаар тусгаарлах)</label>
                         <div className="relative">
-                            <input type="text" defaultValue={selectedTeacher?.skills?.join(', ')} className={`w-full px-4 py-3 pl-10 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="React, Node.js, UI/UX" />
+                            <input type="text" name="skills" defaultValue={selectedTeacher?.skills?.join(', ')} className={`w-full px-4 py-3 pl-10 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} placeholder="React, Node.js, UI/UX" />
                             <Star size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 opacity-30" />
                         </div>
                     </div>
                     <div className="space-y-1.5">
+                        <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Үнэмлэх, Сертификат (Нэр|Зургийн линк - мөр бүр дээр нэг)</label>
+                        <textarea name="certificates" defaultValue={selectedTeacher?.certificates?.map(c => `${c.title}|${c.image}`).join('\n')} rows={3} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none resize-none font-mono text-xs`} placeholder="Linux Essentials|https://url.com/image.png" />
+                    </div>
+                    <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Дэлгэрэнгүй тайлбар (Bio)</label>
-                        <textarea defaultValue={selectedTeacher?.bio} rows={3} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none resize-none`} placeholder="Багшийн танилцуулга..." />
+                        <textarea name="bio" defaultValue={selectedTeacher?.bio} rows={3} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none resize-none`} placeholder="Багшийн танилцуулга..." />
                     </div>
                     <div className="space-y-3">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Холбоотой линкүүд</label>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="relative">
                                 <Facebook size={14} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-40" />
-                                <input type="text" placeholder="Facebook URL" className={`w-full pl-9 pr-4 py-2 text-xs rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                                <input name="facebook" defaultValue={selectedTeacher?.socialLinks?.find(l => l.platform === 'facebook')?.url} type="text" placeholder="Facebook URL" className={`w-full pl-9 pr-4 py-2 text-xs rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                             </div>
                             <div className="relative">
                                 <Instagram size={14} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-40" />
-                                <input type="text" placeholder="Instagram URL" className={`w-full pl-9 pr-4 py-2 text-xs rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                                <input name="instagram" defaultValue={selectedTeacher?.socialLinks?.find(l => l.platform === 'instagram')?.url} type="text" placeholder="Instagram URL" className={`w-full pl-9 pr-4 py-2 text-xs rounded-lg border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                             </div>
                         </div>
                     </div>

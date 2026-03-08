@@ -29,9 +29,10 @@ import {
   ArrowRight,
   Eye,
 } from 'lucide-react';
-import { mockArticles, mockTeachers } from '../../mock/adminData';
-import type { Article, ArticleBlock, BlockType } from '../../types/admin';
+import type { Article, ArticleBlock, BlockType, Teacher } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
+import { useDataContext } from '../../context/DataContext';
+import { useAlertContext } from '../../context/AlertContext';
 
 type EditorMode = 'edit' | 'preview' | 'card';
 type ArticleStatus = Article['status'];
@@ -194,8 +195,8 @@ function editorReducer(state: EditorState, action: EditorAction): EditorState {
   }
 }
 
-function getAuthorName(authorId: string) {
-  return mockTeachers.find((t) => t.id === authorId)?.name || 'Систем';
+function getAuthorName(authorId: string, teachers: Teacher[]) {
+  return teachers.find((t) => t.id === authorId)?.name || 'Систем';
 }
 
 function safePlainText(text: string): string {
@@ -310,8 +311,8 @@ function BlockEditor({
     <div
       className={`group relative rounded-2xl border p-4 transition-all ${
         theme === 'dark'
-          ? 'bg-white/5 border-white/5 hover:border-brand-secondary/30'
-          : 'bg-black/5 border-black/5 hover:border-brand-secondary/30'
+          ? 'bg-white/5 border-white/5 hover:border-brand-accent/30'
+          : 'bg-black/5 border-black/5 hover:border-brand-accent/30'
       }`}
     >
       <BlockHeader
@@ -347,7 +348,7 @@ function BlockEditor({
                 text: e.target.value,
               })
             }
-            className={`w-full border-l-4 border-brand-secondary p-3 italic outline-none ${
+            className={`w-full border-l-4 border-brand-accent p-3 italic outline-none ${
               theme === 'dark' ? 'text-white/80' : 'text-black/80'
             } bg-transparent`}
             placeholder="Ишлэл..."
@@ -379,7 +380,7 @@ function BlockEditor({
               theme === 'dark' ? 'bg-black/20 border-white/5' : 'bg-black/5 border-black/10'
             }`}
           >
-            <Video size={16} className="text-brand-secondary" aria-hidden="true" />
+            <Video size={16} className="text-brand-accent" aria-hidden="true" />
             <input
               type="text"
               aria-label="Video URL"
@@ -488,7 +489,7 @@ function BlockEditor({
                     showPreview: e.target.checked,
                   })
                 }
-                className="accent-brand-secondary"
+                className="accent-brand-accent"
               />
               <span className="opacity-60">Enable Video Preview</span>
             </label>
@@ -519,8 +520,8 @@ function BlockEditor({
           <div
             className={`flex items-center justify-between rounded-xl border p-3 ${
               theme === 'dark'
-                ? 'bg-brand-secondary/5 border-brand-secondary/10'
-                : 'bg-brand-secondary/10 border-brand-secondary/20'
+                ? 'bg-brand-accent/5 border-brand-accent/10'
+                : 'bg-brand-accent/10 border-brand-accent/20'
             }`}
           >
             <span className="text-[10px] opacity-60">
@@ -531,7 +532,7 @@ function BlockEditor({
             </span>
 
             <button
-              className="text-[10px] font-bold text-brand-secondary"
+              className="text-[10px] font-bold text-brand-accent"
               type="button"
               aria-label="Select courses"
               title="Select courses"
@@ -591,9 +592,11 @@ function BlockEditor({
 function ArticleCardPreview({
   theme,
   article,
+  teachers,
 }: {
   theme: string;
   article: Article;
+  teachers: Teacher[];
 }) {
   return (
     <div className="flex items-center justify-center rounded-[3rem] bg-black/5 py-20">
@@ -673,7 +676,7 @@ function ArticleCardPreview({
 
               <div className="flex flex-col text-left">
                 <span className={`text-[10px] font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                  {getAuthorName(article.authorId)}
+                  {getAuthorName(article.authorId, teachers)}
                 </span>
                 <span className="text-[9px] uppercase tracking-tighter opacity-40">
                   {new Date(article.updatedAt).toLocaleDateString()}
@@ -695,10 +698,12 @@ function ArticlePreview({
   theme,
   article,
   blocks,
+  teachers,
 }: {
   theme: string;
   article: Article;
   blocks: ArticleBlock[];
+  teachers: Teacher[];
 }) {
   return (
     <div className="animate-in fade-in duration-500 mx-auto max-w-5xl space-y-0 overflow-hidden rounded-[3rem] py-0">
@@ -712,8 +717,8 @@ function ArticlePreview({
           <div
             className={`absolute inset-0 ${
               theme === 'dark'
-                ? 'bg-gradient-to-t from-brand-dark via-brand-dark/20 to-transparent'
-                : 'bg-gradient-to-t from-brand-light via-brand-light/10 to-transparent'
+                ? 'bg-black/50'
+                : 'bg-white/50'
             }`}
           />
           <div className="absolute inset-0 bg-black/40" />
@@ -732,7 +737,7 @@ function ArticlePreview({
 
           <div className="flex items-center justify-center gap-6 text-[11px] font-black uppercase tracking-[0.2em] text-white">
             <div className="flex items-center gap-2">
-              <User size={16} className="text-[#eab308]" aria-hidden="true" /> {getAuthorName(article.authorId)}
+              <User size={16} className="text-[#eab308]" aria-hidden="true" /> {getAuthorName(article.authorId, teachers)}
             </div>
             <div className="flex items-center gap-2">
               <Calendar size={16} className="text-[#eab308]" aria-hidden="true" />{' '}
@@ -777,13 +782,13 @@ function ArticlePreview({
                       theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'
                     }`}
                   >
-                    <Quote size={40} className="absolute -top-4 -left-4 text-brand-secondary opacity-40" aria-hidden="true" />
+                    <Quote size={40} className="absolute -top-4 -left-4 text-brand-accent opacity-40" aria-hidden="true" />
                     <p className={`${theme === 'dark' ? 'text-white/90' : 'text-black/90'} text-2xl font-serif italic leading-relaxed`}>
                       “{safePlainText((block.content as { text?: string })?.text ?? '')}”
                     </p>
                     <footer className="mt-6 flex items-center gap-3">
-                      <div className="h-0.5 w-8 bg-brand-secondary/40" />
-                      <cite className="text-brand-secondary not-italic text-sm font-bold uppercase tracking-widest">
+                      <div className="h-0.5 w-8 bg-brand-accent/40" />
+                      <cite className="text-brand-accent not-italic text-sm font-bold uppercase tracking-widest">
                         — {safePlainText((block.content as { author?: string })?.author ?? '')}
                       </cite>
                     </footer>
@@ -813,7 +818,7 @@ function ArticlePreview({
                       theme === 'dark' ? 'bg-black border-white/10' : 'bg-black/10 border-black/10'
                     }`}
                   >
-                    <PlayCircle size={60} className="text-brand-secondary opacity-20" aria-hidden="true" />
+                    <PlayCircle size={60} className="text-brand-accent opacity-20" aria-hidden="true" />
                   </div>
                 )}
 
@@ -821,7 +826,7 @@ function ArticlePreview({
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className={`flex items-center gap-3 text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                        <div className="rounded-lg bg-brand-secondary/10 p-2 text-brand-secondary">
+                        <div className="rounded-lg bg-brand-accent/10 p-2 text-brand-accent">
                           <LayoutGrid size={20} aria-hidden="true" />
                         </div>
                         {safePlainText((block.content as { title?: string })?.title ?? '')}
@@ -837,7 +842,7 @@ function ArticlePreview({
                           }`}
                         >
                           {(block.settings as { ribbonText?: string })?.ribbonText ? (
-                            <div className="absolute top-4 right-4 z-10 rounded-md bg-brand-secondary px-2 py-1 text-[8px] font-black uppercase">
+                            <div className="absolute top-4 right-4 z-10 rounded-md bg-brand-accent px-2 py-1 text-[8px] font-black uppercase">
                               {safePlainText((block.settings as { ribbonText?: string }).ribbonText ?? '')}
                             </div>
                           ) : null}
@@ -852,7 +857,7 @@ function ArticlePreview({
                             </div>
 
                             <button
-                              className="rounded-lg bg-brand-secondary/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-brand-secondary transition-all hover:bg-brand-secondary hover:text-black"
+                              className="rounded-lg bg-brand-accent/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-brand-accent transition-all hover:bg-brand-accent hover:text-black"
                               type="button"
                             >
                               {safePlainText((block.settings as { buttonText?: string })?.buttonText ?? 'Үзэх')}
@@ -877,7 +882,8 @@ export function ArticlesView() {
 
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
-  const [articles, setArticles] = useState<Article[]>(mockArticles);
+  const { articles, teachers, addArticle, updateArticle, deleteArticle } = useDataContext();
+  const { showAlert } = useAlertContext();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   const [deleteState, setDeleteState] = useState<{ isOpen: boolean; articleId: string | null }>({
@@ -908,7 +914,7 @@ export function ArticlesView() {
     const next: Article = {
       id: newId,
       title: '',
-      authorId: mockTeachers[0]?.id || '',
+      authorId: teachers[0]?.id || '',
       category: DEFAULT_CATEGORY,
       blocks: [],
       views: 0,
@@ -919,7 +925,7 @@ export function ArticlesView() {
     };
 
     dispatch({ type: 'OPEN_NEW', payload: { article: next } });
-  }, []);
+  }, [teachers]);
 
   const handleEdit = useCallback((article: Article) => {
     dispatch({ type: 'OPEN_EDIT', payload: { article } });
@@ -931,9 +937,12 @@ export function ArticlesView() {
   }, []);
 
   const confirmDelete = useCallback(() => {
-    setArticles((prev) => prev.filter((a) => a.id !== deleteState.articleId));
+    if (deleteState.articleId) {
+      deleteArticle(deleteState.articleId);
+      showAlert('Нийтлэл амжилттай устгагдлаа', 'success');
+    }
     setDeleteState({ isOpen: false, articleId: null });
-  }, [deleteState.articleId]);
+  }, [deleteState.articleId, deleteArticle, showAlert]);
 
   const closeDelete = useCallback(() => setDeleteState({ isOpen: false, articleId: null }), []);
   const onCloseEditor = useCallback(() => dispatch({ type: 'CLOSE' }), []);
@@ -948,14 +957,17 @@ export function ArticlesView() {
       updatedAt: new Date().toISOString(),
     };
 
-    setArticles((prev) => {
-      const exists = prev.some((a) => a.id === updated.id);
-      if (exists) return prev.map((a) => (a.id === updated.id ? updated : a));
-      return [updated, ...prev];
-    });
+    const exists = articles.some((a) => a.id === updated.id);
+    if (exists) {
+      updateArticle(updated.id, updated);
+      showAlert('Нийтлэл амжилттай шинэчлэгдлээ', 'success');
+    } else {
+      addArticle(updated);
+      showAlert('Нийтлэл амжилттай нийтлэгдлээ', 'success');
+    }
 
     dispatch({ type: 'CLOSE' });
-  }, [editor.article, editor.blocks]);
+  }, [editor.article, editor.blocks, articles, updateArticle, addArticle, showAlert]);
 
   const columns: Column<Article>[] = useMemo(
     () => [
@@ -992,7 +1004,7 @@ export function ArticlesView() {
         accessorKey: 'category',
         cell: ({ row }) => (
           <div className="flex flex-col gap-1">
-            <span className="font-bold text-brand-secondary">{row.category}</span>
+            <span className="font-bold text-brand-accent">{row.category}</span>
             <div className="flex flex-wrap gap-1">
               {row.tags?.slice(0, 2).map((tag, i) => (
                 <span
@@ -1013,10 +1025,10 @@ export function ArticlesView() {
         accessorKey: 'authorId',
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-secondary/10 text-brand-secondary">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-accent/10 text-brand-accent">
               <User size={10} aria-hidden="true" />
             </div>
-            <span className="max-w-[100px] truncate text-xs">{getAuthorName(row.authorId)}</span>
+            <span className="max-w-[100px] truncate text-xs">{getAuthorName(row.authorId, teachers)}</span>
           </div>
         ),
       },
@@ -1025,7 +1037,7 @@ export function ArticlesView() {
         accessorKey: 'views',
         cell: ({ row }) => (
           <div className="flex items-center gap-1.5 font-medium opacity-50">
-            <Eye size={12} className="text-brand-secondary" aria-hidden="true" />
+            <Eye size={12} className="text-brand-accent" aria-hidden="true" />
             <span>{(row.views ?? 0).toLocaleString()}</span>
           </div>
         ),
@@ -1071,7 +1083,7 @@ export function ArticlesView() {
         ),
       },
     ],
-    [theme, handleEdit, openDeleteDialog],
+    [theme, handleEdit, openDeleteDialog, teachers],
   );
 
   const selectedArticle = editor.article;
@@ -1158,8 +1170,8 @@ export function ArticlesView() {
               onClick={() => handleEdit(article)}
               className={`group cursor-pointer overflow-hidden rounded-3xl border transition-all duration-300 hover:shadow-xl ${
                 theme === 'dark'
-                  ? 'bg-black/40 border-white/5 hover:border-brand-secondary/30'
-                  : 'bg-white border-black/5 hover:border-brand-secondary/30 shadow-sm'
+                  ? 'bg-black/40 border-white/5 hover:border-brand-accent/30'
+                  : 'bg-white border-black/5 hover:border-brand-accent/30 shadow-sm'
               }`}
             >
               <div className="relative aspect-video overflow-hidden">
@@ -1182,7 +1194,7 @@ export function ArticlesView() {
 
               <div className="space-y-3 p-5">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-secondary">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-accent">
                     {article.category}
                   </span>
 
@@ -1209,7 +1221,7 @@ export function ArticlesView() {
                 </div>
 
                 <h3
-                  className={`line-clamp-2 font-bold leading-snug transition-colors group-hover:text-brand-secondary ${
+                  className={`line-clamp-2 font-bold leading-snug transition-colors group-hover:text-brand-accent ${
                     theme === 'dark' ? 'text-white' : 'text-black'
                   }`}
                 >
@@ -1222,11 +1234,11 @@ export function ArticlesView() {
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-secondary/10 text-brand-secondary">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-accent/10 text-brand-accent">
                       <User size={12} aria-hidden="true" />
                     </div>
                     <span className={`text-[10px] font-bold ${theme === 'dark' ? 'opacity-60' : 'opacity-80 text-black/70'}`}>
-                      {getAuthorName(article.authorId)}
+                      {getAuthorName(article.authorId, teachers)}
                     </span>
                   </div>
 
@@ -1277,7 +1289,7 @@ export function ArticlesView() {
                 onClick={() => setEditorMode('edit')}
                 className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-all ${
                   editor.mode === 'edit'
-                    ? 'bg-brand-secondary text-black shadow-lg'
+                    ? 'bg-brand-accent text-black shadow-lg'
                     : theme === 'dark'
                     ? 'text-white/40 hover:text-white'
                     : 'text-black/40 hover:text-black'
@@ -1291,7 +1303,7 @@ export function ArticlesView() {
                 onClick={() => setEditorMode('preview')}
                 className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-all ${
                   editor.mode === 'preview'
-                    ? 'bg-brand-secondary text-black shadow-lg'
+                    ? 'bg-brand-accent text-black shadow-lg'
                     : theme === 'dark'
                     ? 'text-white/40 hover:text-white'
                     : 'text-black/40 hover:text-black'
@@ -1305,7 +1317,7 @@ export function ArticlesView() {
                 onClick={() => setEditorMode('card')}
                 className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-all ${
                   editor.mode === 'card'
-                    ? 'bg-brand-secondary text-black shadow-lg'
+                    ? 'bg-brand-accent text-black shadow-lg'
                     : theme === 'dark'
                     ? 'text-white/40 hover:text-white'
                     : 'text-black/40 hover:text-black'
@@ -1338,7 +1350,7 @@ export function ArticlesView() {
 
               <button
                 onClick={onPublish}
-                className="rounded-xl bg-brand-secondary px-8 py-2.5 text-xs font-black uppercase tracking-widest text-black shadow-[0_0_20px_rgba(234,88,12,0.3)] transition-all hover:brightness-105"
+                className="rounded-xl bg-brand-accent px-8 py-2.5 text-xs font-black uppercase tracking-widest text-black shadow-[0_0_20px_rgba(234,88,12,0.3)] transition-all hover:brightness-105"
                 type="button"
               >
                 Нийтлэх
@@ -1348,9 +1360,9 @@ export function ArticlesView() {
         }
       >
         {!selectedArticle ? null : editor.mode === 'preview' ? (
-          <ArticlePreview theme={theme} article={selectedArticle} blocks={editor.blocks} />
+          <ArticlePreview theme={theme} article={selectedArticle} blocks={editor.blocks} teachers={teachers} />
         ) : editor.mode === 'card' ? (
-          <ArticleCardPreview theme={theme} article={selectedArticle} />
+          <ArticleCardPreview theme={theme} article={selectedArticle} teachers={teachers} />
         ) : (
           <div className="grid grid-cols-12 gap-10">
             <div className="col-span-8 space-y-8">
@@ -1389,7 +1401,7 @@ export function ArticlesView() {
               <div
                 className={`group flex flex-col items-center justify-center gap-6 rounded-[2rem] border-2 border-dashed py-10 transition-all ${
                   theme === 'dark' ? 'border-white/5' : 'border-black/10'
-                } hover:border-brand-secondary/40`}
+                } hover:border-brand-accent/40`}
               >
                 <div className="space-y-1 text-center">
                   <p
@@ -1415,12 +1427,12 @@ export function ArticlesView() {
                     <button
                       key={btn.type}
                       onClick={() => addBlock(btn.type as BlockType)}
-                      className={`flex w-24 flex-col items-center gap-2 rounded-2xl p-4 transition-all hover:bg-brand-secondary/10 hover:border-brand-secondary/40 ${
+                      className={`flex w-24 flex-col items-center gap-2 rounded-2xl p-4 transition-all hover:bg-brand-accent/10 hover:border-brand-accent/40 ${
                         theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-white border-black/10 shadow-sm'
                       }`}
                       type="button"
                     >
-                      <btn.icon size={20} className="text-brand-secondary" aria-hidden="true" />
+                      <btn.icon size={20} className="text-brand-accent" aria-hidden="true" />
                       <span className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'opacity-40' : 'opacity-60 text-black'}`}>
                         {btn.label}
                       </span>
@@ -1540,7 +1552,7 @@ export function ArticlesView() {
                       onClick={() => setStatus('published')}
                       className={`flex-1 rounded-lg p-2 text-[10px] font-bold transition-all ${
                         selectedArticle.status === 'published'
-                          ? 'bg-brand-secondary text-black'
+                          ? 'bg-brand-accent text-black'
                           : theme === 'dark'
                           ? 'bg-white/5 text-white/40 hover:text-white'
                           : 'bg-black/5 text-black/40 hover:text-black'
@@ -1554,7 +1566,7 @@ export function ArticlesView() {
                       onClick={() => setStatus('draft')}
                       className={`flex-1 rounded-lg p-2 text-[10px] font-bold transition-all ${
                         selectedArticle.status === 'draft'
-                          ? 'bg-brand-secondary text-black'
+                          ? 'bg-brand-accent text-black'
                           : theme === 'dark'
                           ? 'bg-white/5 text-white/40 hover:text-white'
                           : 'bg-black/5 text-black/40 hover:text-black'
@@ -1585,7 +1597,7 @@ export function ArticlesView() {
                         : 'bg-black/5 border-black/10 text-black/80'
                     }`}
                   >
-                    {mockTeachers.map((t) => (
+                    {teachers.map((t) => (
                       <option key={t.id} value={t.id}>
                         {t.name}
                       </option>
@@ -1597,17 +1609,17 @@ export function ArticlesView() {
                       theme === 'dark' ? 'bg-white/5 border-white/5' : 'bg-black/5 border-black/5'
                     }`}
                   >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-secondary text-xs font-bold text-black">
-                      {(getAuthorName(selectedArticle.authorId)[0] ?? 'A').toUpperCase()}
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-accent text-xs font-bold text-black">
+                      {(getAuthorName(selectedArticle.authorId, teachers)[0] ?? 'A').toUpperCase()}
                     </div>
                     <span className={`text-xs font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-                      {getAuthorName(selectedArticle.authorId)}
+                      {getAuthorName(selectedArticle.authorId, teachers)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-4 rounded-3xl border border-brand-secondary/10 bg-brand-secondary/5 p-6">
+              <div className="space-y-4 rounded-3xl border border-brand-accent/10 bg-brand-accent/5 p-6">
                 <p className="text-[10px] leading-relaxed opacity-60">
                   This article will be visible on the main homepage and the "Нийтлэл" section.
                 </p>

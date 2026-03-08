@@ -47,14 +47,14 @@ export function DataTable<T extends { id: string | number }>({
                                     onClick={() => onSelectAll?.(!allSelected)}
                                     className="p-1 rounded opacity-50 hover:opacity-100 transition-opacity"
                                 >
-                                    {allSelected ? <CheckSquare size={16} className="text-brand-secondary" /> : <Square size={16} />}
+                                    {allSelected ? <CheckSquare size={16} className="text-brand-accent" /> : <Square size={16} />}
                                 </button>
                             </th>
                         )}
                         {columns.map((col, i) => (
                             <th
                                 key={i}
-                                className={`px-6 py-5 ${col.sortable ? 'cursor-pointer hover:text-brand-secondary transition-colors' : ''}`}
+                                className={`px-6 py-5 ${col.sortable ? 'cursor-pointer hover:text-brand-accent transition-colors' : ''}`}
                                 onClick={() => col.sortable && col.accessorKey && onSort?.(col.accessorKey as string)}
                             >
                                 <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ export function DataTable<T extends { id: string | number }>({
                                             className="p-1 rounded opacity-50 hover:opacity-100 transition-opacity"
                                         >
                                             {selectedIds.includes(row.id.toString()) ? (
-                                                <CheckSquare size={16} className="text-brand-secondary" />
+                                                <CheckSquare size={16} className="text-brand-accent" />
                                             ) : (
                                                 <Square size={16} />
                                             )}

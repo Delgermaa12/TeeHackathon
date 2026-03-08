@@ -2,8 +2,9 @@ import React from 'react';
 import { useAppContext } from '../../context/AppContext';
 import {
     LayoutDashboard, BookOpen, GraduationCap, Users,
-    FileText, MessageSquare, Heart, LogOut, Moon, Sun, Globe
+    FileText, MessageSquare, Heart, LogOut, Moon, Sun, Globe, Rocket
 } from 'lucide-react';
+import { useAdminTranslation } from '../../hooks/useAdminTranslation';
 
 interface AdminLayoutProps {
     children: React.ReactNode;
@@ -14,15 +15,17 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children, activeTab, onTabChange, onLogout }: AdminLayoutProps) {
     const { theme, toggleTheme, language, setLanguage } = useAppContext();
+    const t = useAdminTranslation();
 
     const menuItems = [
-        { id: 'dashboard', label: 'Хяналтын самбар', icon: LayoutDashboard },
-        { id: 'programs', label: 'Хөтөлбөр', icon: BookOpen },
-        { id: 'trainings', label: 'Сургалт', icon: GraduationCap },
-        { id: 'teachers', label: 'Багш нар', icon: Users },
-        { id: 'articles', label: 'Нийтлэл', icon: FileText },
-        { id: 'requests', label: 'Хүсэлтүүд', icon: MessageSquare },
-        { id: 'appreciation', label: 'Талархал', icon: Heart },
+        { id: 'dashboard', label: t.sidebar.dashboard, icon: LayoutDashboard },
+        { id: 'programs', label: t.sidebar.programs, icon: BookOpen },
+        { id: 'trainings', label: t.sidebar.trainings, icon: GraduationCap },
+        { id: 'teachers', label: t.sidebar.teachers, icon: Users },
+        { id: 'articles', label: t.sidebar.articles, icon: FileText },
+        { id: 'projects', label: t.sidebar.projects, icon: Rocket },
+        { id: 'requests', label: t.sidebar.requests, icon: MessageSquare },
+        { id: 'appreciation', label: t.sidebar.appreciation, icon: Heart },
     ];
 
     return (
@@ -31,12 +34,12 @@ export function AdminLayout({ children, activeTab, onTabChange, onLogout }: Admi
             <aside className={`w-full md:w-64 shrink-0 flex flex-col ${theme === 'dark' ? 'bg-[#111] border-r border-white/5' : 'bg-white border-r border-black/5 shadow-xl md:shadow-none z-50 relative'}`}>
                 <div className="p-6">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-brand-secondary flex items-center justify-center text-black font-black text-xl">
+                        <div className="w-10 h-10 rounded-xl bg-brand-accent flex items-center justify-center text-black font-black text-xl">
                             T
                         </div>
                         <div>
-                            <h2 className="font-bold text-lg leading-tight">Admin System</h2>
-                            <p className="text-[10px] uppercase tracking-widest font-bold text-brand-secondary animate-pulse">Төв удирдлага</p>
+                            <h2 className="font-bold text-lg leading-tight tracking-tighter">{t.sidebar.adminSystem}</h2>
+                            <p className="text-[10px] uppercase tracking-widest font-black text-brand-accent animate-pulse">{t.sidebar.centralControl}</p>
                         </div>
                     </div>
                 </div>
@@ -50,7 +53,7 @@ export function AdminLayout({ children, activeTab, onTabChange, onLogout }: Admi
                                 key={item.id}
                                 onClick={() => onTabChange(item.id)}
                                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-bold text-sm ${isActive
-                                    ? 'bg-brand-secondary text-black shadow-md'
+                                    ? 'bg-brand-accent text-black shadow-[0_0_20px_rgba(234,179,8,0.3)]'
                                     : theme === 'dark'
                                         ? 'text-white/50 hover:bg-white/5 hover:text-white'
                                         : 'text-black/50 hover:bg-black/5 hover:text-black'
@@ -93,7 +96,7 @@ export function AdminLayout({ children, activeTab, onTabChange, onLogout }: Admi
                         className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all font-bold text-sm border border-red-500/20 text-red-500 hover:bg-red-500/10`}
                     >
                         <LogOut size={16} />
-                        Гарах
+                        {t.sidebar.logout}
                     </button>
                 </div>
             </aside>

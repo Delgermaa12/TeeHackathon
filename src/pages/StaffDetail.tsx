@@ -13,21 +13,56 @@ import {
 import { staffData } from "../data/StaffData";
 import { translations } from "../translations";
 import { useAppContext } from "../context/AppContext";
+import { useDataContext } from "../context/DataContext";
 
 const skillColors = [
-  "border-blue-500/30 bg-gradient-to-r from-blue-500/20 to-transparent",
-  "border-purple-500/30 bg-gradient-to-r from-purple-500/20 to-transparent",
-  "border-red-500/30 bg-gradient-to-r from-red-500/20 to-transparent",
-  "border-yellow-500/30 bg-gradient-to-r from-yellow-500/20 to-transparent",
-  "border-green-500/30 bg-gradient-to-r from-green-500/20 to-transparent",
-  "border-orange-500/30 bg-gradient-to-r from-orange-500/20 to-transparent",
+  "border-blue-500/30 bg-blue-500/20",
+  "border-purple-500/30 bg-purple-500/20",
+  "border-red-500/30 bg-red-500/20",
+  "border-yellow-500/30 bg-yellow-500/20",
+  "border-green-500/30 bg-green-500/20",
+  "border-orange-500/30 bg-orange-500/20",
 ];
 const StaffDetail: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { language, theme } = useAppContext();
+  const { teachers, articles } = useDataContext();
 
-  const person = staffData.find((item) => item.id === id);
+  const dynamicTeacher = teachers.find(t => t.id === id);
+  const staticPerson = staffData.find((item) => item.id === id);
+
+  const teacherArticles = React.useMemo(() => {
+    return articles
+      .filter(a => a.authorId === id && a.status === 'published')
+      .map(a => ({
+        title: { mn: a.title, en: a.title },
+        category: { mn: a.category, en: a.category },
+        readTime: { mn: '5 мин', en: '5 min' },
+        url: `/articles/${a.id}`
+      }));
+  }, [articles, id]);
+
+  const person = React.useMemo(() => {
+    if (dynamicTeacher) {
+      return {
+        id: dynamicTeacher.id,
+        name: { mn: dynamicTeacher.name, en: dynamicTeacher.name },
+        role: { mn: dynamicTeacher.specialization, en: dynamicTeacher.specialization },
+        type: 'teacher' as const,
+        image: dynamicTeacher.avatar || "https://tee.education/wp-content/uploads/2022/10/DSC0443232-min-1024x683.jpg",
+        philosophy: { mn: dynamicTeacher.philosophy || dynamicTeacher.bio || '', en: dynamicTeacher.philosophy || dynamicTeacher.bio || '' },
+        experience: { mn: dynamicTeacher.experience || 'Тасралтгүй суралцагч', en: dynamicTeacher.experience || 'Continuous Learner' },
+        education: { mn: dynamicTeacher.education || 'Их сургууль', en: dynamicTeacher.education || 'University' },
+        skills: dynamicTeacher.skills?.map(s => ({ mn: s, en: s })) || [{ mn: "Заах арга зүй", en: "Teaching Skills" }],
+        courses: dynamicTeacher.certificates?.map(c => ({ title: { mn: c.title, en: c.title }, image: c.image })) || [],
+        articles: teacherArticles,
+        github: dynamicTeacher.github || dynamicTeacher.socialLinks?.find(l => l.platform === 'github')?.url
+      };
+    }
+    return staticPerson;
+  }, [dynamicTeacher, staticPerson, teacherArticles]);
+
   const t = translations[language].staff;
 
   const textMain = theme === "dark" ? "text-white" : "text-black";
@@ -180,7 +215,7 @@ const StaffDetail: React.FC = () => {
                   {person.courses.map((course) => (
                     <div
                       key={course.title[language]}
-                      className={`group/item border rounded-xl overflow-hidden transition ${softBg}`}
+                      className={`group/item border rounded-xl overflow-hidden transition h-48 ${softBg}`}
                     >
                       <img
                         src={course.image}
@@ -292,20 +327,18 @@ const StaffDetail: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  {person.articles.map((article) => (
-                    <a
-                      key={article.title[language]}
-                      href={article.url || "#"}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`group/article relative overflow-hidden flex items-center justify-between gap-4 rounded-2xl border p-4 transition ${
-                        innerBg
-                      } ${
-                        theme === "dark"
-                          ? "hover:border-[#eab308]/40"
-                          : "hover:border-[#eab308]/40"
-                      }`}
-                    >
+                    {person.articles.map((article) => (
+                      <div
+                        key={article.title[language]}
+                        onClick={() => article.url?.startsWith('http') ? window.open(article.url, '_blank') : navigate(article.url || '#')}
+                        className={`group/article cursor-pointer relative overflow-hidden flex items-center justify-between gap-4 rounded-2xl border p-4 transition ${
+                          innerBg
+                        } ${
+                          theme === "dark"
+                            ? "hover:border-[#eab308]/40"
+                            : "hover:border-[#eab308]/40"
+                        }`}
+                      >
                       {/* rotating border */}
                       <div className="pointer-events-none absolute inset-0 opacity-0 group-hover/article:opacity-1000 transition duration-300">
                         <div className="absolute -inset-[1px] rounded-2xl bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]" />
@@ -330,7 +363,7 @@ const StaffDetail: React.FC = () => {
                         size={18}
                         className={`relative z-10 ${textMuted} shrink-0 group-hover/article:text-[#eab308] transition`}
                       />
-                    </a>
+                    </div>
                   ))}
                 </div>
               </div>

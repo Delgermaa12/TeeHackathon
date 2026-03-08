@@ -34,8 +34,7 @@ const AboutUs = () => {
     "group relative overflow-hidden transition-all duration-300 hover:-translate-y-1";
   const rotatingLayer = () =>
     "pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500";
-  const rotatingBorder =
-    "absolute -inset-[1px] bg-[conic-gradient(from_0deg,#DB4437,#F4B400,#0F9D58,#4285F4,#DB4437)] opacity-30 animate-[spin_4s_linear_infinite]";
+    "absolute -inset-[1px] bg-brand-primary opacity-30";
   const arcBorder = dark
     ? "border-t-white/10 border-r-white/10 border-b-white/10"
     : "border-t-[#cfd7e3] border-r-[#cfd7e3] border-b-[#cfd7e3]";
@@ -187,7 +186,7 @@ const timeline = [
   return (
     <div id="about-us" className={`${bg} min-h-screen`}>
       {/* Vision + Purpose + semicircle values */}
-      <section className={`py-36 ${bg}`}>
+      <section className={`pt-44 pb-36 ${bg}`}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-[1fr_1.1fr] gap-10 items-center">
           <motion.div
             variants={fadeUp}
@@ -259,7 +258,7 @@ const timeline = [
                     className={`${rotatingHover} rounded-full border ${cardBg} w-36 h-36 md:w-40 md:h-40`}
                   >
                     <div className={rotatingLayer()}>
-                      <div className={`${rotatingBorder} rounded-full`} />
+                      <div className={`${rotatingHover} rounded-full`} />
                       <div
                         className={`absolute inset-[2px] rounded-full ${hoverMask}`}
                       />
@@ -292,7 +291,7 @@ const timeline = [
                 className={`${rotatingHover} rounded-2xl border ${cardBg}`}
               >
                 <div className={rotatingLayer()}>
-                  <div className={`${rotatingBorder} rounded-2xl`} />
+                  <div className={`${rotatingHover} rounded-2xl`} />
                   <div
                     className={`absolute inset-[2px] rounded-2xl ${hoverMask}`}
                   />
@@ -326,7 +325,7 @@ const timeline = [
               className={`group relative overflow-hidden rounded-3xl border ${cardBg} max-w-[420px] mx-auto`}
             >
               <div className={rotatingLayer()}>
-                <div className={`${rotatingBorder} rounded-3xl`} />
+                <div className={`${rotatingHover} rounded-3xl`} />
                 <div
                   className={`absolute inset-[2px] rounded-3xl ${hoverMaskAlt}`}
                 />
@@ -341,7 +340,7 @@ const timeline = [
                   />
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/85 to-transparent">
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-black/85">
                   <p className="text-white font-bold text-xl">
                     {language === "mn" ? "Үүсгэн байгуулагч" : "Founder & CEO"}
                   </p>
@@ -420,7 +419,7 @@ const timeline = [
                         className={`${rotatingHover} rounded-2xl border ${cardBg}`}
                       >
                         <div className={rotatingLayer()}>
-                          <div className={`${rotatingBorder} rounded-2xl`} />
+                          <div className={`${rotatingHover} rounded-2xl`} />
                           <div
                             className={`absolute inset-[2px] rounded-2xl ${hoverMask}`}
                           />
@@ -447,7 +446,7 @@ const timeline = [
                         className={`${rotatingHover} rounded-2xl border ${cardBg}`}
                       >
                         <div className={rotatingLayer()}>
-                          <div className={`${rotatingBorder} rounded-2xl`} />
+                          <div className={`${rotatingHover} rounded-2xl`} />
                           <div
                             className={`absolute inset-[2px] rounded-2xl ${hoverMask}`}
                           />
@@ -495,7 +494,7 @@ const timeline = [
                   className={`${rotatingHover} rounded-full border ${cardBg} min-w-[220px]`}
                 >
                   <div className={rotatingLayer()}>
-                    <div className={`${rotatingBorder} rounded-full`} />
+                    <div className={`${rotatingHover} rounded-full`} />
                     <div
                       className={`absolute inset-[2px] rounded-full ${hoverMaskAlt}`}
                     />
@@ -539,7 +538,7 @@ const timeline = [
               className={`${rotatingHover} rounded-3xl border ${cardBg} h-full`}
             >
               <div className={rotatingLayer()}>
-                <div className={`${rotatingBorder} rounded-3xl`} />
+                <div className={`${rotatingHover} rounded-3xl`} />
                 <div
                   className={`absolute inset-[2px] rounded-3xl ${hoverMask}`}
                 />
@@ -571,7 +570,7 @@ const timeline = [
                     }`}
                   >
                     <div className={rotatingLayer()}>
-                      <div className={`${rotatingBorder} rounded-2xl`} />
+                      <div className={`${rotatingHover} rounded-2xl`} />
                       <div
                         className={`absolute inset-[2px] rounded-2xl ${hoverMask}`}
                       />

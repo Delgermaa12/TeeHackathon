@@ -44,7 +44,7 @@ export function ConfirmDialog({
                         className={`relative w-full max-w-sm p-6 rounded-2xl border ${theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-black/10'} shadow-2xl flex flex-col`}
                     >
                         <div className="flex justify-between items-start mb-4">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${danger ? 'bg-red-500/10 text-red-500' : 'bg-brand-secondary/10 text-brand-secondary'}`}>
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${danger ? 'bg-red-500/10 text-red-500' : 'bg-brand-accent/10 text-brand-accent'}`}>
                                 <AlertTriangle size={20} />
                             </div>
                             <button
@@ -79,7 +79,7 @@ export function ConfirmDialog({
                                     onConfirm();
                                     onClose();
                                 }}
-                                className={`px-5 py-2 text-xs font-bold rounded-lg transition-all shadow-md ${danger ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-brand-secondary hover:brightness-105 text-black'}`}
+                                className={`px-5 py-2 text-xs font-bold rounded-lg transition-all shadow-md ${danger ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-brand-accent hover:brightness-105 text-black'}`}
                             >
                                 {confirmText}
                             </button>

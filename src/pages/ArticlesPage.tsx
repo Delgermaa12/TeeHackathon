@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Clock, User, ArrowRight, ChevronDown, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { articles } from '../data/articles';
+import { useDataContext } from '../context/DataContext';
+import { articles as staticArticles } from '../data/articles';
 import Galaxy from '../components/Galaxy';
 
 interface ArticlesPageProps {
@@ -13,9 +15,37 @@ interface ArticlesPageProps {
 
 const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick, initialTag, onTagChange }) => {
     const { theme, language } = useAppContext();
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const { articles: contextArticles, teachers } = useDataContext();
+
+    const displayArticles = useMemo(() => {
+        const dynamicArticles = contextArticles.filter(a => a.status === 'published').map(a => {
+            const author = teachers.find(t => t.id === a.authorId)?.name || 'System';
+            const contentHTML = a.blocks.map(b => {
+                if (b.type === 'text') return `<p>${(b.content as any).html || ''}</p>`;
+                if (b.type === 'image') return `<img src="${(b.content as any).url}" alt="image" style="max-width: 100%; border-radius: 1rem;" />`;
+                return '';
+            }).join('');
+
+            return {
+                id: a.id,
+                title: { mn: a.title, en: a.title },
+                category: { mn: a.category, en: a.category },
+                excerpt: { mn: a.excerpt || '', en: a.excerpt || '' },
+                content: { mn: contentHTML, en: contentHTML },
+                author: { mn: author, en: author },
+                date: new Date(a.updatedAt).toLocaleDateString(),
+                readTime: { mn: '5 мин', en: '5 min' },
+                image: a.cover || 'https://via.placeholder.com/800x400',
+                tags: a.tags || []
+            };
+        });
+        return dynamicArticles.length > 0 ? dynamicArticles : staticArticles;
+    }, [contextArticles, teachers]);
 
     const [selectedTag, setSelectedTag] = useState<string | null>(initialTag || null);
 
@@ -38,19 +68,19 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick, initialTag,
     };
 
     const categories = useMemo(() => {
-        const cats = new Set(articles.map(a => a.category[language]));
+        const cats = new Set(displayArticles.map(a => a.category[language]));
         return Array.from(cats);
-    }, [language]);
+    }, [displayArticles, language]);
 
     const filteredArticles = useMemo(() => {
-        return articles.filter(article => {
+        return displayArticles.filter(article => {
             const matchesSearch = article.title[language].toLowerCase().includes(searchQuery.toLowerCase()) ||
                 article.excerpt[language].toLowerCase().includes(searchQuery.toLowerCase());
             const matchesCategory = !selectedCategory || article.category[language] === selectedCategory;
             const matchesTag = !selectedTag || (article.tags?.includes(selectedTag));
             return matchesSearch && matchesCategory && matchesTag;
         });
-    }, [searchQuery, selectedCategory, selectedTag, language]);
+    }, [displayArticles, searchQuery, selectedCategory, selectedTag, language]);
 
     return (
         <div className={`min-h-screen ${theme === 'dark' ? 'bg-brand-dark text-white' : 'bg-brand-light text-black'}`}>
@@ -200,7 +230,13 @@ const ArticlesPage: React.FC<ArticlesPageProps> = ({ onArticleClick, initialTag,
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     transition={{ delay: idx * 0.05 }}
-                                    onClick={() => onArticleClick?.(article.id)}
+                                    onClick={() => {
+                                        if (onArticleClick) {
+                                            onArticleClick(article.id);
+                                        } else {
+                                            navigate(`/articles/${article.id}`);
+                                        }
+                                    }}
                                     className={`group cursor-pointer rounded-[2.5rem] overflow-hidden border transition-all duration-500 hover:shadow-2xl ${theme === 'dark'
                                         ? 'bg-black/40 border-white/5 hover:border-[#eab308]/30 shadow-black'
                                         : 'bg-white/70 border-black/5 hover:border-[#eab308]/30 shadow-black/5'

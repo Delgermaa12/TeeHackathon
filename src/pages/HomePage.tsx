@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, animate } from 'motion/react';
 import { Trophy, Zap, Star, Award, Cpu, Palette, ExternalLink, Quote, Phone, Mail, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { useDataContext } from '../context/DataContext';
 import { translations } from '../translations';
 import { PATHS } from '../constants';
 import Galaxy from '../components/Galaxy';
@@ -142,7 +143,7 @@ const FirstGooseScene = ({ theme }: { theme: string }) => {
   ];
 
   return (
-    <motion.g 
+    <motion.g
       key="scene1"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -202,11 +203,11 @@ const FirstGooseScene = ({ theme }: { theme: string }) => {
 const GoldenRatioScene = ({ theme }: { theme: string }) => {
   const gridLines = Array.from({ length: 11 });
   return (
-    <motion.g 
-      key="scene2" 
-      initial={{ opacity: 0, scale: 0.9 }} 
-      animate={{ opacity: 1, scale: 1 }} 
-      exit={{ opacity: 0, scale: 1.1 }} 
+    <motion.g
+      key="scene2"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.1 }}
       transition={{ duration: 1.5, ease: "easeOut" }}
     >
       {/* Grid */}
@@ -229,12 +230,12 @@ const GoldenRatioScene = ({ theme }: { theme: string }) => {
           { r: 10, color: theme === 'dark' ? "white" : "black", label: "1px", delay: 2, cx: -50, cy: -40 },
         ].map((c, i) => (
           <React.Fragment key={i}>
-            <motion.circle 
-              cx={c.cx || 0} cy={c.cy || 0} r={c.r} fill="none" stroke={c.color} strokeWidth="1.5" 
+            <motion.circle
+              cx={c.cx || 0} cy={c.cy || 0} r={c.r} fill="none" stroke={c.color} strokeWidth="1.5"
               initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, delay: c.delay }}
             />
-            <motion.text 
-              x={(c.cx || 0) + c.r + 5} y={(c.cy || 0)} fill={c.color} fontSize="8" fontWeight="bold" 
+            <motion.text
+              x={(c.cx || 0) + c.r + 5} y={(c.cy || 0)} fill={c.color} fontSize="8" fontWeight="bold"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: c.delay + 1 }}
             >{c.label}</motion.text>
           </React.Fragment>
@@ -265,35 +266,30 @@ const UnifiedBackground = ({ scrollY }: { scrollY: any }) => {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      
+
       {/* Base background */}
       <div
-        className={`absolute inset-0 transition-colors duration-500 ${
-          theme === "dark" ? "bg-[#0c0c0c]" : "bg-white"
-        }`}
+        className={`absolute inset-0 transition-colors duration-500 ${theme === "dark" ? "bg-[#0c0c0c]" : "bg-white"
+          }`}
       />
 
       {/* Sparkle Galaxy */}
       <Galaxy
-      starSpeed={theme === "dark" ? 0.08 : 0.06}
-      density={theme === "dark" ? 0.12 : 0.16}
-      speed={theme === "dark" ? 0.22 : 0.18}
-      glowIntensity={theme === "dark" ? 0.2 : 0.24}
-      twinkleIntensity={theme === "dark" ? 0.08 : 0.1}
-/>
+        starSpeed={theme === "dark" ? 0.08 : 0.06}
+        density={theme === "dark" ? 0.12 : 0.16}
+        speed={theme === "dark" ? 0.22 : 0.18}
+        glowIntensity={theme === "dark" ? 0.2 : 0.24}
+        twinkleIntensity={theme === "dark" ? 0.08 : 0.1}
+      />
 
       {/* Subtle gradient overlay */}
       <div
-        className={`absolute inset-0 ${
-          theme === "dark"
+        className={`absolute inset-0 ${theme === "dark"
             ? "bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.45)_100%)]"
             : "bg-[radial-gradient(circle_at_center,transparent_0%,rgba(255,255,255,0.45)_100%)]"
-        }`}
+          }`}
       />
 
-      {/* Ambient glow */}
-      <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-blue-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vh] bg-brand-accent/10 rounded-full blur-[120px]" />
     </div>
   );
 };
@@ -323,8 +319,8 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
       {FINAL_GOOSE_PATHS.map((path, i) => (
         <React.Fragment key={i}>
           <DisintegratedStroke path={path.d} color={path.color} delay={path.delay} />
-          <motion.path 
-            style={{ fill: 'none', stroke: path.color, strokeWidth: theme === 'dark' ? 1.2 : 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', strokeOpacity: 1 }} 
+          <motion.path
+            style={{ fill: 'none', stroke: path.color, strokeWidth: theme === 'dark' ? 1.2 : 1.8, strokeLinecap: 'round', strokeLinejoin: 'round', strokeOpacity: 1 }}
             d={path.d}
             transform={path.transform}
             initial={{ pathLength: 0, opacity: 0 }}
@@ -352,7 +348,7 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
 
   useEffect(() => {
     if (scene === 0) return;
-    setTransitionKey((k) => k + 1);
+    setTransitionKey((k: number) => k + 1);
   }, [scene]);
 
   const resetAnimation = () => {
@@ -364,7 +360,7 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
     <section className="relative w-full min-h-screen flex items-center pt-32 pb-20 lg:pt-24 lg:pb-0 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-24 relative z-10">
         {/* Left Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
@@ -378,14 +374,14 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
           </div>
 
           <h1 className={`text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-            {language === 'mn' ? 'монголын n1 дижитал' : 'The Future of'} <br />
+            {language === 'mn' ? 'монголын №1 дижитал' : 'The Future of'} <br />
             <span className="text-brand-accent italic font-serif">
               {language === 'mn' ? 'технологийн сургууль.' : 'Technical Minds.'}
             </span>
           </h1>
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-4 bg-brand-accent text-black rounded-full font-bold text-sm uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-brand-accent/20"
@@ -393,7 +389,7 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
               {language === 'mn' ? 'Хөтөлбөрүүд' : 'Explore Programs'}
               <ArrowRight size={18} />
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`px-8 py-4 border ${theme === 'dark' ? 'border-white/10 text-white hover:bg-white/5' : 'border-black/10 text-black hover:bg-black/5'} rounded-full font-bold text-sm uppercase tracking-widest transition-all`}
@@ -404,8 +400,8 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
         </motion.div>
 
         {/* Right Logo Animation */}
-        <motion.div 
-          style={{ y: logoY, scale: logoScale, opacity: logoOpacity }} 
+        <motion.div
+          style={{ y: logoY, scale: logoScale, opacity: logoOpacity }}
           className="relative aspect-square w-full max-w-[320px] sm:max-w-[400px] lg:max-w-[500px] mx-auto order-last lg:order-none"
         >
           <svg viewBox="0 0 240 240" className={`w-full h-full ${theme === 'dark' ? 'drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]' : 'drop-shadow-[0_0_10px_rgba(0,0,0,0.15)]'}`}>
@@ -433,18 +429,19 @@ const HeroSection = ({ scrollY }: { scrollY: any }) => {
 
 const StatsSection = () => {
   const { theme, language } = useAppContext();
+  const { programs, teachers, trainings } = useDataContext();
   const t = translations[language].stats;
   const stats = [
-    { value: '6+', label: t.experience, color: 'text-red-500' },
-    { value: '14+', label: t.programs, color: 'text-brand-primary' },
-    { value: '110+', label: t.graduations, color: 'text-brand-accent' },
+    { value: `${Math.max(6, Math.floor(teachers.length / 2))}+`, label: t.experience, color: 'text-red-500' },
+    { value: `${Math.max(14, programs.length)}+`, label: t.programs, color: 'text-brand-primary' },
+    { value: `${110 + trainings.filter(tr => tr.status === 'active').length}+`, label: t.graduations, color: 'text-brand-accent' },
     { value: '2,100+', label: t.students, color: 'text-blue-500' },
   ];
   return (
     <section className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-24 space-y-4">
-          <h2 className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.title.split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-accent">{t.title.split(' ')[1]}</span> {t.title.split(' ').slice(2).join(' ')}</h2>
+          <h2 className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'}`}>{t.title.split(' ')[0]} <span className="text-brand-accent">{t.title.split(' ')[1]}</span> {t.title.split(' ').slice(2).join(' ')}</h2>
           <div className="h-1 w-20 bg-brand-accent mx-auto rounded-full" />
         </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-8">
@@ -457,49 +454,49 @@ const StatsSection = () => {
         </div>
       </div>
     </section>
-    
+
   );
 };
 
 const SuccessStoriesSection = () => {
   const galleryItems = [
-  {
-    id: '1',
-    img: gallery1,
-    url: '#',
-    height: 400,
-  },
-  {
-    id: '2',
-    img: gallery2,
-    url: '#',
-    height: 300,
-  },
-  {
-    id: '3',
-    img: gallery3,
-    url: '#',
-    height: 500,
-  },
-  {
-    id: '4',
-    img: gallery4,
-    url: '#',
-    height: 350,
-  },
-  {
-    id: '5',
-    img: gallery5,
-    url: '#',
-    height: 420,
-  },
-  {
-    id: '6',
-    img: gallery6,
-    url: '#',
-    height: 380,
-  },
-];
+    {
+      id: '1',
+      img: gallery1,
+      url: '#',
+      height: 400,
+    },
+    {
+      id: '2',
+      img: gallery2,
+      url: '#',
+      height: 300,
+    },
+    {
+      id: '3',
+      img: gallery3,
+      url: '#',
+      height: 500,
+    },
+    {
+      id: '4',
+      img: gallery4,
+      url: '#',
+      height: 350,
+    },
+    {
+      id: '5',
+      img: gallery5,
+      url: '#',
+      height: 420,
+    },
+    {
+      id: '6',
+      img: gallery6,
+      url: '#',
+      height: 380,
+    },
+  ];
   const { theme, language } = useAppContext();
 
   return (
@@ -508,17 +505,15 @@ const SuccessStoriesSection = () => {
 
         <div className="flex flex-col items-center text-center mb-16 space-y-4">
           <h2
-            className={`text-4xl md:text-6xl font-black tracking-tight ${
-              theme === 'dark' ? 'text-white' : 'text-black'
-            }`}
+            className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'
+              }`}
           >
             Бидний дурсамж
           </h2>
 
           <p
-            className={`text-sm ${
-              theme === 'dark' ? 'text-white/40' : 'text-black/40'
-            }`}
+            className={`text-sm ${theme === 'dark' ? 'text-white/40' : 'text-black/40'
+              }`}
           >
             {language === 'mn'
               ? 'Манай сурагчдын бүтээлүүд'
@@ -527,16 +522,16 @@ const SuccessStoriesSection = () => {
         </div>
 
         <Masonry
-        items={galleryItems}
-        ease="power3.out"
-  duration={0.6}
-  stagger={0.05}
-  animateFrom="bottom"
-  scaleOnHover
-  hoverScale={0.95}
-  blurToFocus
-  colorShiftOnHover={false}
-/>
+          items={galleryItems}
+          ease="power3.out"
+          duration={0.6}
+          stagger={0.05}
+          animateFrom="bottom"
+          scaleOnHover
+          hoverScale={0.95}
+          blurToFocus
+          colorShiftOnHover={false}
+        />
 
       </div>
     </section>
@@ -545,61 +540,22 @@ const SuccessStoriesSection = () => {
 
 const ProgramsPreviewSection = () => {
   const { theme, language } = useAppContext();
+  const { programs } = useDataContext();
 
-  const featuredPrograms = [
-    {
-      grade: '3',
-      title: language === 'mn' ? '3 дугаар ангийн хөтөлбөр' : '3rd Grade Program',
-      description:
-        language === 'mn'
-          ? 'Компьютерын үндэс, алгоритм, програмчлалын анхан шатыг сурах'
-          : 'Learn computer basics, algorithms, and programming fundamentals',
-      duration: language === 'mn' ? '9 сар' : '9 months',
-      level: language === 'mn' ? 'Анхан шат' : 'Beginner',
-      age: language === 'mn' ? '8-9 нас' : '8-9 years',
-      image: scratchImage,
-      accent: 'bg-blue-600/90',
-    },
-    {
-      grade: '5',
-      title: language === 'mn' ? '5-р ангийн хөтөлбөр' : '5th Grade Program',
-      description:
-        language === 'mn'
-          ? 'Вэб хөгжүүлэлт, HTML, CSS, JavaScript сурах'
-          : 'Web development, HTML, CSS, JavaScript learning',
-      duration: language === 'mn' ? '9 сар' : '9 months',
-      level: language === 'mn' ? 'Суурь шат' : 'Foundation',
-      age: language === 'mn' ? '10-11 нас' : '10-11 years',
-      image: grade5Image,
-      accent: 'bg-purple-600/90',
-    },
-    {
-      grade: '7',
-      title: language === 'mn' ? '7-р ангийн хөтөлбөр' : '7th Grade Program',
-      description:
-        language === 'mn'
-          ? 'Мобайл хэрэгслэлийн хөгжүүлэлт ба дизайн'
-          : 'Mobile app development and design',
-      duration: language === 'mn' ? '9 сар' : '9 months',
-      level: language === 'mn' ? 'Дунд шат' : 'Intermediate',
-      age: language === 'mn' ? '12-13 нас' : '12-13 years',
-      image: grade7Image,
-      accent: 'bg-orange-600/90',
-    },
-    {
-      grade: '9',
-      title: language === 'mn' ? '9-р ангийн хөтөлбөр' : '9th Grade Program',
-      description:
-        language === 'mn'
-          ? 'AI, машин сургалт ба системүүдийн зарчим'
-          : 'AI, machine learning and systems principles',
-      duration: language === 'mn' ? '9 сар' : '9 months',
-      level: language === 'mn' ? 'Ахисан шат' : 'Advanced',
-      age: language === 'mn' ? '14-15 нас' : '14-15 years',
-      image: grade9Image,
-      accent: 'bg-emerald-600/90',
-    },
-  ];
+  const accents = ['bg-blue-600/90', 'bg-purple-600/90', 'bg-orange-600/90', 'bg-emerald-600/90'];
+  const fallbackImages = [scratchImage, grade5Image, grade7Image, grade9Image];
+
+  const featuredPrograms = programs.slice(0, 4).map((program, index) => ({
+    id: program.id,
+    grade: program.ageGroup || String(index + 3),
+    title: program.title,
+    description: program.description || (language === 'mn' ? 'Мэдээлэл оруулаагүй байна' : 'No description provided'),
+    duration: program.duration,
+    level: program.level,
+    age: program.ageGroup || (language === 'mn' ? 'Тодорхойгүй' : 'Unknown'),
+    image: program.coverImage || fallbackImages[index % fallbackImages.length],
+    accent: accents[index % accents.length],
+  }));
 
   return (
     <section className="py-24 relative overflow-hidden">
@@ -614,17 +570,15 @@ const ProgramsPreviewSection = () => {
             </div>
 
             <h2
-              className={`text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter ${
-                theme === 'dark' ? 'text-white' : 'text-black'
-              } leading-none`}
+              className={`text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-black'
+                } leading-none`}
             >
               {language === 'mn' ? 'ХӨТӨЛБӨРҮҮД' : 'PROGRAMS'}
             </h2>
 
             <p
-              className={`max-w-2xl text-sm md:text-base ${
-                theme === 'dark' ? 'text-white/50' : 'text-black/50'
-              }`}
+              className={`max-w-2xl text-sm md:text-base ${theme === 'dark' ? 'text-white/50' : 'text-black/50'
+                }`}
             >
               {language === 'mn'
                 ? '3-9-р ангийн сурагчдад зориулсан шаталсан технологийн сургалтын хөтөлбөрүүд.'
@@ -634,11 +588,10 @@ const ProgramsPreviewSection = () => {
 
           <Link
             to="/programm"
-            className={`inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest ${
-              theme === 'dark'
+            className={`inline-flex items-center gap-3 text-xs font-black uppercase tracking-widest ${theme === 'dark'
                 ? 'text-white/40 hover:text-white'
                 : 'text-black/40 hover:text-black'
-            } transition-colors pb-2`}
+              } transition-colors pb-2`}
           >
             {language === 'mn' ? 'БҮХ ХӨТӨЛБӨР' : 'ALL PROGRAMS'}
             <ArrowRight size={16} />
@@ -655,13 +608,12 @@ const ProgramsPreviewSection = () => {
               transition={{ duration: 0.45, delay: index * 0.08 }}
               className="h-full"
             >
-              <Link to={`/grade/${program.grade}`} className="block h-full">
+              <Link to={`/programm/course/${program.id}`} className="block h-full">
                 <div
-                  className={`relative group overflow-hidden rounded-[2rem] border h-full transition-all duration-500 hover:-translate-y-2 ${
-                    theme === 'dark'
+                  className={`relative group overflow-hidden rounded-[2rem] border h-full transition-all duration-500 hover:-translate-y-2 ${theme === 'dark'
                       ? 'bg-[#111111] border-white/5 hover:border-white/10'
                       : 'bg-white border-black/5 hover:border-black/10 shadow-xl'
-                  }`}
+                    }`}
                 >
                   <div className="relative h-56 overflow-hidden">
                     <img
@@ -671,7 +623,7 @@ const ProgramsPreviewSection = () => {
                       loading="lazy"
                       decoding="async"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-black/60" />
 
                     <div className="absolute top-4 left-4">
                       <div
@@ -686,48 +638,43 @@ const ProgramsPreviewSection = () => {
 
                   <div className="p-6 flex flex-col h-[calc(100%-14rem)]">
                     <h3
-                      className={`text-xl font-black mb-3 ${
-                        theme === 'dark' ? 'text-white' : 'text-black'
-                      }`}
+                      className={`text-xl font-black mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'
+                        }`}
                     >
                       {program.title}
                     </h3>
 
                     <p
-                      className={`text-sm leading-relaxed mb-5 flex-grow ${
-                        theme === 'dark' ? 'text-white/60' : 'text-black/60'
-                      }`}
+                      className={`text-sm leading-relaxed mb-5 flex-grow ${theme === 'dark' ? 'text-white/60' : 'text-black/60'
+                        }`}
                     >
                       {program.description}
                     </p>
 
                     <div className="flex flex-wrap gap-2 text-xs">
                       <span
-                        className={`px-3 py-1.5 rounded-full font-semibold ${
-                          theme === 'dark'
+                        className={`px-3 py-1.5 rounded-full font-semibold ${theme === 'dark'
                             ? 'bg-blue-500/15 text-blue-300'
                             : 'bg-blue-100 text-blue-700'
-                        }`}
+                          }`}
                       >
                         {program.duration}
                       </span>
 
                       <span
-                        className={`px-3 py-1.5 rounded-full font-semibold ${
-                          theme === 'dark'
+                        className={`px-3 py-1.5 rounded-full font-semibold ${theme === 'dark'
                             ? 'bg-purple-500/15 text-purple-300'
                             : 'bg-purple-100 text-purple-700'
-                        }`}
+                          }`}
                       >
                         {program.level}
                       </span>
 
                       <span
-                        className={`px-3 py-1.5 rounded-full font-semibold ${
-                          theme === 'dark'
+                        className={`px-3 py-1.5 rounded-full font-semibold ${theme === 'dark'
                             ? 'bg-pink-500/15 text-pink-300'
                             : 'bg-pink-100 text-pink-700'
-                        }`}
+                          }`}
                       >
                         {program.age}
                       </span>
@@ -750,8 +697,20 @@ const ProgramsPreviewSection = () => {
 
 const TestimonialsSection = () => {
   const { theme, language } = useAppContext();
+  const { appreciations } = useDataContext();
   const t = translations[language].testimonials;
-  const testimonials = [
+
+  const dynamicTestimonials = appreciations
+    .filter((a) => a.status === 'approved' && a.featured)
+    .map((a, idx) => ({
+      initial: a.sender.charAt(0).toUpperCase(),
+      color: ['bg-brand-primary', 'bg-blue-500', 'bg-brand-accent', 'bg-purple-500'][idx % 4],
+      text: `“${a.fullMessage}”`,
+      name: a.sender,
+      role: a.targetType === 'teacher' ? (language === 'mn' ? 'Сурагч' : 'Student') : (language === 'mn' ? 'Эцэг эх' : 'Parent'),
+    }));
+
+  const fallbackTestimonials = [
     { initial: 'Б', color: 'bg-brand-primary', text: language === 'mn' ? '“Хүүхэд маань TEE-д 2 жил суралцсанаас хойш технологид маш их сонирхолтой болсон. Одоо өөрийн вэбсайт хийж чаддаг болсон.”' : '“My child has been interested in technology since studying at TEE for 2 years. Now they can make their own website.”', name: 'Б. Батбаяр', role: language === 'mn' ? 'Эцэг, 7-р ангийн сурагчийн' : 'Parent of 7th grade student' },
     { initial: 'Д', color: 'bg-blue-500', text: language === 'mn' ? '“Scratch програмчлал сурснаас хойш хүүхэд маань логик сэтгэлгээ маш их хөгжсөн. Математикийн хичээлд ч илүү сайн болсон.”' : '“Since learning Scratch programming, my child\'s logical thinking has developed a lot. They even got better at math.”', name: 'Д. Сарангэрэл', role: language === 'mn' ? 'Ээж, 5-р ангийн сурагчийн' : 'Mother of 5th grade student' },
     { initial: 'Э', color: 'bg-brand-accent', text: language === 'mn' ? '“Би TEE-д Arduino робот хийж сурсан. Маш сонирхолтой! Ирээдүйд робот инженер болмоор байна.”' : '“I learned to make Arduino robots at TEE. Very interesting! I want to be a robot engineer in the future.”', name: 'Э. Тэмүүлэн', role: language === 'mn' ? '6-р ангийн сурагч' : '6th grade student' },
@@ -759,20 +718,22 @@ const TestimonialsSection = () => {
     { initial: 'А', color: 'bg-purple-500', text: language === 'mn' ? '“TEE-д Python сурснаас хойш тоглоом хөгжүүлж чаддаг болсон. Маш их зүйл сурлаа!”' : '“Since learning Python at TEE, I can develop games. I learned a lot!”', name: 'А. Анужин', role: language === 'mn' ? '8-р ангийн сурагч' : '8th grade student' },
   ];
 
+  const testimonials = dynamicTestimonials.length > 0 ? dynamicTestimonials : fallbackTestimonials;
+
   return (
     <section className="py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-20">
           <div className="space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }} 
-              whileInView={{ opacity: 1, x: 0 }} 
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="space-y-4"
             >
               <h2 className={`text-4xl md:text-6xl font-black tracking-tight ${theme === 'dark' ? 'text-white' : 'text-black'} leading-tight`}>
                 {t.title} <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-blue-500">
+                <span className="text-brand-primary">
                   {t.subtitle}
                 </span>
               </h2>
@@ -788,21 +749,21 @@ const TestimonialsSection = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end pr-0 lg:pr-20">
-            <CardSwap 
-              width={400} 
-              height={320} 
-              cardDistance={40} 
-              verticalDistance={30} 
+            <CardSwap
+              width={400}
+              height={320}
+              cardDistance={40}
+              verticalDistance={30}
               delay={4000}
               skewAmount={3}
             >
               {testimonials.map((t, index) => (
-                <Card 
+                <Card
                   key={index}
                   className={`${theme === 'dark' ? 'bg-[#111111] border-white/5' : 'bg-[#f5f5f5] border-black/5 shadow-xl'} border rounded-[2.5rem] p-8 space-y-6 flex flex-col justify-between`}
                 >
                   <Quote className={`absolute top-6 right-6 ${theme === 'dark' ? 'text-white/5' : 'text-black/5'}`} size={40} />
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="relative">
                       <div className={`w-12 h-12 rounded-xl ${t.color} flex items-center justify-center text-white font-black text-xl shadow-lg`}>

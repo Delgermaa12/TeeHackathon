@@ -6,9 +6,10 @@ import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
 import { MessageSquare, Eye, Trash2 } from 'lucide-react';
-import { mockRequests } from '../../mock/adminData';
 import type { Request } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
+import { useDataContext } from '../../context/DataContext';
+import { useAlertContext } from '../../context/AlertContext';
 
 export function RequestsView() {
     const { theme } = useAppContext();
@@ -16,7 +17,9 @@ export function RequestsView() {
     const [typeFilter, setTypeFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
 
-    const [requests, setRequests] = useState<Request[]>(mockRequests);
+    const { requests, updateRequest, deleteRequest } = useDataContext();
+    const { showAlert } = useAlertContext();
+
     const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
     const [isDrawOpen, setIsDrawOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -35,15 +38,18 @@ export function RequestsView() {
 
     const confirmDelete = () => {
         if (requestToDelete) {
-            setRequests(requests.filter(r => r.id !== requestToDelete));
+            deleteRequest(requestToDelete);
+            showAlert('Хүсэлт амжилттай устгагдлаа', 'success');
             setRequestToDelete(null);
+            setIsDeleteDialogOpen(false);
         }
     };
 
     const handleStatusUpdate = (newStatus: 'new' | 'in_review' | 'resolved') => {
         if (selectedRequest) {
-            setRequests(requests.map(r => r.id === selectedRequest.id ? { ...r, status: newStatus } : r));
+            updateRequest(selectedRequest.id, { status: newStatus });
             setSelectedRequest({ ...selectedRequest, status: newStatus });
+            showAlert(`Хүсэлтийн төлөв "${newStatus}" болж шинэчлэгдлээ`, 'success');
         }
     };
 

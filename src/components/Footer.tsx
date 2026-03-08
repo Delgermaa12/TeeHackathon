@@ -1,5 +1,5 @@
-import React from 'react';
-import { Phone, Mail, Clock, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import { Phone, Mail, Clock, MapPin, Facebook, Instagram, Twitter, Youtube, Lock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
 
@@ -118,13 +118,18 @@ const Footer = () => {
           <p className={`${theme === 'dark' ? 'text-white/20' : 'text-black/20'} text-[10px] uppercase tracking-widest font-bold`}>
             {t.copyright}
           </p>
-          <div className="flex gap-8">
+          <div className="flex gap-8 items-center">
+            <Link to="/admin" className={`${theme === 'dark' ? 'text-white/20 hover:text-brand-accent' : 'text-black/20 hover:text-brand-accent'} text-[10px] uppercase tracking-widest font-bold transition-colors flex items-center gap-1.5`}>
+              <Lock size={12} />
+              Admin
+            </Link>
             <a href="#" className={`${theme === 'dark' ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'} text-[10px] uppercase tracking-widest font-bold transition-colors`}>{t.privacy}</a>
             <a href="#" className={`${theme === 'dark' ? 'text-white/20 hover:text-white' : 'text-black/20 hover:text-black'} text-[10px] uppercase tracking-widest font-bold transition-colors`}>{t.terms}</a>
           </div>
         </div>
       </div>
     </footer>
+
   );
 };
 

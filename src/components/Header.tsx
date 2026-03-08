@@ -9,12 +9,14 @@ import {
   X,
   BookOpen,
   Users,
+  Accessibility,
 } from 'lucide-react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { translations } from '../translations';
 import { RegistrationForm } from './RegistrationForm';
+import { AccessibilityModal } from './AccessibilityModal';
 import logo from '../assets/logo1.png';
 
 const Header: React.FC = () => {
@@ -27,6 +29,7 @@ const Header: React.FC = () => {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
+  const [isAccessibilityOpen, setIsAccessibilityOpen] = useState(false);
 
   const aboutItems = [
     {
@@ -134,7 +137,7 @@ const Header: React.FC = () => {
                 type="button"
                 className={`flex items-center gap-1 text-[11px] uppercase tracking-widest font-bold ${
                   theme === 'dark' ? 'text-white/50' : 'text-black/70'
-                } hover:text-brand-accent transition-all`}
+                } hover:text-brand-accen transition-all`}
               >
                 {aboutLabel}
                 <ChevronDown
@@ -203,6 +206,19 @@ const Header: React.FC = () => {
               } transition-colors`}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAccessibilityOpen(true)}
+              className={`p-2 rounded-full ${
+                theme === 'dark'
+                  ? 'hover:bg-white/5 text-white/50'
+                  : 'hover:bg-black/5 text-black/60'
+              } transition-colors`}
+              title={language === 'mn' ? 'Хүртээмжтэй байдал' : 'Accessibility'}
+            >
+              <Accessibility size={18} />
             </button>
 
             <motion.button
@@ -339,6 +355,11 @@ const Header: React.FC = () => {
       <RegistrationForm
         isOpen={isRegistrationOpen}
         onClose={() => setIsRegistrationOpen(false)}
+      />
+      
+      <AccessibilityModal
+        isOpen={isAccessibilityOpen}
+        onClose={() => setIsAccessibilityOpen(false)}
       />
     </>
   );

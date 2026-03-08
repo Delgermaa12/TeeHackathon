@@ -17,7 +17,7 @@ export function ViewModeToggle({ viewMode, onViewModeChange }: ViewModeTogglePro
             <button
                 onClick={() => onViewModeChange('list')}
                 className={`p-2 rounded-lg transition-all ${viewMode === 'list'
-                    ? 'bg-brand-secondary text-black shadow-md'
+                    ? 'bg-brand-accent text-black shadow-md'
                     : theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'
                     }`}
                 title="Жагсаалтаар харах"
@@ -28,7 +28,7 @@ export function ViewModeToggle({ viewMode, onViewModeChange }: ViewModeTogglePro
             <button
                 onClick={() => onViewModeChange('grid')}
                 className={`p-2 rounded-lg transition-all ${viewMode === 'grid'
-                    ? 'bg-brand-secondary text-black shadow-md'
+                    ? 'bg-brand-accent text-black shadow-md'
                     : theme === 'dark' ? 'text-white/40 hover:text-white' : 'text-black/40 hover:text-black'
                     }`}
                 title="Хүснэгтээр харах"

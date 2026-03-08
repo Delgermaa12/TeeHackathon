@@ -1,15 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useParams, Link } from 'react-router';
+import { useParams, Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useDataContext } from '../context/DataContext';
 import { ArrowLeft, CheckCircle, Clock, Users, Award, BookOpen, Code, Zap, DollarSign } from 'lucide-react';
 import zuslanBg from '../assets/zuslan.jpg';
 import zerotoheroImage from '../assets/zerotohero.jpg';
 import electrikidImage from '../assets/electrikid.jpg';
 
 const ProgramCourseDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { theme, language } = useAppContext();
+  const { programs } = useDataContext();
 
   const courses = [
     {
@@ -158,27 +160,60 @@ const ProgramCourseDetail = () => {
     },
   ];
 
-  const course = courses.find(c => c.id === parseInt(id || '0'));
+  const dynamicProgram = programs.find(p => p.id === id);
+  const staticCourse = courses.find(c => c.id.toString() === id);
+
+  const course = React.useMemo(() => {
+    if (dynamicProgram) {
+      return {
+        id: dynamicProgram.id,
+        name: dynamicProgram.title,
+        category: dynamicProgram.category,
+        tag: dynamicProgram.category === 'zuslaan' ? (language === 'mn' ? 'Зуслан' : 'Summer') : (language === 'mn' ? 'Богино хугацааны' : 'Short-term'),
+        tagColor: dynamicProgram.category === 'zuslaan' ? 'bg-green-500' : 'bg-orange-500',
+        price: dynamicProgram.price || '₮850,000',
+        description: dynamicProgram.description || '',
+        duration: dynamicProgram.duration,
+        age: dynamicProgram.ageGroup || (language === 'mn' ? 'Бүх нас' : 'All ages'),
+        level: dynamicProgram.level || (language === 'mn' ? 'Анхан шат' : 'Beginner'),
+        color: dynamicProgram.color || 'from-blue-400 to-cyan-500',
+        icon: dynamicProgram.icon || '💻',
+        details: dynamicProgram.description || '',
+        curriculum: dynamicProgram.curriculumSummary ? dynamicProgram.curriculumSummary.split(',').map(s => s.trim()) : (language === 'mn' ? ['Танилцуулга', 'Үндсэн ойлголт', 'Практик'] : ['Introduction', 'Core Concepts', 'Practice']),
+        tools: dynamicProgram.tools ? dynamicProgram.tools.split(',').map(s => s.trim()) : (language === 'mn' ? ['Компьютер', 'Интернэт'] : ['PC', 'Internet']),
+        iconComponent: Code,
+        image: dynamicProgram.coverImage
+      };
+    }
+    return staticCourse;
+  }, [dynamicProgram, staticCourse, language]);
 
   if (!course) {
-    return <div>Course not found</div>;
+    return (
+      <div className={`min-h-screen pt-32 px-4 sm:px-6 flex items-center justify-center ${theme === 'dark' ? 'bg-[#060810] text-white' : 'bg-gray-50 text-black'}`}>
+        <div className="text-center">
+            <h2 className="text-2xl font-bold mb-4">{language === 'mn' ? 'Сургалт олдсонгүй' : 'Course not found'}</h2>
+            <Link to="/programm" className="text-blue-500 hover:underline">{language === 'mn' ? 'Буцах' : 'Go back'}</Link>
+        </div>
+      </div>
+    );
   }
 
   const IconComponent = course.iconComponent;
-  const heroBackgroundByCourseId: Record<number, string> = {
-    1: zuslanBg,
-    2: zerotoheroImage,
-    3: electrikidImage,
-    4: electrikidImage,
+  const heroBackgroundByCourseId: Record<string, string> = {
+    '1': zuslanBg,
+    '2': zerotoheroImage,
+    '3': electrikidImage,
+    '4': electrikidImage,
   };
-  const heroBackgroundImage = heroBackgroundByCourseId[course.id];
+  const heroBackgroundImage = (course as any).image || heroBackgroundByCourseId[course.id.toString()];
   const hasHeroBackground = Boolean(heroBackgroundImage);
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#060810]' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen pt-32 ${theme === 'dark' ? 'bg-[#060810]' : 'bg-gray-50'}`}>
       {/* Hero Banner */}
       <div 
-        className={`relative overflow-hidden ${theme === 'dark' ? 'bg-gradient-to-br from-blue-900/20 to-purple-900/20' : 'bg-gradient-to-br from-blue-50 to-purple-50'}`}
+        className={`relative overflow-hidden ${theme === 'dark' ? 'bg-[#0f172a]' : 'bg-[#f8fafc]'}`}
         style={
           hasHeroBackground
             ? {
@@ -189,7 +224,7 @@ const ProgramCourseDetail = () => {
             : {}
         }
       >
-        <div className={`absolute inset-0 ${hasHeroBackground ? 'bg-black/40' : 'bg-gradient-to-r from-blue-600/10 to-purple-600/10'}`}></div>
+        <div className={`absolute inset-0 ${hasHeroBackground ? 'bg-black/40' : 'bg-[#0ea5e9]/10'}`}></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -222,7 +257,7 @@ const ProgramCourseDetail = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <Link
-            to="/program"
+            to="/programm"
             className={`inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-lg transition-colors ${
               theme === 'dark' ? 'text-[#F4B400] hover:bg-[#F4B400]/20' : 'text-[#F4B400] hover:bg-[#F4B400]/10'
             }`}
@@ -250,7 +285,7 @@ const ProgramCourseDetail = () => {
                       {language === 'mn' ? 'Хичээлийн хөтөлбөр' : 'Curriculum'}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {course.curriculum.map((item, index) => (
+                      {course.curriculum.map((item: string, index: number) => (
                         <div key={index} className="flex items-center gap-3">
                           <CheckCircle size={20} className="text-green-500 flex-shrink-0" />
                           <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
@@ -270,7 +305,7 @@ const ProgramCourseDetail = () => {
                     {language === 'mn' ? 'Ашиглах багаж хэрэгслүүд' : 'Tools & Technologies'}
                   </h3>
                   <div className="flex flex-wrap gap-3">
-                    {course.tools.map((tool, index) => (
+                    {course.tools.map((tool: string, index: number) => (
                       <span
                         key={index}
                         className={`px-4 py-2 rounded-full text-sm font-medium ${

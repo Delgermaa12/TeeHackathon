@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, Clock, Calendar, User, Tag, Share2 } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useDataContext } from '../context/DataContext';
+import { articles as staticArticles } from '../data/articles';
 import type { Article } from '../types/article';
 import Galaxy from '../components/Galaxy';
 
@@ -10,9 +13,12 @@ interface ArticleDetailProps {
     onBack?: (tag?: string) => void;
 }
 
-const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
+const ArticleDetail: React.FC<ArticleDetailProps> = ({ article: propArticle, onBack }) => {
     const { theme, language } = useAppContext();
     const { scrollY } = useScroll();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { articles: contextArticles, teachers } = useDataContext();
 
     const imageScale = useTransform(scrollY, [0, 400], [1, 1.1]);
 
@@ -20,11 +26,65 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
         window.scrollTo(0, 0);
     }, []);
 
+    const article = React.useMemo(() => {
+        if (propArticle) return propArticle;
+
+        const foundContextArticle = contextArticles.find(a => a.id === id);
+        if (foundContextArticle && foundContextArticle.status === 'published') {
+            const author = teachers.find(t => t.id === foundContextArticle.authorId)?.name || 'System';
+            
+            const contentHTML = foundContextArticle.blocks.map(b => {
+                if (b.type === 'text') {
+                    const text = typeof b.content === 'string' ? b.content : (b.content as any).html || '';
+                    return `<div class="article-text-block">${text}</div>`;
+                }
+                if (b.type === 'image') {
+                    return `<div class="article-image-block">
+                        <img src="${(b.content as any).url}" alt="${(b.content as any).caption || ''}" class="rounded-2xl w-full" />
+                        ${(b.content as any).caption ? `<p class="text-sm text-center mt-2 opacity-60">${(b.content as any).caption}</p>` : ''}
+                    </div>`;
+                }
+                if (b.type === 'quote') {
+                    return `<blockquote class="border-l-4 border-brand-secondary pl-6 py-2 italic text-2xl font-bold opacity-90 my-8">
+                        "${(b.content as any).text}"
+                        ${(b.content as any).author ? `<cite class="block text-sm font-black uppercase not-italic mt-4 opacity-50">— ${(b.content as any).author}</cite>` : ''}
+                    </blockquote>`;
+                }
+                if (b.type === 'video') {
+                    return `<div class="article-video-block aspect-video w-full rounded-2xl overflow-hidden my-8">
+                        <iframe src="${(b.content as any).url}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                    </div>`;
+                }
+                return '';
+            }).join('');
+
+            return {
+                id: foundContextArticle.id,
+                title: { mn: foundContextArticle.title, en: foundContextArticle.title },
+                category: { mn: foundContextArticle.category, en: foundContextArticle.category },
+                excerpt: { mn: foundContextArticle.excerpt || '', en: foundContextArticle.excerpt || '' },
+                content: { mn: contentHTML, en: contentHTML },
+                author: { mn: author, en: author },
+                date: new Date(foundContextArticle.updatedAt).toLocaleDateString(),
+                readTime: { mn: '5 мин', en: '5 min' },
+                image: foundContextArticle.cover || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800',
+                tags: foundContextArticle.tags || []
+            } as Article;
+        }
+
+        return staticArticles.find(a => a.id === id);
+    }, [propArticle, id, contextArticles, teachers]);
+
+    const handleBack = () => {
+        if (onBack) onBack();
+        else navigate('/articles');
+    };
+
     if (!article) {
         return (
             <div className={`min-h-screen ${theme === 'dark' ? 'bg-brand-dark text-white' : 'bg-brand-light text-black'} flex items-center justify-center`}>
                 <button
-                    onClick={() => onBack?.()}
+                    onClick={handleBack}
                     className="px-6 py-3 rounded-2xl border border-[#eab308]/40 text-[#eab308] font-bold"
                 >
                     {language === 'mn' ? 'Нийтлэл олдсонгүй. Буцах' : 'Article not found. Go back'}
@@ -45,35 +105,12 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
                 <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-brand-dark/60' : 'bg-brand-light/90'}`} />
             </div>
 
-            <main className="relative z-10">
+            <main className="relative z-10 pt-32">
                 {/* Reading Progress Bar */}
                 <motion.div
                     className="fixed top-0 left-0 right-0 h-1 bg-[#eab308] z-[60] origin-left"
                     style={{ scaleX: useTransform(scrollY, [0, 1000], [0, 1]) }}
                 />
-
-                {/* Navigation */}
-                <nav className="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-gradient-to-b from-black/40 to-transparent">
-                    <motion.button
-                        whileHover={{ scale: 1.05, x: -5 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => onBack?.()}
-                        className={`flex items-center gap-3 px-6 py-3 rounded-2xl backdrop-blur-3xl border-2 ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white hover:border-[#eab308]/40' : 'bg-black/5 border-black/5 text-black hover:border-[#eab308]/40'
-                            } font-black text-[10px] uppercase tracking-widest transition-all`}
-                    >
-                        <ArrowLeft size={16} className="text-[#eab308]" />
-                        {language === 'mn' ? 'Буцах' : 'Back'}
-                    </motion.button>
-
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`p-3.5 rounded-2xl backdrop-blur-3xl border-2 ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white hover:border-[#eab308]/40' : 'bg-black/5 border-black/5 text-black hover:border-[#eab308]/40'
-                            } transition-all`}
-                    >
-                        <Share2 size={18} className="text-[#eab308]" />
-                    </motion.button>
-                </nav>
 
                 {/* Hero Section */}
                 <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
@@ -160,7 +197,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
                                 {article.tags?.map(tag => (
                                     <span
                                         key={tag}
-                                        onClick={() => onBack?.()} // For now just go back, ideally pass tag
+                                        onClick={handleBack}
                                         className={`text-[10px] font-black uppercase tracking-widest px-5 py-2 rounded-2xl border-2 transition-all cursor-pointer ${theme === 'dark' ? 'bg-white/5 border-white/5 text-white/50 hover:border-[#eab308]/40 hover:text-white' : 'bg-black/5 border-black/5 text-black/50 hover:border-[#eab308]/40 hover:text-black'
                                             }`}>
                                         #{tag}
@@ -174,7 +211,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, onBack }) => {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                onClick={() => onBack?.()}
+                                onClick={handleBack}
                                 className="px-12 py-5 bg-[#eab308] text-black rounded-3xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl shadow-[#eab308]/20 flex items-center gap-4 transition-all hover:shadow-[#eab308]/40 active:scale-95"
                             >
                                 <ArrowLeft size={20} />

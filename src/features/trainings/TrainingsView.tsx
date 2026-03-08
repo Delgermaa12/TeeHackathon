@@ -6,9 +6,10 @@ import { StatusBadge } from '../../components/admin/StatusBadge';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
 import { GraduationCap, Edit3, Trash2 } from 'lucide-react';
-import { mockTrainings, mockTeachers, mockPrograms } from '../../mock/adminData';
 import type { Training } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
+import { useDataContext } from '../../context/DataContext';
+import { useAlertContext } from '../../context/AlertContext';
 
 export function TrainingsView() {
     const { theme } = useAppContext();
@@ -16,7 +17,9 @@ export function TrainingsView() {
     const [formatFilter, setFormatFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
 
-    const [trainings, setTrainings] = useState<Training[]>(mockTrainings);
+    const { trainings, teachers, programs, addTraining, updateTraining, deleteTraining } = useDataContext();
+    const { showAlert } = useAlertContext();
+
     const [selectedTraining, setSelectedTraining] = useState<Training | null>(null);
     const [isDrawOpen, setIsDrawOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -40,9 +43,37 @@ export function TrainingsView() {
 
     const confirmDelete = () => {
         if (trainingToDelete) {
-            setTrainings(trainings.filter(t => t.id !== trainingToDelete));
+            deleteTraining(trainingToDelete);
+            showAlert('Сургалт амжилттай устгагдлаа', 'success');
             setTrainingToDelete(null);
+            setIsDeleteDialogOpen(false);
         }
+    };
+
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
+        
+        const trainingData: any = {
+            title: formData.get('title'),
+            programId: formData.get('programId'),
+            teacherId: formData.get('teacherId'),
+            startDate: formData.get('startDate'),
+            endDate: formData.get('endDate'),
+            format: formData.get('format'),
+            capacity: Number(formData.get('capacity')),
+            status: formData.get('status') || 'active',
+            enrolledCount: selectedTraining?.enrolledCount || 0
+        };
+
+        if (selectedTraining) {
+            updateTraining(selectedTraining.id, trainingData);
+            showAlert('Сургалт амжилттай шинэчлэгдлээ', 'success');
+        } else {
+            addTraining(trainingData);
+            showAlert('Шинэ сургалт амжилттай үүсгэлээ', 'success');
+        }
+        setIsDrawOpen(false);
     };
 
     const filteredTrainings = trainings.filter(t => {
@@ -63,7 +94,7 @@ export function TrainingsView() {
             header: 'Багш',
             accessorKey: 'teacherId',
             cell: ({ row }) => {
-                const teacher = mockTeachers.find(t => t.id === row.teacherId);
+                const teacher = teachers.find(t => t.id === row.teacherId);
                 return teacher ? teacher.name : '-';
             }
         },
@@ -91,7 +122,7 @@ export function TrainingsView() {
                     <span className="text-xs font-bold">{row.enrolledCount} / {row.capacity}</span>
                     <div className={`w-16 h-1.5 rounded-full overflow-hidden ${theme === 'dark' ? 'bg-white/10' : 'bg-black/10'}`}>
                         <div
-                            className="h-full bg-brand-secondary"
+                            className="h-full bg-brand-accent"
                             style={{ width: `${Math.min((row.enrolledCount / row.capacity) * 100, 100)}%` }}
                         />
                     </div>
@@ -173,42 +204,42 @@ export function TrainingsView() {
                 title={selectedTraining ? 'Сургалт засах' : 'Шинэ сургалт'}
                 footer={
                     <>
-                        <button onClick={() => setIsDrawOpen(false)} className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/60' : 'border-black/10 hover:bg-black/5 text-black/60'}`}>Цуцлах</button>
-                        <button onClick={() => setIsDrawOpen(false)} className="px-5 py-2 rounded-xl text-xs font-bold bg-brand-secondary text-black shadow-md hover:brightness-105 transition-all">Хадгалах</button>
+                        <button type="button" onClick={() => setIsDrawOpen(false)} className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${theme === 'dark' ? 'border-white/10 hover:bg-white/5 text-white/60' : 'border-black/10 hover:bg-black/5 text-black/60'}`}>Цуцлах</button>
+                        <button form="training-form" type="submit" className="px-5 py-2 rounded-xl text-xs font-bold bg-brand-accent text-black shadow-md hover:brightness-105 transition-all">Хадгалах</button>
                     </>
                 }
             >
-                <form className="space-y-5">
+                <form id="training-form" onSubmit={handleSave} className="space-y-5">
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Сургалтын нэр</label>
-                        <input type="text" defaultValue={selectedTraining?.title} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                        <input name="title" type="text" defaultValue={selectedTraining?.title} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} required />
                     </div>
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Хөтөлбөр сонгох</label>
-                        <select defaultValue={selectedTraining?.programId} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
-                            {mockPrograms.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
+                        <select name="programId" defaultValue={selectedTraining?.programId} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                            {programs.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
                         </select>
                     </div>
                     <div className="space-y-1.5">
                         <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Багш сонгох</label>
-                        <select defaultValue={selectedTraining?.teacherId} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
-                            {mockTeachers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                        <select name="teacherId" defaultValue={selectedTraining?.teacherId} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                            {teachers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                         </select>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Эхлэх огноо</label>
-                            <input type="date" defaultValue={selectedTraining?.startDate} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            <input name="startDate" type="date" defaultValue={selectedTraining?.startDate} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                         </div>
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Дуусах огноо</label>
-                            <input type="date" defaultValue={selectedTraining?.endDate} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            <input name="endDate" type="date" defaultValue={selectedTraining?.endDate} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Хэлбэр</label>
-                            <select defaultValue={selectedTraining?.format || 'offline'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
+                            <select name="format" defaultValue={selectedTraining?.format || 'offline'} className={`w-full px-4 py-3 rounded-xl border appearance-none outline-none ${theme === 'dark' ? 'bg-[#151515] border-white/10 text-white' : 'bg-white border-black/10 text-black'}`}>
                                 <option value="offline">Танхим</option>
                                 <option value="online">Цахим</option>
                                 <option value="hybrid">Холимог</option>
@@ -216,7 +247,7 @@ export function TrainingsView() {
                         </div>
                         <div className="space-y-1.5">
                             <label className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>Хүчин чадал</label>
-                            <input type="number" defaultValue={selectedTraining?.capacity || 20} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
+                            <input name="capacity" type="number" defaultValue={selectedTraining?.capacity || 20} className={`w-full px-4 py-3 rounded-xl border ${theme === 'dark' ? 'bg-white/5 border-white/10 text-white' : 'bg-black/5 border-black/10 text-black'} outline-none`} />
                         </div>
                     </div>
                 </form>

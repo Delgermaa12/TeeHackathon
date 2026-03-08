@@ -71,7 +71,7 @@ export function ImageUpload({
       <div
         className={`relative group rounded-3xl border-2 border-dashed transition-all duration-500 overflow-hidden cursor-pointer ${aspectClass} ${
           isDragging
-            ? 'border-brand-secondary bg-brand-secondary/5 scale-[0.98]'
+            ? 'border-brand-accent bg-brand-accent/5 scale-[0.98]'
             : theme === 'dark'
             ? 'border-white/10 bg-white/5 hover:border-white/20'
             : 'border-black/10 bg-black/5 hover:border-black/20'
@@ -112,8 +112,8 @@ export function ImageUpload({
             <div
               className={`p-5 rounded-[2rem] transition-all duration-500 ${
                 theme === 'dark'
-                  ? 'bg-white/5 text-brand-secondary'
-                  : 'bg-black/5 text-brand-secondary'
+                  ? 'bg-white/5 text-brand-accent'
+                  : 'bg-black/5 text-brand-accent'
               } group-hover:scale-110 group-hover:rotate-3`}
             >
               <Upload size={32} aria-hidden="true" />

@@ -9,6 +9,7 @@ import { TeachersView } from '../features/teachers/TeachersView';
 import { ArticlesView } from '../features/articles/ArticlesView';
 import { RequestsView } from '../features/requests/RequestsView';
 import { AppreciationView } from '../features/appreciation/AppreciationView';
+import { ProjectsView } from '../features/projects/ProjectsView';
 
 export default function AdminPage() {
     // Auth State
@@ -37,12 +38,12 @@ export default function AdminPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="w-full max-w-md bg-[#111] border border-white/5 rounded-2xl p-8 shadow-2xl relative overflow-hidden"
                 >
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-brand-secondary/5 rounded-full blur-3xl" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent/5 rounded-full blur-3xl" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
 
                     <div className="relative z-10">
                         <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-6 border border-white/10">
-                            <LogIn className="text-brand-secondary" size={24} />
+                            <LogIn className="text-brand-accent" size={24} />
                         </div>
 
                         <h1 className="text-2xl font-bold mb-2">Админ нэвтрэх</h1>
@@ -55,14 +56,14 @@ export default function AdminPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Нууц үг оруулах..."
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 outline-none focus:border-brand-secondary transition-colors"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 outline-none focus:border-brand-accent transition-colors"
                                 />
                                 {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
                             </div>
 
                             <button
                                 type="submit"
-                                className="w-full bg-brand-secondary text-black font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:brightness-105 transition-all shadow-[0_0_20px_rgba(234,88,12,0.3)]"
+                                className="w-full bg-brand-accent text-black font-black py-3 rounded-xl flex items-center justify-center gap-2 hover:brightness-105 transition-all shadow-[0_0_20px_rgba(234,179,8,0.3)] uppercase tracking-widest text-xs"
                             >
                                 Нэвтрэх
                                 <ArrowRight size={18} />
@@ -83,6 +84,7 @@ export default function AdminPage() {
             case 'articles': return <ArticlesView />;
             case 'requests': return <RequestsView />;
             case 'appreciation': return <AppreciationView />;
+            case 'projects': return <ProjectsView />;
             default: return <DashboardView />;
         }
     };

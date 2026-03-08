@@ -12,6 +12,8 @@ import {
   ClipboardList,
 } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { useDataContext } from '../context/DataContext';
+import { useAlert } from '../hooks/useAlert';
 
 interface Branch {
   id: string;
@@ -184,6 +186,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   onClose,
 }) => {
   const { theme } = useAppContext();
+  const { showAlert } = useAlert();
+  const { addRequest } = useDataContext();
 
   const [step, setStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -316,7 +320,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     }
 
     if (errors.length > 0) {
-      alert(errors.join('\n'));
+      showAlert(errors.join('\n'), 'warning');
       return false;
     }
 
@@ -343,20 +347,37 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const payload =
-        formType === 'training'
-          ? trainingForm
-          : formType === 'job'
-          ? jobForm
-          : surveyForm;
-
-      console.log('Submitted type:', formType);
-      console.log('Submitted data:', payload);
+      if (formType === 'training') {
+        addRequest({
+          name: `${trainingForm.lastName} ${trainingForm.firstName}`,
+          phone: trainingForm.phone1,
+          type: 'training',
+          priority: 'high',
+          status: 'new',
+        });
+      } else if (formType === 'job') {
+        addRequest({
+          name: `${jobForm.lastName} ${jobForm.firstName}`,
+          email: jobForm.email,
+          phone: jobForm.phone,
+          type: 'teacher',
+          priority: 'medium',
+          status: 'new',
+        });
+      } else if (formType === 'survey') {
+        addRequest({
+          name: surveyForm.fullName,
+          phone: surveyForm.phone,
+          type: 'support',
+          priority: 'low',
+          status: 'new',
+        });
+      }
 
       setSubmitted(true);
     } catch (error) {
       console.error(error);
-      alert('Алдаа гарлаа. Дахин оролдоно уу.');
+      showAlert('Алдаа гарлаа. Дахин оролдоно уу.', 'error');
     } finally {
       setIsLoading(false);
     }

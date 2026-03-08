@@ -6,16 +6,19 @@ import { StatusBadge } from '../../components/admin/StatusBadge';
 import { ConfirmDialog } from '../../components/admin/ConfirmDialog';
 import { DrawerPanel } from '../../components/admin/DrawerPanel';
 import { Heart, Star, StarOff, CheckCircle, XCircle, Trash2, Eye } from 'lucide-react';
-import { mockAppreciations, mockTeachers, mockPrograms, mockTrainings } from '../../mock/adminData';
 import type { Appreciation } from '../../types/admin';
 import { useAppContext } from '../../context/AppContext';
+import { useDataContext } from '../../context/DataContext';
+import { useAlertContext } from '../../context/AlertContext';
 
 export function AppreciationView() {
     const { theme } = useAppContext();
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
 
-    const [appreciations, setAppreciations] = useState<Appreciation[]>(mockAppreciations);
+    const { appreciations, teachers, programs, trainings, updateAppreciation, deleteAppreciation } = useDataContext();
+    const { showAlert } = useAlertContext();
+
     const [selectedAppreciation, setSelectedAppreciation] = useState<Appreciation | null>(null);
     const [isDrawOpen, setIsDrawOpen] = useState(false);
 
@@ -36,31 +39,39 @@ export function AppreciationView() {
 
     const confirmDelete = () => {
         if (itemToDelete) {
-            setAppreciations(appreciations.filter(a => a.id !== itemToDelete));
+            deleteAppreciation(itemToDelete);
+            showAlert('Талархал амжилттай устгагдлаа', 'success');
             setItemToDelete(null);
+            setIsDeleteDialogOpen(false);
             setIsDrawOpen(false);
         }
     };
 
     const toggleFeatured = (id: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
-        setAppreciations(appreciations.map(a => a.id === id ? { ...a, featured: !a.featured } : a));
+        const appr = appreciations.find(a => a.id === id);
+        if (appr) {
+            const newFeatured = !appr.featured;
+            updateAppreciation(id, { featured: newFeatured });
+            showAlert(newFeatured ? 'Нүүр хуудсанд онцлох боллоо' : 'Онцлохоос хасагдлаа', 'info');
+        }
         if (selectedAppreciation?.id === id) {
             setSelectedAppreciation({ ...selectedAppreciation, featured: !selectedAppreciation.featured });
         }
     };
 
     const updateStatus = (id: string, newStatus: 'approved' | 'rejected' | 'pending') => {
-        setAppreciations(appreciations.map(a => a.id === id ? { ...a, status: newStatus } : a));
+        updateAppreciation(id, { status: newStatus });
+        showAlert(`Төлөв "${newStatus}" болж шинэчлэгдлээ`, 'success');
         if (selectedAppreciation?.id === id) {
             setSelectedAppreciation({ ...selectedAppreciation, status: newStatus });
         }
     };
 
     const getTargetName = (type: string, id: string) => {
-        if (type === 'teacher') return mockTeachers.find(t => t.id === id)?.name || 'Тодорхойгүй багш';
-        if (type === 'program') return mockPrograms.find(p => p.id === id)?.title || 'Тодорхойгүй хөтөлбөр';
-        if (type === 'training') return mockTrainings.find(t => t.id === id)?.title || 'Тодорхойгүй сургалт';
+        if (type === 'teacher') return teachers.find(t => t.id === id)?.name || 'Тодорхойгүй багш';
+        if (type === 'program') return programs.find(p => p.id === id)?.title || 'Тодорхойгүй хөтөлбөр';
+        if (type === 'training') return trainings.find(t => t.id === id)?.title || 'Тодорхойгүй сургалт';
         return '-';
     };
 
@@ -148,15 +159,15 @@ export function AppreciationView() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                 <div className={`p-4 rounded-xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5' : 'bg-white border-black/5'}`}>
                     <p className={`text-[10px] uppercase font-bold tracking-widest ${theme === 'dark' ? 'text-white/40' : 'text-black/50'}`}>Нийт талархал</p>
-                    <p className="text-2xl font-bold mt-1">{mockAppreciations.length}</p>
+                    <p className="text-2xl font-bold mt-1">{appreciations.length}</p>
                 </div>
                 <div className={`p-4 rounded-xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5 text-green-500' : 'bg-white border-black/5 text-green-600'}`}>
                     <p className={`text-[10px] uppercase font-bold tracking-widest opacity-60`}>Зөвшөөрсөн</p>
-                    <p className="text-2xl font-bold mt-1">{mockAppreciations.filter(a => a.status === 'approved').length}</p>
+                    <p className="text-2xl font-bold mt-1">{appreciations.filter(a => a.status === 'approved').length}</p>
                 </div>
                 <div className={`p-4 rounded-xl border ${theme === 'dark' ? 'bg-[#151515] border-white/5 text-yellow-500' : 'bg-white border-black/5 text-yellow-600'}`}>
                     <p className={`text-[10px] uppercase font-bold tracking-widest opacity-60`}>Хүлээгдэж буй</p>
-                    <p className="text-2xl font-bold mt-1">{mockAppreciations.filter(a => a.status === 'pending').length}</p>
+                    <p className="text-2xl font-bold mt-1">{appreciations.filter(a => a.status === 'pending').length}</p>
                 </div>
             </div>
 
@@ -192,7 +203,7 @@ export function AppreciationView() {
                         <div className={`p-5 rounded-2xl border ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'}`}>
                             <div className="flex justify-between items-start mb-4 border-b pb-4 border-white/10">
                                 <div className="flex gap-3 items-center">
-                                    <div className="w-10 h-10 rounded-full bg-brand-secondary/20 text-brand-secondary flex items-center justify-center font-bold">
+                                    <div className="w-10 h-10 rounded-full bg-brand-accent/20 text-brand-accent flex items-center justify-center font-bold">
                                         {selectedAppreciation.sender.charAt(0)}
                                     </div>
                                     <div>
@@ -209,7 +220,7 @@ export function AppreciationView() {
                                 <p className={`text-[10px] uppercase font-bold tracking-widest mb-1 ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`}>
                                     Эзэн: {selectedAppreciation.targetType === 'teacher' ? 'Багш' : selectedAppreciation.targetType === 'program' ? 'Хөтөлбөр' : 'Сургалт'}
                                 </p>
-                                <p className="font-bold text-brand-secondary">
+                                <p className="font-bold text-brand-accent">
                                     {getTargetName(selectedAppreciation.targetType, selectedAppreciation.targetId)}
                                 </p>
                             </div>

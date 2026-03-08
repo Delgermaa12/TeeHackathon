@@ -1,0 +1,90 @@
+export const adminTranslations = {
+  mn: {
+    sidebar: {
+      dashboard: 'Хяналтын самбар',
+      programs: 'Хөтөлбөр',
+      trainings: 'Сургалт',
+      teachers: 'Багш нар',
+      articles: 'Нийтлэл',
+      requests: 'Хүсэлтүүд',
+      appreciation: 'Талархал',
+      projects: 'Сурагчдын бүтээл',
+      logout: 'Гарах',
+      centralControl: 'Төв удирдлага',
+      adminSystem: 'Админ систем',
+    },
+    dashboard: {
+      title: 'Хяналтын самбар',
+      description: 'Системийн ерөнхий төлөв байдал болон статистик мэдээлэл',
+      registrationTrends: 'Бүртгэлийн явц',
+      totalPrograms: 'Нийт хөтөлбөр',
+      totalTeachers: 'Нийт багш нар',
+      activeTrainings: 'Идэвхтэй сургалт',
+      newRequests: 'Шинэ хүсэлт',
+    },
+    common: {
+      save: 'Хадгалах',
+      cancel: 'Цуцлах',
+      delete: 'Устгах',
+      edit: 'Засах',
+      add: 'Нэмэх',
+      search: 'Хайх...',
+      loading: 'Уншиж байна...',
+      actions: 'Үйлдэл',
+      status: 'Төлөв',
+      date: 'Огноо',
+    },
+    alerts: {
+      success: 'Амжилттай',
+      error: 'Алдаа гарлаа',
+      deleted: 'Амжилттай устгагдлаа',
+      saved: 'Амжилттай хадгалагдлаа',
+      updated: 'Амжилттай шинэчлэгдлээ',
+    }
+  },
+  en: {
+    sidebar: {
+      dashboard: 'Dashboard',
+      programs: 'Programs',
+      trainings: 'Trainings',
+      teachers: 'Teachers',
+      articles: 'Articles',
+      requests: 'Requests',
+      appreciation: 'Appreciation',
+      projects: 'Projects',
+      logout: 'Logout',
+      centralControl: 'Central Control',
+      adminSystem: 'Admin System',
+    },
+    dashboard: {
+      title: 'Dashboard',
+      description: 'System overview and statistical data',
+      registrationTrends: 'Registration Trends',
+      totalPrograms: 'Total Programs',
+      totalTeachers: 'Total Teachers',
+      activeTrainings: 'Active Trainings',
+      newRequests: 'New Requests',
+    },
+    common: {
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      edit: 'Edit',
+      add: 'Add',
+      search: 'Search...',
+      loading: 'Loading...',
+      actions: 'Actions',
+      status: 'Status',
+      date: 'Date',
+    },
+    alerts: {
+      success: 'Success',
+      error: 'Error occurred',
+      deleted: 'Successfully deleted',
+      saved: 'Successfully saved',
+      updated: 'Successfully updated',
+    }
+  }
+};
+
+export type AdminTranslation = typeof adminTranslations.mn;

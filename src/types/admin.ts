@@ -21,6 +21,10 @@ export interface Program extends BaseEntity {
     tools?: string;
     contactInfo?: string;
     curriculumSummary?: string;
+    price?: string;
+    icon?: string;
+    color?: string;
+    tagColor?: string;
 }
 
 export interface Training extends BaseEntity {
@@ -47,6 +51,15 @@ export interface Teacher extends BaseEntity {
     gender?: 'male' | 'female' | 'other';
     bio?: string;
     skills?: string[];
+    experience?: string;
+    education?: string;
+    philosophy?: string;
+    github?: string;
+    type: 'udirdlaga' | 'bagsh';
+    certificates?: Array<{
+        title: string;
+        image: string;
+    }>;
     socialLinks?: Array<{
         platform: 'facebook' | 'instagram' | 'linkedin' | string;
         url: string;
@@ -102,5 +115,20 @@ export interface Lesson extends BaseEntity {
     type: 'video' | 'reading' | 'assignment' | 'quiz';
     duration: string;
     order: number;
+    status: Status;
+    description?: string;
+    videoId?: string;
+    content?: string;
+}
+
+export interface StudentProject extends BaseEntity {
+    title: string;
+    type: 'scratch' | 'tinkercad';
+    thumbnail: string;
+    embedUrl?: string;
+    openUrl?: string;
+    studentName: string;
+    color?: string;
+    featured: boolean;
     status: Status;
 }

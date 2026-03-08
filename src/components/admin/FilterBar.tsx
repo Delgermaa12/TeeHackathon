@@ -36,7 +36,7 @@ export function FilterBar({
 
     return (
         <div className="flex flex-col md:flex-row gap-4 mb-8 items-center">
-            <div className={`relative flex-1 rounded-2xl border ${theme === 'dark' ? 'bg-black/20 border-white/5 focus-within:border-brand-secondary/50 focus-within:bg-white/5' : 'bg-black/[0.02] border-black/5 focus-within:border-brand-secondary/50 focus-within:bg-white shadow-sm'} transition-all flex items-center px-5 w-full md:w-auto overflow-hidden`}>
+            <div className={`relative flex-1 rounded-2xl border ${theme === 'dark' ? 'bg-black/20 border-white/5 focus-within:border-brand-accent/50 focus-within:bg-white/5' : 'bg-black/[0.02] border-black/5 focus-within:border-brand-accent/50 focus-within:bg-white shadow-sm'} transition-all flex items-center px-5 w-full md:w-auto overflow-hidden`}>
                 <Search size={16} className={`shrink-0 ${theme === 'dark' ? 'text-white/40' : 'text-black/40'}`} />
                 <input
                     type="text"
@@ -60,7 +60,7 @@ export function FilterBar({
                                 theme === 'dark'
                                 ? 'bg-[#151515] border-white/5 text-white/80 hover:bg-white/5'
                                 : 'bg-white border-black/5 text-black/80 hover:bg-black/[0.02]'
-                                } shadow-sm focus:border-brand-secondary transition-all`}
+                                } shadow-sm focus:border-brand-accent transition-all`}
                                 >
                                 <option value="">{fGroup.label}</option>
                                 {fGroup.options.map((opt) => (

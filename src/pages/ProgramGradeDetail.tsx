@@ -146,10 +146,10 @@ const ProgramGradeDetail = () => {
   const IconComponent = program.icon;
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#060810]' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen pt-32 ${theme === 'dark' ? 'bg-[#060810]' : 'bg-gray-50'}`}>
       {/* Hero Banner */}
-      <div className={`relative overflow-hidden ${theme === 'dark' ? 'bg-gradient-to-br from-blue-900/20 to-purple-900/20' : 'bg-gradient-to-br from-blue-50 to-purple-50'}`}>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+      <div className={`relative overflow-hidden ${theme === 'dark' ? 'bg-[#0f172a]' : 'bg-[#f8fafc]'}`}>
+        <div className="absolute inset-0 bg-blue-600/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -179,7 +179,7 @@ const ProgramGradeDetail = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <Link
-            to="/program"
+            to="/programm"
             className={`inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-lg transition-colors ${
               theme === 'dark' ? 'text-blue-400 hover:bg-blue-900/30' : 'text-blue-600 hover:bg-blue-100'
             }`}
